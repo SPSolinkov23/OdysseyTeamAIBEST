@@ -1,7 +1,7 @@
 # Odyssey
 <h1 align="center">Team Odyssey<h1>
 <p align="center">
-  <img src="resources/logoBackground.jpg" alt="logo" align="center">
+  <img src="resources/logoBackground.png" alt="logo" align="center">
 </p>
 <hr>
 <h2>📰About</h2>
