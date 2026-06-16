@@ -3,47 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="School Events & Notification Center - Team Odyssey">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/fontawesome/css/fontawesome.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/whiteboard-semibold.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/utility-fill-semibold.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/utility-duo-semibold.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/utility-semibold.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/thumbprint-light.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/slab-press-regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/slab-regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/sharp-duotone-thin.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/sharp-duotone-solid.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/sharp-duotone-regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/sharp-duotone-light.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/sharp-thin.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/sharp-solid.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/sharp-regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/sharp-light.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/notdog-duo-solid.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/notdog-solid.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/jelly-fill-regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/jelly-duo-regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/jelly-regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/graphite-thin.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/etch-solid.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/duotone-thin.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/duotone.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/duotone-regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/duotone-light.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/thin.css">
     <link rel="stylesheet" href="assets/fontawesome/css/solid.css">
     <link rel="stylesheet" href="assets/fontawesome/css/regular.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/light.css">
     <link rel="stylesheet" href="assets/fontawesome/css/brands.css">
-    <link rel="stylesheet" href="assets/fontawesome/css/chisel-regular.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.14/dist/lenis.css">
 
     <link rel="stylesheet" href="css/output.css">
 
-    <title>School Events & Notification Center - Odyssey Team</title>
+    <title>School Events & Notification Center - Team Odyssey</title>
 </head>
-<body>
+<body class="flex min-h-screen flex-col">
 
+    <header id="nav" class="sticky top-0 z-40"></header>
+
+    <main id="app" class="flex-1"></main>
+
+    <footer class="border-t border-slate-200 bg-white">
+        <div class="container-app flex flex-col items-center justify-between gap-3 py-6 text-sm text-slate-500 sm:flex-row">
+            <p class="flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-brand-500"></i> School Events &amp; Notification Center</p>
+            <p>Made with <i class="fa-solid fa-heart text-rose-500"></i> by <span class="font-semibold text-slate-700">Team Odyssey</span></p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+
+    <script src="js/store.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/tour.js"></script>
+    <script src="js/views.auth.js"></script>
+    <script src="js/views.student.js"></script>
+    <script src="js/views.organizer.js"></script>
+    <script src="js/router.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

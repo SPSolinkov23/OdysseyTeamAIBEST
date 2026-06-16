@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+web/dist/
+
+# .NET
+bin/
+obj/
+
+# Environment / secrets (commit the .example files instead)
+.env
+*.env.local
+worker/appsettings.Production.json
+
+# Logs / OS
+*.log
+.DS_Store
+Thumbs.db
