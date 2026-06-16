@@ -1,0 +1,22 @@
+namespace SchoolEvents.Api.Auth;
+
+/// <summary>BCrypt-based password hashing (slow, salted).</summary>
+public static class PasswordHasher
+{
+    private const int WorkFactor = 11;
+
+    public static string Hash(string password) =>
+        BCrypt.Net.BCrypt.HashPassword(password, WorkFactor);
+
+    public static bool Verify(string password, string hash)
+    {
+        try
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hash);
+        }
+        catch (BCrypt.Net.SaltParseException)
+        {
+            return false;
+        }
+    }
+}
