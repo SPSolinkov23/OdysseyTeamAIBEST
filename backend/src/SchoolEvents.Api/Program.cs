@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using SchoolEvents.Api;
 using SchoolEvents.Api.Auth;
@@ -13,12 +14,10 @@ using SchoolEvents.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- Database ---------------------------------------------------------------
 var connectionString = builder.Configuration.GetConnectionString("Default")
     ?? throw new InvalidOperationException("ConnectionStrings:Default is required.");
 builder.Services.AddSchoolEventsData(connectionString);
 
-// --- Auth -------------------------------------------------------------------
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
 var jwt = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>() ?? new JwtOptions();
 if (string.IsNullOrWhiteSpace(jwt.Secret))
@@ -27,7 +26,7 @@ if (string.IsNullOrWhiteSpace(jwt.Secret))
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.MapInboundClaims = false; // keep raw "sub"/"role" claim names
+        options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -42,8 +41,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             RoleClaimType = "role",
         };
 
-        // Return the same JSON envelope for auth failures instead of an empty
-        // body (which browsers render as a bare "HTTP ERROR 401" page).
         options.Events = new JwtBearerEvents
         {
             OnChallenge = async context =>
@@ -71,12 +68,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
-// --- App services -----------------------------------------------------------
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<EventService>();
 builder.Services.AddScoped<RegistrationService>();
 
-// --- MVC / JSON -------------------------------------------------------------
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
@@ -84,7 +79,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower));
 });
 
-// Consistent error envelope for model-validation failures.
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
@@ -114,18 +108,12 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
-// --- Pipeline ---------------------------------------------------------------
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SchoolEventsDbContext>();
     await db.Database.MigrateAsync();
-    if (app.Configuration.GetValue("Seed:Enabled", false))
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Seed");
-        await SeedData.EnsureAsync(db, logger);
-    }
 }
 
 if (app.Environment.IsDevelopment())
@@ -135,13 +123,46 @@ if (app.Environment.IsDevelopment())
     app.UseCors();
 }
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
+var frontendPath = Path.Combine(app.Environment.ContentRootPath, "..", "..", "..", "frontend");
+StaticFileOptions staticFileOptions;
+
+if (Directory.Exists(frontendPath))
+{
+    var provider = new PhysicalFileProvider(frontendPath);
+    staticFileOptions = new StaticFileOptions
+    {
+        FileProvider = provider,
+        RequestPath = ""
+    };
+
+    app.UseDefaultFiles(new DefaultFilesOptions
+    {
+        FileProvider = provider,
+        RequestPath = ""
+    });
+}
+else
+{
+    staticFileOptions = new StaticFileOptions();
+}
+
+app.UseStaticFiles(staticFileOptions);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapFallbackToFile("index.html");
+
+if (Directory.Exists(frontendPath))
+{
+    app.MapFallbackToFile("index.html", new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(frontendPath)
+    });
+}
+else
+{
+    app.MapFallbackToFile("index.html");
+}
 
 app.Run();
