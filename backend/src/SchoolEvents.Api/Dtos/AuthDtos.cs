@@ -9,6 +9,8 @@ public class RegisterRequest
     public string Email { get; set; } = string.Empty;
 
     [Required, MinLength(8), MaxLength(200)]
+    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", 
+        ErrorMessage = "Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.")]
     public string Password { get; set; } = string.Empty;
 
     [Required, MaxLength(120)]
@@ -39,6 +41,8 @@ public class ChangePasswordRequest
     public string CurrentPassword { get; set; } = string.Empty;
 
     [Required, MinLength(8), MaxLength(200)]
+    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", 
+        ErrorMessage = "New password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.")]
     public string NewPassword { get; set; } = string.Empty;
 }
 
