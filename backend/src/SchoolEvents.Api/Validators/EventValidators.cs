@@ -57,7 +57,6 @@ public class UpdateEventRequestValidator : AbstractValidator<UpdateEventRequest>
 {
     public UpdateEventRequestValidator()
     {
-        // Всички полета са optional при update — валидираме само ако са подадени
  
         RuleFor(x => x.Title)
             .MaximumLength(200)
@@ -94,7 +93,6 @@ public class UpdateEventRequestValidator : AbstractValidator<UpdateEventRequest>
                 .WithMessage("The event must start in the future.")
             .When(x => x.StartsAt is not null);
  
-        // EndsAt > StartsAt — сравняваме с новото StartsAt ако е подадено
         RuleFor(x => x.EndsAt)
             .GreaterThan(x => x.StartsAt!.Value)
                 .WithMessage("The end time must be after the start time.")
