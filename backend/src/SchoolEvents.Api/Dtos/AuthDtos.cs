@@ -1,19 +1,14 @@
-using System.ComponentModel.DataAnnotations;
+
 using SchoolEvents.Data.Entities;
 
 namespace SchoolEvents.Api.Dtos;
 
 public class RegisterRequest
 {
-    [Required, EmailAddress, MaxLength(255)]
     public string Email { get; set; } = string.Empty;
 
-    [Required, MinLength(8), MaxLength(200)]
-    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", 
-        ErrorMessage = "Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.")]
     public string Password { get; set; } = string.Empty;
 
-    [Required, MaxLength(120)]
     public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>Optional: "student" (default) or "organizer" (only if signup is allowed).</summary>
@@ -22,27 +17,18 @@ public class RegisterRequest
 
 public class LoginRequest
 {
-    [Required, EmailAddress]
     public string Email { get; set; } = string.Empty;
-
-    [Required]
     public string Password { get; set; } = string.Empty;
 }
 
 public class UpdateMeRequest
 {
-    [Required, MaxLength(120)]
     public string DisplayName { get; set; } = string.Empty;
 }
 
 public class ChangePasswordRequest
 {
-    [Required]
     public string CurrentPassword { get; set; } = string.Empty;
-
-    [Required, MinLength(8), MaxLength(200)]
-    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", 
-        ErrorMessage = "New password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.")]
     public string NewPassword { get; set; } = string.Empty;
 }
 

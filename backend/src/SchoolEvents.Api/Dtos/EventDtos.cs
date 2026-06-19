@@ -1,55 +1,42 @@
-using System.ComponentModel.DataAnnotations;
+
 using SchoolEvents.Data.Entities;
 
 namespace SchoolEvents.Api.Dtos;
 
 public class CreateEventRequest
 {
-    [Required, MaxLength(200)]
     public string Title { get; set; } = string.Empty;
 
-    [MaxLength(5000)]
     public string? Description { get; set; }
 
-    [MaxLength(200)]
     public string? Location { get; set; }
 
-    [MaxLength(60)]
     public string? Category { get; set; }
 
-    [MaxLength(500)]
     public string? Url { get; set; }
 
-    [Required]
     public DateTime StartsAt { get; set; }
 
     public DateTime? EndsAt { get; set; }
 
-    [Range(1, 100000)]
     public int Capacity { get; set; }
 }
 
 public class UpdateEventRequest
 {
-    [MaxLength(200)]
     public string? Title { get; set; }
 
-    [MaxLength(5000)]
     public string? Description { get; set; }
 
-    [MaxLength(200)]
     public string? Location { get; set; }
 
-    [MaxLength(60)]
     public string? Category { get; set; }
 
-    [MaxLength(500)]
     public string? Url { get; set; }
 
     public DateTime? StartsAt { get; set; }
     public DateTime? EndsAt { get; set; }
 
-    [Range(1, 100000)]
     public int? Capacity { get; set; }
 }
 
