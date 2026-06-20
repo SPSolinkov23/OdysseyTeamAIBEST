@@ -57,6 +57,17 @@ function eventCard(ev, mine, i) {
 export async function events() {
     const user = Auth.current();
     const list = await API.listPublishedEvents();
+
+    const PAGE_SIZE = 6;
+    const currentPage = 1;
+
+    const totalPages = Math.ceil(list.length / PAGE_SIZE);
+
+    const pagedEvents = list.slice(
+        (currentPage - 1) * PAGE_SIZE,
+        currentPage * PAGE_SIZE
+    );
+
     const mine = await myMap();
     const cats = Array.from(new Set(list.map((e) => e.category)));
 
@@ -84,10 +95,15 @@ export async function events() {
         cats.map((c) => '<button class="chip" data-cat="' + UI.escape(c) + '">' + UI.escape(c) + "</button>").join("") +
         "</div></div>" +
         '<div id="ev-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">' +
-        list.map((e, i) => eventCard(e, mine, i)).join("") +
+        pagedEvents.map((e, i) => eventCard(e, mine, i)).join("") +
         "</div>" +
         '<div id="ev-empty" class="hidden">' + UI.empty({ icon: "fa-calendar-xmark", title: "No events found", text: "Try a different word or category." }) + "</div>" +
-        "</section>";
+
+        '<div class="mt-8 flex justify-center gap-2">' +
+
+         Array.from({ length: totalPages }, (_, i) =>
+        '<button class="btn-secondary btn-sm page-btn" data-page="' + (i + 1) + '">' + (i + 1) + '</button>').join("") +
+        '</div>' + "</section>";
 
     return { html: html, onMount: bindEvents };
 }
@@ -97,6 +113,12 @@ function bindEvents(root) {
     const grid = root.querySelector("#ev-grid");
     const empty = root.querySelector("#ev-empty");
     let activeCat = "all";
+
+    root.querySelectorAll(".page-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            console.log("Page:", btn.dataset.page);
+        });
+    });
 
     function apply() {
         const q = (search.value || "").trim().toLowerCase();
@@ -113,6 +135,7 @@ function bindEvents(root) {
     }
 
     search.addEventListener("input", apply);
+
     root.querySelectorAll("#ev-cats .chip").forEach((btn) => {
         btn.addEventListener("click", () => {
             root.querySelectorAll("#ev-cats .chip").forEach((b) => b.classList.remove("is-active"));
