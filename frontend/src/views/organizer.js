@@ -27,14 +27,14 @@ export async function organizer() {
 
     const rows = list.length
         ? list.map((e, idx) => eventRow(e, idx)).join("")
-        : UI.empty({ icon: "fa-calendar-plus", title: "No events yet", text: "Create your first event and publish it for students.", actionHtml: '<a href="#/organizer/new" class="btn-primary"><i class="fa-solid fa-plus"></i> New event</a>' });
+        : UI.empty({ icon: "fa-calendar-plus", title: "No events yet", text: "Create your first event and publish it for students.", actionHtml: '<a href="/organizer/new" class="btn-primary"><i class="fa-solid fa-plus"></i> New event</a>' });
 
     const html =
         '<section class="bg-hero-grid bg-grid-dots border-b border-slate-200/70 bg-white"><div class="container-app py-10"><div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-aos="fade-right">' +
         '<div><span class="badge bg-brand-50 text-brand-700 ring-brand-200"><i class="fa-solid fa-user-tie"></i>Organizer</span>' +
         '<h1 class="mt-3 font-display text-3xl font-bold text-slate-800">Management dashboard</h1>' +
         '<p class="mt-1 text-slate-500">Manage your events, registrations and waitlists.</p></div>' +
-        '<a href="#/organizer/new" class="btn-primary self-start"><i class="fa-solid fa-plus"></i> New event</a></div>' +
+        '<a href="/organizer/new" class="btn-primary self-start"><i class="fa-solid fa-plus"></i> New event</a></div>' +
         '<div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">' +
         stats.map((s, i) =>
             '<div class="card flex items-center gap-4 p-4" data-aos="zoom-in-up" data-aos-delay="' + i * 70 + '" data-aos-duration="500"><span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-' + s.color + "-100 text-" + s.color + '-600 text-lg"><i class="fa-solid ' + s.icon + '"></i></span><div><div class="font-display text-2xl font-bold text-slate-800">' + s.value + '</div><div class="text-xs text-slate-500">' + s.label + "</div></div></div>"
@@ -47,16 +47,16 @@ export async function organizer() {
 
 function eventRow(e, idx) {
     const cat = UI.categoryMeta(e.category);
-    let actions = '<a href="#/organizer/events/' + e.id + '" class="btn-secondary btn-sm"><i class="fa-solid fa-users"></i> Registrations</a>';
+    let actions = '<a href="/organizer/events/' + e.id + '" class="btn-secondary btn-sm"><i class="fa-solid fa-users"></i> Registrations</a>';
     if (e.status === "DRAFT") {
         actions =
-            '<a href="#/preview/' + e.id + '" class="btn-secondary btn-sm"><i class="fa-solid fa-eye"></i> Preview</a>' +
-            '<a href="#/organizer/events/' + e.id + '/edit" class="btn-ghost btn-sm"><i class="fa-solid fa-pen"></i> Edit</a>' +
+            '<a href="/preview/' + e.id + '" class="btn-secondary btn-sm"><i class="fa-solid fa-eye"></i> Preview</a>' +
+            '<a href="/organizer/events/' + e.id + '/edit" class="btn-ghost btn-sm"><i class="fa-solid fa-pen"></i> Edit</a>' +
             '<button data-publish="' + e.id + '" class="btn-primary btn-sm"><i class="fa-solid fa-paper-plane"></i> Publish</button>';
     } else if (e.status === "PUBLISHED") {
         actions =
-            '<a href="#/organizer/events/' + e.id + '" class="btn-secondary btn-sm"><i class="fa-solid fa-users"></i> Registrations</a>' +
-            '<a href="#/organizer/events/' + e.id + '/edit" class="btn-ghost btn-sm"><i class="fa-solid fa-pen"></i> Edit</a>' +
+            '<a href="/organizer/events/' + e.id + '" class="btn-secondary btn-sm"><i class="fa-solid fa-users"></i> Registrations</a>' +
+            '<a href="/organizer/events/' + e.id + '/edit" class="btn-ghost btn-sm"><i class="fa-solid fa-pen"></i> Edit</a>' +
             '<button data-cancel-event="' + e.id + '" class="btn-ghost btn-sm text-rose-600 hover:bg-rose-50"><i class="fa-solid fa-ban"></i> Cancel</button>';
     }
     return (
@@ -109,7 +109,7 @@ export async function organizerForm(id) {
     const d = ev || { title: "", category: "Workshop", description: "", startsAt: "", endsAt: "", location: "", url: "", capacity: 20 };
 
     const html =
-        '<section class="container-app py-8"><a href="#/organizer" class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-600"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</a>' +
+        '<section class="container-app py-8"><a href="/organizer" class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-600"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</a>' +
         '<div class="grid gap-8 lg:grid-cols-5"><div class="lg:col-span-3" data-aos="fade-right"><div class="card p-6 sm:p-8">' +
         '<h1 class="font-display text-2xl font-bold text-slate-800">' + (ev ? "Edit event" : "New event") + "</h1>" +
         '<p class="mt-1 text-sm text-slate-500">' + (ev ? "Changes are saved immediately." : "The event is created as a draft you can publish later.") + "</p>" +
@@ -129,7 +129,7 @@ export async function organizerForm(id) {
         field("Link (optional)", '<input id="p-url" name="url" class="input" value="' + UI.escape(d.url) + '" placeholder="https://...">') +
         "</div>" +
         '<div class="flex flex-wrap gap-3 pt-2"><button type="submit" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> ' + (ev ? "Save changes" : "Save as draft") + "</button>" +
-        '<a href="#/organizer" class="btn-secondary">Cancel</a></div></form></div></div>' +
+        '<a href="/organizer" class="btn-secondary">Cancel</a></div></form></div></div>' +
         '<div class="lg:col-span-2" data-aos="fade-left"><div class="sticky top-24"><div class="mb-3 flex items-center gap-2 text-sm font-medium text-slate-500"><i class="fa-solid fa-eye"></i> Live preview</div>' +
         '<div id="live-preview"></div></div></div></div></section>';
 
@@ -181,7 +181,7 @@ function bindForm(root, user, ev) {
                 await API.createEvent(user.id, data);
                 UI.toast("Draft created.", "success");
             }
-            location.hash = "#/organizer";
+            Router.navigate("/organizer");
         } catch (err) {
             UI.toast(err.message, "error");
             submit.disabled = false;
@@ -200,7 +200,7 @@ export async function eventRegistrations(id) {
     const waitlist = attendees.waitlist;
 
     const html =
-        '<section class="container-app py-8"><a href="#/organizer" class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-600"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</a>' +
+        '<section class="container-app py-8"><a href="/organizer" class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-600"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</a>' +
         '<div class="card mb-6 p-6" data-aos="fade-down"><div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">' +
         '<div><div class="flex items-center gap-2">' + UI.eventBadge(ev.status) + '<span class="text-sm text-slate-500">' + UI.escape(ev.category) + "</span></div>" +
         '<h1 class="mt-2 font-display text-2xl font-bold text-slate-800">' + UI.escape(ev.title) + "</h1>" +
@@ -267,7 +267,7 @@ export async function preview(id) {
     const html =
         '<div class="border-b border-amber-200 bg-amber-50"><div class="container-app flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">' +
         '<p class="flex items-center gap-2 text-sm font-medium text-amber-800"><i class="fa-solid fa-eye"></i> Preview mode — this is how students will see it</p>' +
-        '<div class="flex gap-2"><a href="#/organizer" class="btn-ghost btn-sm text-amber-800 hover:bg-amber-100"><i class="fa-solid fa-arrow-left"></i> Back</a>' +
+        '<div class="flex gap-2"><a href="/organizer" class="btn-ghost btn-sm text-amber-800 hover:bg-amber-100"><i class="fa-solid fa-arrow-left"></i> Back</a>' +
         (ev.status === "DRAFT" ? '<button data-publish="' + ev.id + '" class="btn-primary btn-sm"><i class="fa-solid fa-paper-plane"></i> Publish</button>' : "") +
         "</div></div></div>" +
         '<section class="container-app py-8"><div class="grid gap-8 lg:grid-cols-3"><div class="lg:col-span-2" data-aos="fade-right">' +

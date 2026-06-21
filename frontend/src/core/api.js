@@ -4,12 +4,14 @@ import { Bus } from "./bus.js";
 async function request(method, path, body) {
     const headers = { Accept: "application/json" };
     const token = Store.getToken();
+
     if (token) headers.Authorization = "Bearer " + token;
     if (body !== undefined) headers["Content-Type"] = "application/json";
 
     let res;
+
     try {
-        res = await fetch(path, {
+        res = await fetch("/api" + path, {
             method: method,
             headers: headers,
             body: body !== undefined ? JSON.stringify(body) : undefined,
@@ -20,6 +22,7 @@ async function request(method, path, body) {
 
     const text = await res.text();
     let data = null;
+
     if (text) {
         try { data = JSON.parse(text); } catch (e) { data = null; }
     }
@@ -28,15 +31,22 @@ async function request(method, path, body) {
         if (res.status === 401 && path.indexOf("/auth/") !== 0) {
             Store.clear();
             Bus.emit("auth");
-            if (location.hash !== "#/login") location.hash = "#/login";
+
+            if (location.pathname !== "/login") {
+                history.pushState(null, "", "/login");
+                import("./router.js").then((m) => m.Router.handle());
+            }
         }
+
         const err = (data && data.error) || {};
         let msg = err.message || "Request failed (" + res.status + ").";
+
         if (err.details && typeof err.details === "object") {
             const firstField = Object.keys(err.details)[0];
             const firstMsg = firstField && Array.isArray(err.details[firstField]) ? err.details[firstField][0] : null;
             if (firstMsg) msg = firstMsg;
         }
+
         throw new Error(msg);
     }
 
@@ -53,6 +63,7 @@ function toIso(localValue) {
 
 function mapUser(u) {
     if (!u) return null;
+
     return {
         id: u.id,
         name: u.display_name,
@@ -65,6 +76,7 @@ function mapUser(u) {
 function mapEvent(e) {
     const confirmed = e.confirmed_count || 0;
     const seats = e.seats_available != null ? e.seats_available : Math.max(0, (e.capacity || 0) - confirmed);
+    
     return {
         id: e.id,
         organizerId: e.organizer_id,
@@ -92,6 +104,7 @@ function mapEvent(e) {
 
 function mapSummary(ev) {
     if (!ev) return null;
+
     return {
         id: ev.id,
         title: ev.title || "",
@@ -124,7 +137,9 @@ function mapNotification(n) {
 
 function eventBody(data) {
     if (!data.title || !data.title.trim()) throw new Error("Title is required.");
+
     const cap = parseInt(data.capacity, 10);
+
     if (!Number.isInteger(cap) || cap < 1) throw new Error("Capacity must be a whole number ≥ 1.");
     if (!data.startsAt) throw new Error("Start date and time are required.");
 
@@ -137,6 +152,7 @@ function eventBody(data) {
         capacity: cap,
         starts_at: toIso(data.startsAt),
     };
+
     body.ends_at = data.endsAt ? toIso(data.endsAt) : null;
     return body;
 }
@@ -145,12 +161,15 @@ export const API = {
     async authLogin(email, password) {
         return request("POST", "/auth/login", { email: email, password: password });
     },
+
     async authRegister(payload) {
         return request("POST", "/auth/register", payload);
     },
+
     async logout() {
         await request("POST", "/auth/logout");
     },
+
     async me() {
         const data = await request("GET", "/users/me");
         return mapUser(data.user);
@@ -160,53 +179,72 @@ export const API = {
 
     async listPublishedEvents() {
         const data = await request("GET", "/events");
+        
         return (data.events || []).map(mapEvent);
     },
+
     async listOrganizerEvents() {
         const data = await request("GET", "/events?mine=true");
         const list = (data.events || []).map(mapEvent);
 
         return list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     },
+
     async getEvent(id) {
         const data = await request("GET", "/events/" + id);
+
         return mapEvent(data.event);
     },
+
     async createEvent(_orgId, data) {
         const res = await request("POST", "/events", eventBody(data));
+
         return mapEvent(res.event);
     },
+
     async updateEvent(_orgId, id, data) {
         const res = await request("PATCH", "/events/" + id, eventBody(data));
+
         return mapEvent(res.event);
     },
+
     async publishEvent(_orgId, id) {
         const res = await request("POST", "/events/" + id + "/publish");
+
         return mapEvent(res.event);
     },
+
     async cancelEvent(_orgId, id) {
         const res = await request("POST", "/events/" + id + "/cancel");
+
         return mapEvent(res.event);
     },
 
     async registerForEvent(_userId, eventId) {
         const r = await request("POST", "/events/" + eventId + "/registrations");
+
         return { status: up(r.status), position: r.waitlist_position || 0 };
     },
+
     async cancelRegistration(_userId, regId) {
         const r = await request("DELETE", "/registrations/" + regId);
+
         return { promoted: !!(r && r.promoted_registration) };
     },
+
     async myRegistrations() {
         const data = await request("GET", "/registrations/me");
+
         return (data.registrations || []).map((r) => ({
             registration: { id: r.id, eventId: r.event_id, status: up(r.status) },
             event: mapSummary(r.event),
             position: r.waitlist_position || 0,
         })).filter((x) => x.event);
     },
+
     async getEventAttendees(eventId) {
         const data = await request("GET", "/events/" + eventId + "/registrations");
+
         return {
             confirmed: (data.registrations || []).map(mapAttendee),
             waitlist: (data.waitlist || []).map(mapAttendee),
@@ -216,15 +254,19 @@ export const API = {
     async refreshNotifications() {
         const data = await request("GET", "/notifications");
         const list = (data.notifications || []).map(mapNotification);
+
         Store.setNotifications(list);
+
         return list;
     },
     async listNotifications() {
         return this.refreshNotifications();
     },
+
     unreadCount() {
         return Store.unreadCount();
     },
+
     async markAllRead() {
         await request("POST", "/notifications/read");
         const seen = Store.getNotifications().map((n) => Object.assign({}, n, { read: true }));

@@ -34,7 +34,7 @@ public class CreateEventRequestValidator : AbstractValidator<CreateEventRequest>
             .Must(url => Uri.TryCreate(url, UriKind.Absolute, out var result)
                          && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps))
                 .WithMessage("The URL must be a valid HTTP or HTTPS URL.")
-            .When(x => x.Url is not null);
+            .When(x => !string.IsNullOrWhiteSpace(x.Url));
  
         RuleFor(x => x.StartsAt)
             .NotEmpty()
@@ -86,7 +86,7 @@ public class UpdateEventRequestValidator : AbstractValidator<UpdateEventRequest>
             .Must(url => Uri.TryCreate(url, UriKind.Absolute, out var result)
                          && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps))
                 .WithMessage("The URL must be a valid HTTP or HTTPS URL.")
-            .When(x => x.Url is not null);
+            .When(x => !string.IsNullOrWhiteSpace(x.Url));
  
         RuleFor(x => x.StartsAt)
             .GreaterThan(DateTime.UtcNow)

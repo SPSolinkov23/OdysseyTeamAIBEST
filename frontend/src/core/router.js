@@ -6,8 +6,8 @@ import { refreshAos } from "./anim.js";
 
 function home() {
     const u = Auth.current();
-    if (!u) return "#/login";
-    return u.role === "organizer" ? "#/organizer" : "#/events";
+    if (!u) return "/login";
+    return u.role === "organizer" ? "/organizer" : "/events";
 }
 
 const routes = [
@@ -37,9 +37,16 @@ function loader() {
     );
 }
 
+function navigate(path) {
+    history.pushState(null, "", path);
+    Router.handle();
+}
+
 export const Router = {
+    navigate,
+
     async handle() {
-        const path = location.hash.replace(/^#/, "") || "/";
+        const path = location.pathname || "/";
         let producer = null;
         let match = null;
 
@@ -49,23 +56,23 @@ export const Router = {
             match = m;
 
             if (r.role === "home") {
-                location.hash = home();
+                navigate(home());
                 return;
             }
             const user = Auth.current();
             if (r.role === "guest") {
                 if (user) {
-                    location.hash = home();
+                    navigate(home());
                     return;
                 }
             } else if (r.role === "any") {
                 if (!user) {
-                    location.hash = "#/login";
+                    navigate("/login");
                     return;
                 }
             } else if (r.role === "student" || r.role === "organizer") {
                 if (!user) {
-                    location.hash = "#/login";
+                    navigate("/login");
                     return;
                 }
                 if (user.role !== r.role) {
@@ -100,6 +107,6 @@ export const Router = {
         scrollTop();
         if (view.onMount) view.onMount(app);
         refreshAos();
-        Bus.emit("route", location.hash);
+        Bus.emit("route", location.pathname);
     },
 };

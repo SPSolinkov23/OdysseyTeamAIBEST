@@ -31,10 +31,10 @@ function eventCard(ev, mine, i) {
     const reg = mine[ev.id];
     let action;
     if (reg) {
-        action = '<div class="flex items-center justify-between gap-2"><a href="#/events/' + ev.id + '" class="btn-secondary btn-sm">Details</a>' + UI.regBadge(reg.status) + "</div>";
+        action = '<div class="flex items-center justify-between gap-2"><a href="/events/' + ev.id + '" class="btn-secondary btn-sm">Details</a>' + UI.regBadge(reg.status) + "</div>";
     } else {
         action =
-            '<div class="flex items-center gap-2"><a href="#/events/' + ev.id + '" class="btn-secondary btn-sm flex-1">Details</a>' +
+            '<div class="flex items-center gap-2"><a href="/events/' + ev.id + '" class="btn-secondary btn-sm flex-1">Details</a>' +
             '<button data-register="' + ev.id + '" class="btn-primary btn-sm flex-1">' + (ev.isFull ? '<i class="fa-solid fa-hourglass-half"></i> Join waitlist' : '<i class="fa-solid fa-bolt"></i> Register') + "</button></div>";
     }
     return (
@@ -163,7 +163,7 @@ export async function eventDetail(id) {
     }
 
     const html =
-        '<section class="container-app py-8"><a href="#/events" class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-600"><i class="fa-solid fa-arrow-left"></i> Back to events</a>' +
+        '<section class="container-app py-8"><a href="/events" class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-600"><i class="fa-solid fa-arrow-left"></i> Back to events</a>' +
         '<div class="grid gap-8 lg:grid-cols-3"><div class="lg:col-span-2" data-aos="fade-right">' +
         '<div class="overflow-hidden rounded-3xl">' +
         '<div class="relative flex h-44 items-end bg-gradient-to-br from-' + cat.color + "-500 to-" + cat.color + '-700 p-6 text-white sm:h-56"><div class="pointer-events-none absolute inset-0 bg-mesh opacity-50"></div>' +
@@ -233,7 +233,7 @@ export async function myRegistrations() {
                 return (
                     '<div class="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between" data-aos="' + UI.aos(idx) + '" data-aos-delay="' + idx * 60 + '">' +
                     '<div class="flex items-start gap-4"><span class="flex h-12 w-12 flex-none items-center justify-center rounded-2xl bg-' + cat.color + "-100 text-" + cat.color + '-600 text-lg"><i class="fa-solid ' + cat.icon + '"></i></span>' +
-                    '<div><a href="#/events/' + ev.id + '" class="font-display text-base font-semibold text-slate-800 hover:text-brand-600">' + UI.escape(ev.title) + "</a>" +
+                    '<div><a href="/events/' + ev.id + '" class="font-display text-base font-semibold text-slate-800 hover:text-brand-600">' + UI.escape(ev.title) + "</a>" +
                     '<p class="mt-1 text-sm text-slate-500"><i class="fa-regular fa-calendar mr-1.5"></i>' + UI.escape(UI.fmtRange(ev.startsAt, ev.endsAt)) + "</p>" +
                     '<p class="text-sm text-slate-500"><i class="fa-solid fa-location-dot mr-1.5"></i>' + UI.escape(ev.location || "Online") + "</p></div></div>" +
                     '<div class="flex items-center justify-between gap-3 sm:flex-col sm:items-end">' + UI.regBadge(i.registration.status) +
@@ -242,12 +242,12 @@ export async function myRegistrations() {
                 );
             })
             .join("")
-        : UI.empty({ icon: "fa-calendar-plus", title: "No registrations yet", text: "Browse the events and grab your spot.", actionHtml: '<a href="#/events" class="btn-primary"><i class="fa-solid fa-compass"></i> Browse events</a>' });
+        : UI.empty({ icon: "fa-calendar-plus", title: "No registrations yet", text: "Browse the events and grab your spot.", actionHtml: '<a href="/events" class="btn-primary"><i class="fa-solid fa-compass"></i> Browse events</a>' });
 
     const html =
         '<section class="container-app py-10"><div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-aos="fade-down">' +
         '<div><h1 class="font-display text-3xl font-bold text-slate-800">My registrations</h1><p class="mt-1 text-slate-500">' + confirmed + " confirmed · " + waiting + " on waitlist</p></div>" +
-        '<a href="#/events" class="btn-secondary self-start"><i class="fa-solid fa-plus"></i> New registration</a></div>' +
+        '<a href="/events" class="btn-secondary self-start"><i class="fa-solid fa-plus"></i> New registration</a></div>' +
         '<div class="space-y-4">' + list + "</div></section>";
 
     return { html: html, onMount: bindMyRegs };

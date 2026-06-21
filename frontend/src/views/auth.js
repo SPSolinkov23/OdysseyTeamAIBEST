@@ -1,6 +1,7 @@
 import { Auth } from "../core/auth.js";
 import { UI } from "../core/ui.js";
 import { Bus } from "../core/bus.js";
+import { Router } from "../core/router.js";
 
 function brandPanel() {
     return (
@@ -51,8 +52,8 @@ export function auth(mode) {
         "</form>" +
         '<p class="mt-6 text-center text-sm text-slate-500">' +
         (isLogin
-            ? "Don't have an account? <a href=\"#/register\" class=\"font-semibold text-brand-600 hover:text-brand-700\">Create one</a>"
-            : 'Already have an account? <a href="#/login" class="font-semibold text-brand-600 hover:text-brand-700">Sign in</a>') +
+            ? "Don't have an account? <a href=\"/register\" class=\"font-semibold text-brand-600 hover:text-brand-700\">Create one</a>"
+            : 'Already have an account? <a href="/login" class="font-semibold text-brand-600 hover:text-brand-700">Sign in</a>') +
         "</p></div></div></div></section>";
 
     return { html: html, onMount: (root) => bind(root, isLogin) };
@@ -89,5 +90,5 @@ function bind(root, isLogin) {
 function done(user) {
     UI.toast("Hi, " + user.name.split(" ")[0] + "!", "success");
     Bus.emit("auth");
-    location.hash = user.role === "organizer" ? "#/organizer" : "#/events";
+    Router.navigate(user.role === "organizer" ? "/organizer" : "/events");
 }
