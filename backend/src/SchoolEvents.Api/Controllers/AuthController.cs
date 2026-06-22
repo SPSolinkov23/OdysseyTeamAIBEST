@@ -15,13 +15,11 @@ public class AuthController : ControllerBase
 {
     private readonly SchoolEventsDbContext _db;
     private readonly TokenService _tokens;
-    private readonly bool _allowOrganizerSignup;
 
-    public AuthController(SchoolEventsDbContext db, TokenService tokens, IConfiguration config)
+    public AuthController(SchoolEventsDbContext db, TokenService tokens)
     {
         _db = db;
         _tokens = tokens;
-        _allowOrganizerSignup = config.GetValue("Auth:AllowOrganizerSignup", false);
     }
 
     [HttpPost("register")]
@@ -32,13 +30,12 @@ public class AuthController : ControllerBase
         if (await _db.Users.AnyAsync(u => u.Email == email))
             throw ApiException.Conflict("An account with that email already exists.", "email_taken");
 
-        var role = UserRole.Student;
+        var appliedAsOrganizer = false;
         if (!string.IsNullOrWhiteSpace(req.Role))
         {
-            if (!Enum.TryParse(req.Role, ignoreCase: true, out role))
+            if (!Enum.TryParse<UserRole>(req.Role, ignoreCase: true, out var requestedRole))
                 throw ApiException.BadRequest("Unknown role.");
-            if (role == UserRole.Organizer && !_allowOrganizerSignup)
-                throw ApiException.Forbidden("Organizer accounts cannot be self-registered.");
+            appliedAsOrganizer = requestedRole == UserRole.Organizer;
         }
 
         var user = new User
@@ -46,7 +43,8 @@ public class AuthController : ControllerBase
             Email = email,
             PasswordHash = PasswordHasher.Hash(req.Password),
             DisplayName = req.DisplayName.Trim(),
-            Role = role,
+            Role = UserRole.Student,
+            OrganizerStatus = appliedAsOrganizer ? OrganizerStatus.Pending : OrganizerStatus.None,
         };
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
@@ -68,9 +66,13 @@ public class AuthController : ControllerBase
 
         // Mirror it as an in-app notification so the bell isn't empty on first login.
         _db.Notifications.Add(AppNotifications.Welcome(user.Id, user.DisplayName));
+
+        if (appliedAsOrganizer)
+            _db.Notifications.Add(AppNotifications.OrganizerPending(user.Id));
+
         await _db.SaveChangesAsync();
 
-        return StatusCode(StatusCodes.Status201Created, BuildAuth(user));
+        return StatusCode(StatusCodes.Status201Created, await BuildAuthAsync(user));
     }
 
     [HttpPost("login")]
@@ -82,20 +84,21 @@ public class AuthController : ControllerBase
         if (user is null || !PasswordHasher.Verify(req.Password, user.PasswordHash))
             throw ApiException.Unauthorized("Invalid email or password.");
 
-        return Ok(BuildAuth(user));
+        return Ok(await BuildAuthAsync(user));
     }
 
     [HttpPost("logout")]
     public IActionResult Logout() => NoContent(); // JWT is stateless; the client drops the token
 
-    private AuthResponse BuildAuth(User user)
+    private async Task<AuthResponse> BuildAuthAsync(User user)
     {
         var (token, expiresAt) = _tokens.Create(user);
+        var isAdmin = await _db.IsAdminAsync(user.Id);
         return new AuthResponse
         {
             Token = token,
             ExpiresAt = expiresAt,
-            User = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt),
+            User = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin),
         };
     }
 }

@@ -46,4 +46,13 @@ public static class AppNotifications
         Message = $"Welcome, {name}! Your account is ready. Browse the upcoming events.",
         IsRead = false,
     };
+
+    public static Notification OrganizerPending(long userId) => new()
+    {
+        UserId = userId,
+        Type = JobTypes.OrganizerPending,
+        EventId = null,
+        Message = "You've applied to become an organizer. Your request is pending approval from an administrator.",
+        IsRead = false,
+    };
 }
