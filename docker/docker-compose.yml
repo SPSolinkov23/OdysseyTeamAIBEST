@@ -1,0 +1,54 @@
+version: "3.9"
+ 
+services:
+ 
+  db:
+    image: mysql:8.0
+    container_name: schoolevents-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: school_events
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+ 
+  api:
+    build:
+      context: ./backend
+      dockerfile: src/SchoolEvents.Api/Dockerfile
+    container_name: schoolevents-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: "Server=db;Port=3306;Database=school_events;User Id=root;Password=rootpass;AllowPublicKeyRetrieval=True;SslMode=None;"
+      Jwt__Issuer: "school-events"
+      Jwt__Audience: "school-events"
+      Jwt__Secret: "557e57baddd1711bce98b1ab1b3bc64925c61c061ac54b5ddc37f1e3d5ff35a6"
+      Jwt__ExpiresMinutes: "720"
+      Auth__AllowOrganizerSignup: "false"
+    ports:
+      - "5080:8080"
+ 
+  worker:
+    build:
+      context: ./backend
+      dockerfile: src/SchoolEvents.Worker/Dockerfile
+    container_name: schoolevents-worker
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: "Server=db;Port=3306;Database=school_events;User Id=root;Password=rootpass;AllowPublicKeyRetrieval=True;SslMode=None;"
+
+volumes:
+  db_data:
