@@ -10,14 +10,14 @@ const STEPS = {
         { el: "#ev-search", placement: "bottom", icon: "fa-magnifying-glass", title: "Search & filters", text: "Quickly find an event by keyword or category." },
         { el: "[data-register]", placement: "top", icon: "fa-bolt", title: "Registration", text: "Register with one tap. If the event is full, you join a fair FIFO waitlist." },
         { el: '#nav a[href="#/my-registrations"]', placement: "bottom", icon: "fa-ticket", title: "My registrations", text: "Track your status and your position on the waitlist." },
-        { el: '#nav a[href="#/notifications"]', placement: "bottom-end", icon: "fa-bell", title: "Notifications", text: "Get a real-time notification on confirmation, promotion or change." },
+        { el: '#bell-btn', placement: "bottom-end", icon: "fa-bell", title: "Notifications", text: "Open the bell to see real-time updates: confirmations, promotions and changes." },
     ],
     organizer: [
         { el: '#nav a[href="#/"]', placement: "bottom-start", icon: "fa-hand-sparkles", title: "Welcome! 👋", text: "Manage your events from here. Here's a quick tour." },
         { el: '#nav a[href="#/organizer/new"]', placement: "bottom", icon: "fa-plus", title: "New event", text: "Create an event as a draft with a live preview before you publish it." },
         { el: "[data-publish]", placement: "top", icon: "fa-paper-plane", title: "Publishing", text: "Publish the draft to make it visible to students." },
         { el: '[href^="#/organizer/events/"]', placement: "top", icon: "fa-users", title: "Registrations & waitlist", text: "See confirmed registrations and the ordered waitlist for each of your events." },
-        { el: '#nav a[href="#/notifications"]', placement: "bottom-end", icon: "fa-bell", title: "Notifications", text: "Event-driven notifications arrive here." },
+        { el: '#bell-btn', placement: "bottom-end", icon: "fa-bell", title: "Notifications", text: "Open the bell to see event-driven notifications in real time." },
     ],
 };
 
