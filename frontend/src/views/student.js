@@ -1,7 +1,6 @@
 import { UI } from "../core/ui.js";
 import { Auth } from "../core/auth.js";
 import { API } from "../core/api.js";
-import { Bus } from "../core/bus.js";
 import { Router } from "../core/router.js";
 import { refreshNotifications } from "../core/notifications.js";
 
@@ -257,49 +256,3 @@ function bindMyRegs(root) {
     root.querySelectorAll("[data-cancel]").forEach((btn) => btn.addEventListener("click", () => cancelReg(btn.getAttribute("data-cancel"))));
 }
 
-export async function notifications() {
-    const items = await API.listNotifications();
-    const meta = {
-        RegistrationConfirmed: { icon: "fa-circle-check", color: "emerald" },
-        RegistrationWaitlisted: { icon: "fa-hourglass-half", color: "amber" },
-        WaitlistPromoted: { icon: "fa-arrow-up-right-dots", color: "sky" },
-        RegistrationCancelled: { icon: "fa-circle-minus", color: "slate" },
-        EventCancelled: { icon: "fa-calendar-xmark", color: "rose" },
-        AccountWelcome: { icon: "fa-hand-sparkles", color: "brand" },
-    };
-
-    const list = items.length
-        ? items
-            .map((n, idx) => {
-                const m = meta[n.type] || { icon: "fa-bell", color: "brand" };
-                return (
-                    '<div class="flex items-start gap-4 rounded-2xl border p-4 ' + (n.read ? "border-slate-200 bg-white" : "border-brand-200 bg-brand-50/50") + '" data-aos="' + UI.aos(idx) + '" data-aos-delay="' + idx * 40 + '">' +
-                    '<span class="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-' + m.color + "-100 text-" + m.color + '-600"><i class="fa-solid ' + m.icon + '"></i></span>' +
-                    '<div class="flex-1"><p class="text-sm text-slate-700">' + UI.escape(n.message) + "</p>" +
-                    '<p class="mt-1 text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i>' + UI.fmtRelative(n.createdAt) + "</p></div>" +
-                    (n.read ? "" : '<span class="mt-1 h-2.5 w-2.5 flex-none rounded-full bg-brand-500"></span>') +
-                    "</div>"
-                );
-            })
-            .join("")
-        : UI.empty({ icon: "fa-bell-slash", title: "No notifications", text: "Confirmations, promotions and changes will show up here." });
-
-    const html =
-        '<section class="container-app py-10"><div class="mb-8 flex items-end justify-between" data-aos="fade-down">' +
-        '<div><h1 class="font-display text-3xl font-bold text-slate-800">Notifications</h1><p class="mt-1 text-slate-500">Event-driven messages in real time.</p></div></div>' +
-        '<div class="mx-auto max-w-2xl space-y-3">' + list + "</div></section>";
-
-    return {
-        html: html,
-        onMount: () => {
-            if (API.unreadCount() > 0) {
-                setTimeout(async () => {
-                    try {
-                        await API.markAllRead();
-                        Bus.emit("notifications");
-                    } catch (e) { }
-                }, 900);
-            }
-        },
-    };
-}

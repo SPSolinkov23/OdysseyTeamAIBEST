@@ -1,7 +1,7 @@
 import { Bus } from "./core/bus.js";
 import { Auth } from "./core/auth.js";
 import { Router } from "./core/router.js";
-import { renderNav } from "./core/nav.js";
+import { renderNav, updateBell } from "./core/nav.js";
 import { refreshNotifications } from "./core/notifications.js";
 import { initAos } from "./core/anim.js";
 import { initScroll } from "./core/scroll.js";
@@ -15,7 +15,7 @@ async function boot() {
     Bus.on("auth", renderNav);
     Bus.on("auth", refreshNotifications);
     Bus.on("route", renderNav);
-    Bus.on("notifications", renderNav);
+    Bus.on("notifications", updateBell);
 
     Bus.on("route", (path) => {
         const u = Auth.current();
