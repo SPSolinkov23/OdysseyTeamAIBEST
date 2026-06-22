@@ -14,6 +14,17 @@ public static class EmailTemplates
 
         return jobType switch
         {
+
+            JobTypes.OrganizerApproved => (
+                "Your organizer request was approved",
+                $"Hi {p.Name},\n\nGood news! Your request to become an organizer has been approved. "
+                + "You can now create and manage events.\n\n— School Events"),
+
+            JobTypes.OrganizerRejected => (
+                "Your organizer request was declined",
+                $"Hi {p.Name},\n\nYour request to become an organizer has been declined. "
+                + "Your account stays as a student account and you can keep registering for events.\n\n— School Events"),
+
             JobTypes.AccountWelcome => (
                 "Welcome to School Events",
                 $"Hi {p.Name},\n\nYour School Events account has been created successfully. "
