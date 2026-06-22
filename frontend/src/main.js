@@ -17,20 +17,23 @@ async function boot() {
     Bus.on("route", renderNav);
     Bus.on("notifications", updateBell);
 
-    Bus.on("route", (hash) => {
+    Bus.on("route", (path) => {
         const u = Auth.current();
-        if (u && (hash === "#/events" || hash === "#/organizer")) Tour.maybeStart(u);
+        if (u && (path === "/events" || path === "/organizer")) Tour.maybeStart(u);
     });
 
-    window.addEventListener("hashchange", () => Router.handle());
+    window.addEventListener("popstate", () => Router.handle());
+
+    document.addEventListener("click", (e) => {
+        const a = e.target.closest("a[href]");
+        if (!a || a.target === "_blank" || a.origin !== location.origin) return;
+        e.preventDefault();
+        history.pushState(null, "", a.pathname);
+        Router.handle();
+    });
 
     renderNav();
-    
-    if (!location.hash) {
-        location.hash = "#/";
-    } else {
-        await Router.handle();
-    }
+    await Router.handle();
 
     if (Auth.current()) refreshNotifications();
     setInterval(refreshNotifications, 30000);

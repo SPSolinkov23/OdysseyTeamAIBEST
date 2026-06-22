@@ -170,7 +170,7 @@ function guard(title, text) {
         '<div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50 text-2xl text-rose-500"><i class="fa-solid fa-lock"></i></div>' +
         '<h2 class="font-display text-2xl font-bold text-slate-800">' + escape(title) + "</h2>" +
         '<p class="mt-2 text-slate-500">' + escape(text) + "</p>" +
-        '<a href="#/" class="btn-primary mt-6"><i class="fa-solid fa-house"></i> Go home</a></div></section>'
+        '<a href="/" class="btn-primary mt-6"><i class="fa-solid fa-house"></i> Go home</a></div></section>'
     );
 }
 
