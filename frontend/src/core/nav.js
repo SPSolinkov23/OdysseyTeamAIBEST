@@ -40,9 +40,23 @@ function bellBadge(n) {
 function bell() {
     const n = API.unreadCount();
     return (
-        '<a href="/notifications" class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600 ' + (cur === "/notifications" ? "bg-brand-50 text-brand-600" : "") + '" aria-label="Notifications"><i class="fa-solid fa-bell text-lg"></i>' +
-        (n > 0 ? '<span class="absolute -right-0.5 -top-0.5 flex min-w-[18px] items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white ring-2 ring-white">' + (n > 9 ? "9+" : n) + "</span>" : "") +
-        "</a>"
+        '<div class="relative" id="notif-wrap">' +
+        '<button id="bell-btn" type="button" aria-label="Notifications" aria-haspopup="true" class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600">' +
+        '<i class="fa-solid fa-bell text-lg"></i>' + bellBadge(n) +
+        '</button>' +
+        '<div id="notif-panel" class="hidden absolute right-0 top-full z-50 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-96 origin-top-right overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft">' +
+        '<div class="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-3">' +
+        '<div class="flex items-center gap-2">' +
+        '<span class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><i class="fa-solid fa-bell text-sm"></i></span>' +
+        '<h3 class="font-display text-sm font-bold text-slate-800">Notifications</h3>' +
+        '</div>' +
+        '<button id="notif-mark-read" type="button" class="hidden inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-brand-600 transition hover:bg-brand-50">' +
+        '<i class="fa-solid fa-check-double"></i> Mark all as read' +
+        '</button>' +
+        '</div>' +
+        '<div id="notif-list" class="max-h-[28rem] overflow-y-auto"></div>' +
+        '</div>' +
+        '</div>'
     );
 }
 
