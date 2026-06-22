@@ -243,11 +243,14 @@ export const API = {
     },
 
     async getEventAttendees(eventId) {
-        const data = await request("GET", "/events/" + eventId + "/registrations");
+        const [reg, wait] = await Promise.all([
+            request("GET", "/events/" + eventId + "/registrations"),
+            request("GET", "/events/" + eventId + "/waitlist"),
+        ]);
 
         return {
-            confirmed: (data.registrations || []).map(mapAttendee),
-            waitlist: (data.waitlist || []).map(mapAttendee),
+            confirmed: (reg.registrations || []).map(mapAttendee),
+            waitlist: (wait.waitlist || []).map(mapAttendee),
         };
     },
 
