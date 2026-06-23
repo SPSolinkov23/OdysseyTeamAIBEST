@@ -56,18 +56,9 @@ function eventCard(ev, mine, i) {
 
 export async function events() {
     const user = Auth.current();
-    const list = await API.listPublishedEvents();
-
     const PAGE_SIZE = 6;
-    const currentPage = 1;
-
-    const totalPages = Math.ceil(list.length / PAGE_SIZE);
-
-    const pagedEvents = list.slice(
-        (currentPage - 1) * PAGE_SIZE,
-        currentPage * PAGE_SIZE
-    );
-
+    const list = await API.listPublishedEvents();
+    const pageData = await API.listPublishedEvents({ page: 1, pageSize: PAGE_SIZE, paginated: true });
     const mine = await myMap();
     const cats = Array.from(new Set(list.map((e) => e.category)));
 
@@ -95,59 +86,84 @@ export async function events() {
         cats.map((c) => '<button class="chip" data-cat="' + UI.escape(c) + '">' + UI.escape(c) + "</button>").join("") +
         "</div></div>" +
         '<div id="ev-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">' +
-        pagedEvents.map((e, i) => eventCard(e, mine, i)).join("") +
+        pageData.events.map((e, i) => eventCard(e, mine, i)).join("") +
         "</div>" +
         '<div id="ev-empty" class="hidden">' + UI.empty({ icon: "fa-calendar-xmark", title: "No events found", text: "Try a different word or category." }) + "</div>" +
 
-        '<div class="mt-8 flex justify-center gap-2">' +
-
-         Array.from({ length: totalPages }, (_, i) =>
-        '<button class="btn-secondary btn-sm page-btn" data-page="' + (i + 1) + '">' + (i + 1) + '</button>').join("") +
+        '<div id="ev-pages" class="mt-8 flex justify-center gap-2">' +
+        paginationButtons(pageData.page, pageData.totalPages) +
         '</div>' + "</section>";
 
-    return { html: html, onMount: bindEvents };
+    return { html: html, onMount: (root) => bindEvents(root, { pageSize: PAGE_SIZE, mine: mine }) };
 }
 
-function bindEvents(root) {
+function paginationButtons(currentPage, totalPages) {
+    if (totalPages <= 1) return "";
+    return Array.from({ length: totalPages }, (_, i) => {
+        const page = i + 1;
+        const active = page === currentPage;
+        return (
+            '<button class="' + (active ? "btn-primary" : "btn-secondary") + ' btn-sm page-btn" data-page="' + page + '">' +
+            page +
+            '</button>'
+        );
+    }).join("");
+}
+
+function bindEvents(root, state) {
     const search = root.querySelector("#ev-search");
     const grid = root.querySelector("#ev-grid");
     const empty = root.querySelector("#ev-empty");
+    const pages = root.querySelector("#ev-pages");
     let activeCat = "all";
+    let timer = null;
 
-    root.querySelectorAll(".page-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            console.log("Page:", btn.dataset.page);
+    function bindRegisterButtons() {
+        grid.querySelectorAll("[data-register]").forEach((btn) => {
+            btn.addEventListener("click", () => quickRegister(btn.getAttribute("data-register"), btn));
         });
-    });
-
-    function apply() {
-        const q = (search.value || "").trim().toLowerCase();
-        let shown = 0;
-        grid.querySelectorAll("[data-card]").forEach((card) => {
-            const okText = !q || card.getAttribute("data-title").includes(q);
-            const okCat = activeCat === "all" || card.getAttribute("data-cat") === activeCat;
-            const ok = okText && okCat;
-            card.classList.toggle("hidden", !ok);
-            if (ok) shown++;
-        });
-        empty.classList.toggle("hidden", shown !== 0);
-        grid.classList.toggle("hidden", shown === 0);
     }
 
-    search.addEventListener("input", apply);
+    function bindPageButtons() {
+        pages.querySelectorAll(".page-btn").forEach((btn) => {
+            btn.addEventListener("click", () => loadPage(parseInt(btn.getAttribute("data-page"), 10)));
+        });
+    }
+
+    async function loadPage(page) {
+        const q = (search.value || "").trim().toLowerCase();
+        const data = await API.listPublishedEvents({
+            page: page,
+            pageSize: state.pageSize,
+            q: q,
+            category: activeCat,
+            paginated: true,
+        });
+
+        grid.innerHTML = data.events.map((e, i) => eventCard(e, state.mine, i)).join("");
+        pages.innerHTML = paginationButtons(data.page, data.totalPages);
+        empty.classList.toggle("hidden", data.events.length !== 0);
+        grid.classList.toggle("hidden", data.events.length === 0);
+        bindRegisterButtons();
+        bindPageButtons();
+    }
+
+    search.addEventListener("input", () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => loadPage(1), 250);
+    });
 
     root.querySelectorAll("#ev-cats .chip").forEach((btn) => {
         btn.addEventListener("click", () => {
             root.querySelectorAll("#ev-cats .chip").forEach((b) => b.classList.remove("is-active"));
             btn.classList.add("is-active");
             activeCat = btn.getAttribute("data-cat");
-            apply();
+            loadPage(1);
         });
     });
 
-    grid.querySelectorAll("[data-register]").forEach((btn) => {
-        btn.addEventListener("click", () => quickRegister(btn.getAttribute("data-register"), btn));
-    });
+    bindRegisterButtons();
+    bindPageButtons();
 }
 
 async function quickRegister(eventId, btn) {

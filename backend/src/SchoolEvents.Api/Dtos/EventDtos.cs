@@ -79,4 +79,8 @@ public class EventEnvelope
 public class EventListResponse
 {
     public IReadOnlyList<EventDto> Events { get; set; } = Array.Empty<EventDto>();
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; }
+    public int TotalCount { get; set; }
+    public int TotalPages { get; set; } = 1;
 }

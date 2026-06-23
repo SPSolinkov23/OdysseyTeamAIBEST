@@ -39,7 +39,7 @@ public class EventService
         UpdatedAt = e.UpdatedAt,
     };
 
-    public async Task<List<EventDto>> ListAsync(long? callerId, string? status, string? q, bool mine)
+    public async Task<EventListResponse> ListAsync(long? callerId, string? status, string? q, string? category, bool mine, int? page, int? pageSize)
     {
         IQueryable<Event> query = _db.Events.AsNoTracking();
 
@@ -62,7 +62,32 @@ public class EventService
             query = query.Where(e => e.Title.Contains(term) || (e.Location != null && e.Location.Contains(term)));
         }
 
-        return await query.OrderBy(e => e.StartsAt).Select(ToDto).ToListAsync();
+        if (!string.IsNullOrWhiteSpace(category) && !string.Equals(category, "all", StringComparison.OrdinalIgnoreCase))
+        {
+            var selectedCategory = category.Trim();
+            query = query.Where(e => e.Category == selectedCategory);
+        }
+
+        var totalCount = await query.CountAsync();
+        var safePageSize = pageSize is > 0 ? Math.Min(pageSize.Value, 50) : totalCount;
+        if (safePageSize == 0) safePageSize = pageSize is > 0 ? Math.Min(pageSize.Value, 50) : 0;
+
+        var totalPages = safePageSize > 0 ? (int)Math.Ceiling(totalCount / (double)safePageSize) : 1;
+        var safePage = page is > 0 ? page.Value : 1;
+        if (totalPages > 0) safePage = Math.Min(safePage, totalPages);
+
+        var eventsQuery = query.OrderBy(e => e.StartsAt).Select(ToDto);
+        if (page is not null || pageSize is not null)
+            eventsQuery = eventsQuery.Skip((safePage - 1) * safePageSize).Take(safePageSize);
+
+        return new EventListResponse
+        {
+            Events = await eventsQuery.ToListAsync(),
+            Page = safePage,
+            PageSize = safePageSize,
+            TotalCount = totalCount,
+            TotalPages = totalPages,
+        };
     }
 
     public async Task<EventDto> GetAsync(long id, long? callerId, bool callerIsOrganizer)

@@ -158,9 +158,26 @@ export const API = {
 
     mapUser: mapUser,
 
-    async listPublishedEvents() {
-        const data = await request("GET", "/events");
-        return (data.events || []).map(mapEvent);
+    async listPublishedEvents(options) {
+        const params = new URLSearchParams();
+        if (options) {
+            if (options.page) params.set("page", options.page);
+            if (options.pageSize) params.set("pageSize", options.pageSize);
+            if (options.q) params.set("q", options.q);
+            if (options.category && options.category !== "all") params.set("category", options.category);
+        }
+        const data = await request("GET", "/events" + (params.toString() ? "?" + params.toString() : ""));
+        const events = (data.events || []).map(mapEvent);
+        if (options && options.paginated) {
+            return {
+                events: events,
+                page: data.page || 1,
+                pageSize: data.page_size || options.pageSize || events.length,
+                totalCount: data.total_count || events.length,
+                totalPages: data.total_pages || 1,
+            };
+        }
+        return events;
     },
     async listOrganizerEvents() {
         const data = await request("GET", "/events?mine=true");
