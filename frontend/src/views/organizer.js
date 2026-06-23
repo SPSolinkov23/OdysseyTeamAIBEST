@@ -5,6 +5,44 @@ import { Router } from "../core/router.js";
 
 const CATS = ["Workshop", "Lecture", "Club", "Sports", "Seminar", "Hackathon", "Trip", "Event"];
 
+function readOrganizerPage(defaultSize) {
+    const params = new URLSearchParams(location.search);
+    return {
+        page: Math.max(1, parseInt(params.get("page") || "1", 10) || 1),
+        pageSize: defaultSize,
+    };
+}
+
+function setOrganizerPage(page) {
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", page);
+    history.pushState(null, "", "/organizer" + (params.toString() ? "?" + params.toString() : ""));
+    Router.handle();
+}
+
+function pagination(meta) {
+    if (meta.totalPages <= 1) return "";
+
+    const buttons = [];
+    for (let p = 1; p <= meta.totalPages; p++) {
+        if (p === 1 || p === meta.totalPages || Math.abs(p - meta.page) <= 1) {
+            buttons.push('<button class="chip ' + (p === meta.page ? "is-active" : "") + '" data-page="' + p + '">' + p + "</button>");
+        } else if (buttons[buttons.length - 1] !== '<span class="px-1 text-slate-400">...</span>') {
+            buttons.push('<span class="px-1 text-slate-400">...</span>');
+        }
+    }
+
+    return (
+        '<div id="org-pagination" class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
+        '<p class="text-sm text-slate-500">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
+        '<div class="flex flex-wrap items-center gap-2">' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> Previous</button>' +
+        buttons.join("") +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>Next <i class="fa-solid fa-chevron-right"></i></button>' +
+        "</div></div>"
+    );
+}
+
 function toLocalInput(iso) {
     if (!iso) return "";
     const d = new Date(iso);
@@ -13,16 +51,17 @@ function toLocalInput(iso) {
 }
 
 export async function organizer() {
-    const list = await API.listOrganizerEvents();
+    const page = await API.listOrganizerEvents(readOrganizerPage(8));
+    const list = page.events;
     const published = list.filter((e) => e.status === "PUBLISHED").length;
     const drafts = list.filter((e) => e.status === "DRAFT").length;
     const totalRegs = list.reduce((a, e) => a + e.confirmedCount + e.waitlistCount, 0);
 
     const stats = [
-        { icon: "fa-layer-group", label: "Total events", value: list.length, color: "brand" },
-        { icon: "fa-tower-broadcast", label: "Published", value: published, color: "sky" },
-        { icon: "fa-pen-ruler", label: "Drafts", value: drafts, color: "slate" },
-        { icon: "fa-users", label: "Registrations", value: totalRegs, color: "emerald" },
+        { icon: "fa-layer-group", label: "Total events", value: page.totalCount, color: "brand" },
+        { icon: "fa-tower-broadcast", label: "Published on page", value: published, color: "sky" },
+        { icon: "fa-pen-ruler", label: "Drafts on page", value: drafts, color: "slate" },
+        { icon: "fa-users", label: "Registrations on page", value: totalRegs, color: "emerald" },
     ];
 
     const rows = list.length
@@ -40,7 +79,7 @@ export async function organizer() {
             '<div class="card flex items-center gap-4 p-4" data-aos="zoom-in-up" data-aos-delay="' + i * 70 + '" data-aos-duration="500"><span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-' + s.color + "-100 text-" + s.color + '-600 text-lg"><i class="fa-solid ' + s.icon + '"></i></span><div><div class="font-display text-2xl font-bold text-slate-800">' + s.value + '</div><div class="text-xs text-slate-500">' + s.label + "</div></div></div>"
         ).join("") +
         "</div></div></section>" +
-        '<section class="container-app py-8"><h2 class="mb-5 font-display text-xl font-semibold text-slate-800">My events</h2><div class="space-y-4">' + rows + "</div></section>";
+        '<section class="container-app py-8"><h2 class="mb-5 font-display text-xl font-semibold text-slate-800">My events</h2><div class="space-y-4">' + rows + "</div>" + pagination(page) + "</section>";
 
     return { html: html, onMount: bindDashboard };
 }
@@ -71,6 +110,7 @@ function eventRow(e, idx) {
 function bindDashboard(root) {
     root.querySelectorAll("[data-publish]").forEach((b) => b.addEventListener("click", () => publish(b.getAttribute("data-publish"))));
     root.querySelectorAll("[data-cancel-event]").forEach((b) => b.addEventListener("click", () => cancelEvent(b.getAttribute("data-cancel-event"))));
+    root.querySelectorAll("#org-pagination [data-page]").forEach((b) => b.addEventListener("click", () => setOrganizerPage(parseInt(b.getAttribute("data-page"), 10))));
 }
 
 async function publish(id) {

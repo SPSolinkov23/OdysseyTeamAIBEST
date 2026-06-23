@@ -53,15 +53,57 @@ function eventCard(ev, mine, i) {
     );
 }
 
+function readPageState(defaultSize) {
+    const params = new URLSearchParams(location.search);
+    return {
+        page: Math.max(1, parseInt(params.get("page") || "1", 10) || 1),
+        pageSize: defaultSize,
+        q: params.get("q") || "",
+    };
+}
+
+function setPageState(page, q) {
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", page);
+    if (q) params.set("q", q);
+    history.pushState(null, "", "/events" + (params.toString() ? "?" + params.toString() : ""));
+    Router.handle();
+}
+
+function pagination(meta) {
+    if (meta.totalPages <= 1) return "";
+
+    const buttons = [];
+    for (let p = 1; p <= meta.totalPages; p++) {
+        if (p === 1 || p === meta.totalPages || Math.abs(p - meta.page) <= 1) {
+            buttons.push('<button class="chip ' + (p === meta.page ? "is-active" : "") + '" data-page="' + p + '">' + p + "</button>");
+        } else if (buttons[buttons.length - 1] !== '<span class="px-1 text-slate-400">...</span>') {
+            buttons.push('<span class="px-1 text-slate-400">...</span>');
+        }
+    }
+
+    return (
+        '<div id="ev-pagination" class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
+        '<p class="text-sm text-slate-500">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
+        '<div class="flex flex-wrap items-center gap-2">' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> Previous</button>' +
+        buttons.join("") +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>Next <i class="fa-solid fa-chevron-right"></i></button>' +
+        "</div></div>"
+    );
+}
+
 export async function events() {
     const user = Auth.current();
-    const list = await API.listPublishedEvents();
+    const state = readPageState(9);
+    const page = await API.listPublishedEvents(state);
+    const list = page.events;
     const mine = await myMap();
     const cats = Array.from(new Set(list.map((e) => e.category)));
 
     const stats = [
-        { icon: "fa-calendar-star", label: "Active events", value: list.length, color: "brand" },
-        { icon: "fa-circle-check", label: "Free seats", value: list.reduce((a, e) => a + e.spotsLeft, 0), color: "emerald" },
+        { icon: "fa-calendar-star", label: "Active events", value: page.totalCount, color: "brand" },
+        { icon: "fa-circle-check", label: "Free seats on page", value: list.reduce((a, e) => a + e.spotsLeft, 0), color: "emerald" },
         { icon: "fa-hourglass-half", label: "On waitlist", value: list.reduce((a, e) => a + e.waitlistCount, 0), color: "amber" },
     ];
 
@@ -78,7 +120,7 @@ export async function events() {
         ).join("") +
         "</div></div></section>" +
         '<section class="container-app py-8"><div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
-        '<div class="relative w-full sm:max-w-xs"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i><input id="ev-search" class="input pl-10" placeholder="Search by title or place..."></div>' +
+        '<div class="relative w-full sm:max-w-xs"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i><input id="ev-search" class="input pl-10" value="' + UI.escape(state.q) + '" placeholder="Search by title or place..."></div>' +
         '<div id="ev-cats" class="flex flex-wrap gap-2"><button class="chip is-active" data-cat="all">All</button>' +
         cats.map((c) => '<button class="chip" data-cat="' + UI.escape(c) + '">' + UI.escape(c) + "</button>").join("") +
         "</div></div>" +
@@ -86,6 +128,7 @@ export async function events() {
         list.map((e, i) => eventCard(e, mine, i)).join("") +
         "</div>" +
         '<div id="ev-empty" class="hidden">' + UI.empty({ icon: "fa-calendar-xmark", title: "No events found", text: "Try a different word or category." }) + "</div>" +
+        pagination(page) +
         "</section>";
 
     return { html: html, onMount: bindEvents };
@@ -96,6 +139,7 @@ function bindEvents(root) {
     const grid = root.querySelector("#ev-grid");
     const empty = root.querySelector("#ev-empty");
     let activeCat = "all";
+    let searchTimer = null;
 
     function apply() {
         const q = (search.value || "").trim().toLowerCase();
@@ -111,7 +155,10 @@ function bindEvents(root) {
         grid.classList.toggle("hidden", shown === 0);
     }
 
-    search.addEventListener("input", apply);
+    search.addEventListener("input", () => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => setPageState(1, (search.value || "").trim()), 300);
+    });
     root.querySelectorAll("#ev-cats .chip").forEach((btn) => {
         btn.addEventListener("click", () => {
             root.querySelectorAll("#ev-cats .chip").forEach((b) => b.classList.remove("is-active"));
@@ -120,6 +167,12 @@ function bindEvents(root) {
             apply();
         });
     });
+
+    root.querySelectorAll("#ev-pagination [data-page]").forEach((btn) => {
+        btn.addEventListener("click", () => setPageState(parseInt(btn.getAttribute("data-page"), 10), (search.value || "").trim()));
+    });
+
+    apply();
 
     grid.querySelectorAll("[data-register]").forEach((btn) => {
         btn.addEventListener("click", () => quickRegister(btn.getAttribute("data-register"), btn));
@@ -255,4 +308,3 @@ export async function myRegistrations() {
 function bindMyRegs(root) {
     root.querySelectorAll("[data-cancel]").forEach((btn) => btn.addEventListener("click", () => cancelReg(btn.getAttribute("data-cancel"))));
 }
-

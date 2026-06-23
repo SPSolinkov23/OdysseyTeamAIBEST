@@ -157,6 +157,28 @@ function eventBody(data) {
     return body;
 }
 
+function query(params) {
+    const qs = new URLSearchParams();
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") qs.set(key, value);
+    });
+
+    const text = qs.toString();
+    return text ? "?" + text : "";
+}
+
+function mapEventPage(data) {
+    return {
+        events: (data.events || []).map(mapEvent),
+        page: data.page || 1,
+        pageSize: data.page_size || 9,
+        totalCount: data.total_count || 0,
+        totalPages: data.total_pages || 0,
+        hasPreviousPage: !!data.has_previous_page,
+        hasNextPage: !!data.has_next_page,
+    };
+}
+
 export const API = {
     async authLogin(email, password) {
         return request("POST", "/auth/login", { email: email, password: password });
@@ -177,17 +199,27 @@ export const API = {
 
     mapUser: mapUser,
 
-    async listPublishedEvents() {
-        const data = await request("GET", "/events");
-        
-        return (data.events || []).map(mapEvent);
+    async listPublishedEvents(options = {}) {
+        const data = await request("GET", "/events" + query({
+            page: options.page || 1,
+            pageSize: options.pageSize || 9,
+            q: options.q || "",
+        }));
+
+        return mapEventPage(data);
     },
 
-    async listOrganizerEvents() {
-        const data = await request("GET", "/events?mine=true");
-        const list = (data.events || []).map(mapEvent);
+    async listOrganizerEvents(options = {}) {
+        const data = await request("GET", "/events" + query({
+            mine: true,
+            page: options.page || 1,
+            pageSize: options.pageSize || 8,
+            q: options.q || "",
+        }));
+        const page = mapEventPage(data);
 
-        return list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        page.events = page.events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return page;
     },
 
     async getEvent(id) {

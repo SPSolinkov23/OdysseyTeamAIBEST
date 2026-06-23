@@ -39,8 +39,11 @@ public class EventService
         UpdatedAt = e.UpdatedAt,
     };
 
-    public async Task<List<EventDto>> ListAsync(long? callerId, string? status, string? q, bool mine)
+    public async Task<EventListResponse> ListAsync(long? callerId, string? status, string? q, bool mine, int page, int pageSize)
     {
+        page = Math.Max(1, page);
+        pageSize = Math.Clamp(pageSize, 1, 50);
+
         IQueryable<Event> query = _db.Events.AsNoTracking();
 
         if (mine)
@@ -62,7 +65,30 @@ public class EventService
             query = query.Where(e => e.Title.Contains(term) || (e.Location != null && e.Location.Contains(term)));
         }
 
-        return await query.OrderBy(e => e.StartsAt).Select(ToDto).ToListAsync();
+        var totalCount = await query.CountAsync();
+        var totalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        if (totalPages > 0 && page > totalPages)
+            page = totalPages;
+
+        var events = await query
+            .OrderBy(e => e.StartsAt)
+            .ThenBy(e => e.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(ToDto)
+            .ToListAsync();
+
+        return new EventListResponse
+        {
+            Events = events,
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount,
+            TotalPages = totalPages,
+            HasPreviousPage = page > 1,
+            HasNextPage = totalPages > 0 && page < totalPages,
+        };
     }
 
     public async Task<EventDto> GetAsync(long id, long? callerId, bool callerIsOrganizer)

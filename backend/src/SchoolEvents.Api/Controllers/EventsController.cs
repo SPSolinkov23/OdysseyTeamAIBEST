@@ -23,10 +23,11 @@ public class EventsController : ControllerBase
     public async Task<ActionResult<EventListResponse>> List(
         [FromQuery] string? status,
         [FromQuery] string? q,
-        [FromQuery] bool mine = false)
+        [FromQuery] bool mine = false,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 9)
     {
-        var list = await _events.ListAsync(CallerId(), status, q, mine);
-        return Ok(new EventListResponse { Events = list });
+        return Ok(await _events.ListAsync(CallerId(), status, q, mine, page, pageSize));
     }
 
     [HttpGet("{id:long}")]
