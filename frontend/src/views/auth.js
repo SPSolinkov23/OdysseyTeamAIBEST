@@ -30,6 +30,14 @@ function feature(icon, text) {
     );
 }
 
+const ROLE_BASE = "role-card flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-medium transition";
+const ROLE_ON = "border-brand-500 bg-brand-50 text-brand-700 ring-1 ring-brand-200";
+const ROLE_OFF = "border-slate-200 text-slate-600 hover:border-brand-300 hover:bg-slate-50";
+
+function roleCard(value, icon, label, active) {
+    return '<button type="button" data-role="' + value + '" class="' + ROLE_BASE + " " + (active ? ROLE_ON : ROLE_OFF) + '"><i class="fa-solid ' + icon + '"></i>' + label + "</button>";
+}
+
 export function auth(mode) {
     const isLogin = mode !== "register";
     const html =
@@ -44,6 +52,13 @@ export function auth(mode) {
         (isLogin
             ? ""
             : '<div><label class="label" for="f-name">Full name</label><input id="f-name" name="name" class="input" placeholder="Jane Smith" autocomplete="name"></div>') +
+        (isLogin
+            ? ""
+            : '<div><label class="label">Register as</label><div class="grid grid-cols-2 gap-3">' +
+              roleCard("student", "fa-user-graduate", "Student", true) +
+              roleCard("organizer", "fa-user-tie", "Organizer", false) +
+              '</div><input type="hidden" name="role" id="f-role" value="student">' +
+              '<p class="mt-1.5 text-xs text-slate-400">Organizer accounts need admin approval. Until approved you keep student access.</p></div>') +
         '<div><label class="label" for="f-email">Email</label><input id="f-email" type="email" name="email" class="input" placeholder="jane@school.edu" autocomplete="email"></div>' +
         '<div><label class="label" for="f-pass">Password</label><div class="relative"><input id="f-pass" type="password" name="password" class="input pr-11" placeholder="••••••" autocomplete="' + (isLogin ? "current-password" : "new-password") + '"><button type="button" id="toggle-pass" class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 hover:text-brand-600"><i class="fa-solid fa-eye"></i></button></div>' +
         (isLogin ? "" : '<p class="mt-1 text-xs text-slate-400">At least 8 characters, with one uppercase letter, one number, and one special character (@$!%*?&amp;).</p>') +
@@ -62,6 +77,18 @@ export function auth(mode) {
 function bind(root, isLogin) {
     const form = root.querySelector("#auth-form");
     const toggle = root.querySelector("#toggle-pass");
+    const roleInput = root.querySelector("#f-role");
+    if (roleInput) {
+        root.querySelectorAll(".role-card").forEach((card) => {
+            card.addEventListener("click", () => {
+                const val = card.getAttribute("data-role");
+                roleInput.value = val;
+                root.querySelectorAll(".role-card").forEach((c) => {
+                    c.className = ROLE_BASE + " " + (c.getAttribute("data-role") === val ? ROLE_ON : ROLE_OFF);
+                });
+            });
+        });
+    }
     if (toggle) {
         toggle.addEventListener("click", () => {
             const input = root.querySelector("#f-pass");
