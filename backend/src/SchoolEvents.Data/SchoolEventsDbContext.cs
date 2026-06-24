@@ -98,6 +98,7 @@ public class SchoolEventsDbContext : DbContext
         {
             e.Property(x => x.Type).HasMaxLength(60).IsRequired();
             e.Property(x => x.Message).HasMaxLength(500).IsRequired();
+            e.Property(x => x.Data).HasColumnType("json");
             e.HasOne(x => x.User)
                 .WithMany()
                 .HasForeignKey(x => x.UserId)

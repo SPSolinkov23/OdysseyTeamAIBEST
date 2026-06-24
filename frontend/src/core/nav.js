@@ -90,7 +90,7 @@ function notifItem(n) {
         '<div class="flex items-start gap-3 border-b border-slate-100 px-4 py-3 last:border-b-0 transition hover:bg-slate-50 ' + (n.read ? "" : "bg-brand-50/40") + '">' +
         '<span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-' + m.color + "-100 text-" + m.color + '-600"><i class="fa-solid ' + m.icon + '"></i></span>' +
         '<div class="min-w-0 flex-1">' +
-        '<p class="text-sm leading-snug text-slate-700">' + UI.escape(n.message) + '</p>' +
+        '<p class="text-sm leading-snug text-slate-700">' + UI.escape(UI.notifText(n)) + '</p>' +
         '<p class="mt-0.5 text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i>' + UI.escape(UI.fmtRelative(n.createdAt)) + '</p>' +
         '</div>' +
         (n.read ? "" : '<span class="mt-1.5 h-2 w-2 flex-none rounded-full bg-brand-500" aria-label="Unread"></span>') +

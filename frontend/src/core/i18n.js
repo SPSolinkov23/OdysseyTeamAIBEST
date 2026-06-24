@@ -260,6 +260,17 @@ const DICT = {
         "tour.organizer.4.text": "See confirmed registrations and the ordered waitlist for each of your events.",
         "tour.organizer.5.title": "Notifications",
         "tour.organizer.5.text": "Event-driven notifications arrive here.",
+
+        "notif.RegistrationConfirmed": "Your registration for “{event}” is confirmed.",
+        "notif.RegistrationWaitlisted": "You're on the waitlist for “{event}” (position {position}).",
+        "notif.RegistrationWaitlistedNoPos": "You're on the waitlist for “{event}”.",
+        "notif.WaitlistPromoted": "A spot opened up! Your registration for “{event}” is now confirmed.",
+        "notif.RegistrationCancelled": "You cancelled your registration for “{event}”.",
+        "notif.EventCancelled": "An event you registered for was cancelled: “{event}”.",
+        "notif.AccountWelcome": "Welcome, {name}! Your account is ready. Browse the upcoming events.",
+        "notif.OrganizerPending": "You've applied to become an organizer. Your request is pending approval from an administrator.",
+        "notif.OrganizerApproved": "Your organizer request was approved! You now have organizer access.",
+        "notif.OrganizerRejected": "Your organizer request was declined. Your account stays as a student account.",
     },
 
     bg: {
@@ -517,6 +528,17 @@ const DICT = {
         "tour.organizer.4.text": "Виж потвърдените записвания и подредената листа на чакащите за всяко твое събитие.",
         "tour.organizer.5.title": "Известия",
         "tour.organizer.5.text": "Известията при събития пристигат тук.",
+
+        "notif.RegistrationConfirmed": "Записването ти за „{event}“ е потвърдено.",
+        "notif.RegistrationWaitlisted": "В листата на чакащите си за „{event}“ (позиция {position}).",
+        "notif.RegistrationWaitlistedNoPos": "В листата на чакащите си за „{event}“.",
+        "notif.WaitlistPromoted": "Освободи се място! Записването ти за „{event}“ вече е потвърдено.",
+        "notif.RegistrationCancelled": "Отказа записването си за „{event}“.",
+        "notif.EventCancelled": "Събитие, за което беше записан, бе отменено: „{event}“.",
+        "notif.AccountWelcome": "Добре дошъл, {name}! Акаунтът ти е готов. Разгледай предстоящите събития.",
+        "notif.OrganizerPending": "Кандидатства за организатор. Заявката ти очаква одобрение от администратор.",
+        "notif.OrganizerApproved": "Заявката ти за организатор е одобрена! Вече имаш достъп на организатор.",
+        "notif.OrganizerRejected": "Заявката ти за организатор е отхвърлена. Акаунтът ти остава ученически.",
     },
 };
 
@@ -566,10 +588,16 @@ function cat(name) {
     return (map && map[name]) || name;
 }
 
+function exists(key) {
+    const dict = DICT[get()] || DICT[DEFAULT_LANG];
+    return dict[key] != null || DICT.en[key] != null;
+}
+
 export const I18n = {
     available: AVAILABLE,
     get,
     set,
     t,
     cat,
+    exists,
 };

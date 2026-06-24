@@ -13,6 +13,8 @@ public class Notification
 
     public string Message { get; set; } = string.Empty;
 
+    public string? Data { get; set; }
+
     public bool IsRead { get; set; }
 
     public DateTime CreatedAt { get; set; }

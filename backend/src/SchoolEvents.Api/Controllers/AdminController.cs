@@ -101,6 +101,7 @@ public class AdminController : ControllerBase
                 UserId = user.Id,
                 Email = user.Email,
                 Name = user.DisplayName,
+                Language = user.Language,
             }),
             Status = JobStatus.Pending,
             MaxAttempts = 5,

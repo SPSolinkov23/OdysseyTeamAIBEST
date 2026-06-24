@@ -150,6 +150,7 @@ public class RegistrationService
             UserId = recipient.Id,
             Email = recipient.Email,
             Name = recipient.DisplayName,
+            Language = recipient.Language,
             EventId = ev.Id,
             EventTitle = ev.Title,
             EventStartsAt = ev.StartsAt,

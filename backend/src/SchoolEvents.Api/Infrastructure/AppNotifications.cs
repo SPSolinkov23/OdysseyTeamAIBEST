@@ -1,9 +1,14 @@
+using System.Text.Json;
 using SchoolEvents.Data.Entities;
 
 namespace SchoolEvents.Api.Infrastructure;
 
 public static class AppNotifications
 {
+    private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
+
+    private static string Json(object data) => JsonSerializer.Serialize(data, JsonOpts);
+
     public static Notification Build(long userId, string type, long eventId, string eventTitle, int? waitlistPosition = null)
     {
         var message = type switch
@@ -29,6 +34,7 @@ public static class AppNotifications
             Type = type,
             EventId = eventId,
             Message = message,
+            Data = Json(new { eventTitle, position = waitlistPosition }),
             IsRead = false,
         };
     }
@@ -39,6 +45,7 @@ public static class AppNotifications
         Type = JobTypes.AccountWelcome,
         EventId = null,
         Message = $"Welcome, {name}! Your account is ready. Browse the upcoming events.",
+        Data = Json(new { name }),
         IsRead = false,
     };
 

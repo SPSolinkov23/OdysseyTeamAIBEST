@@ -128,12 +128,19 @@ function mapAttendee(a) {
     };
 }
 
+function parseData(raw) {
+    if (raw == null) return null;
+    if (typeof raw === "object") return raw;
+    try { return JSON.parse(raw); } catch (e) { return null; }
+}
+
 function mapNotification(n) {
     return {
         id: n.id,
         type: n.type,
         eventId: n.event_id,
         message: n.message,
+        data: parseData(n.data),
         read: !!n.read,
         createdAt: n.created_at,
     };

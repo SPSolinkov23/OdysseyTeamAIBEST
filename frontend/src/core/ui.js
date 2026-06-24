@@ -86,6 +86,14 @@ function categoryMeta(cat) {
     return CATEGORIES[cat] || { icon: "fa-calendar-star", color: "slate" };
 }
 
+function notifText(n) {
+    const d = n.data || {};
+    let key = "notif." + n.type;
+    if (n.type === "RegistrationWaitlisted" && d.position == null) key = "notif.RegistrationWaitlistedNoPos";
+    if (!I18n.exists(key)) return n.message || "";
+    return I18n.t(key, { event: d.eventTitle, position: d.position, name: d.name });
+}
+
 function regBadge(status) {
     const m = REG_STATUS[status] || REG_STATUS.CANCELLED;
     return '<span class="badge bg-' + m.color + '-100 text-' + m.color + '-700 ring-' + m.color + '-200"><i class="fa-solid ' + m.icon + '"></i>' + I18n.t(m.labelKey) + "</span>";
@@ -204,6 +212,7 @@ export const UI = {
     fmtRelative,
     categoryMeta,
     catLabel: (name) => I18n.cat(name),
+    notifText,
     regBadge,
     eventBadge,
     toast,

@@ -36,6 +36,7 @@ public class NotificationsController : ControllerBase
                 Type = n.Type,
                 EventId = n.EventId,
                 Message = n.Message,
+                Data = n.Data,
                 Read = n.IsRead,
                 CreatedAt = n.CreatedAt,
             })

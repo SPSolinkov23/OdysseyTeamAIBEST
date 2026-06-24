@@ -170,6 +170,7 @@ public class EventService
                         UserId = attendee.Id,
                         Email = attendee.Email,
                         Name = attendee.DisplayName,
+                        Language = attendee.Language,
                         EventId = ev.Id,
                         EventTitle = ev.Title,
                         EventStartsAt = ev.StartsAt,

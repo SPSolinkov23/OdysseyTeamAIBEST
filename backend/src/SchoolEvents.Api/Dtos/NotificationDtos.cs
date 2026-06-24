@@ -6,6 +6,7 @@ public class NotificationDto
     public string Type { get; set; } = string.Empty;
     public long? EventId { get; set; }
     public string Message { get; set; } = string.Empty;
+    public string? Data { get; set; }
     public bool Read { get; set; }
     public DateTime CreatedAt { get; set; }
 }

@@ -7,8 +7,8 @@ const seen = new Set();
 let primed = false;
 
 function toastIfImportant(n) {
-    if (n.type === "WaitlistPromoted") UI.toast(n.message, "success");
-    else if (n.type === "EventCancelled") UI.toast(n.message, "error");
+    if (n.type === "WaitlistPromoted") UI.toast(UI.notifText(n), "success");
+    else if (n.type === "EventCancelled") UI.toast(UI.notifText(n), "error");
 }
 
 export async function refreshNotifications() {

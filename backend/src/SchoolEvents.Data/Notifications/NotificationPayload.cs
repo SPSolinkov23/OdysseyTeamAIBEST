@@ -7,6 +7,7 @@ public class NotificationPayload
     public long UserId { get; set; }
     public string Email { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    public string Language { get; set; } = "bg";
 
     public long EventId { get; set; }
     public string EventTitle { get; set; } = string.Empty;
