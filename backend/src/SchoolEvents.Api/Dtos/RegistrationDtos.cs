@@ -58,5 +58,9 @@ public class AttendeeDto
 public class EventRegistrationsResponse
 {
     public IReadOnlyList<AttendeeDto> Registrations { get; set; } = Array.Empty<AttendeeDto>();
+}
+
+public class WaitlistResponse
+{
     public IReadOnlyList<AttendeeDto> Waitlist { get; set; } = Array.Empty<AttendeeDto>();
 }
