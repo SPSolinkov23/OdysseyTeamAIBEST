@@ -1,5 +1,4 @@
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
  
 COPY src/SchoolEvents.Api/SchoolEvents.Api.csproj src/SchoolEvents.Api/
@@ -10,7 +9,7 @@ COPY src/ src/
 WORKDIR /src/src/SchoolEvents.Api
 RUN dotnet publish -c Release -o /app
  
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /app .
  
