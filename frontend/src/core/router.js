@@ -22,6 +22,7 @@ const routes = [
     { re: /^\/organizer\/events\/([\w-]+)\/edit$/, role: "organizer", view: (m) => import("../views/organizer.js").then((mod) => mod.organizerForm(m[1])) },
     { re: /^\/organizer\/events\/([\w-]+)$/, role: "organizer", view: (m) => import("../views/organizer.js").then((mod) => mod.eventRegistrations(m[1])) },
     { re: /^\/preview\/([\w-]+)$/, role: "organizer", view: (m) => import("../views/organizer.js").then((mod) => mod.preview(m[1])) },
+    { re: /^\/admin$/, role: "admin", view: () => import("../views/admin.js").then((m) => m.admin()) },
 ];
 
 function notFound() {
@@ -76,6 +77,15 @@ export const Router = {
                 }
                 if (user.role !== r.role) {
                     this.render({ html: UI.guard("Wrong access", "This section is for " + (r.role === "student" ? "students" : "organizers") + " only."), onMount: null });
+                    return;
+                }
+            } else if (r.role === "admin") {
+                if (!user) {
+                    navigate("/login");
+                    return;
+                }
+                if (!user.isAdmin) {
+                    this.render({ html: UI.guard("Admin only", "This area is restricted to administrators."), onMount: null });
                     return;
                 }
             }

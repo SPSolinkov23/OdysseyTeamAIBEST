@@ -13,6 +13,7 @@ public class SchoolEventsDbContext : DbContext
     public DbSet<NotificationJob> NotificationJobs => Set<NotificationJob>();
     public DbSet<NotificationLog> NotificationLogs => Set<NotificationLog>();
     public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<Admin> Admins => Set<Admin>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -25,6 +26,16 @@ public class SchoolEventsDbContext : DbContext
             e.Property(x => x.PasswordHash).HasMaxLength(255).IsRequired();
             e.Property(x => x.DisplayName).HasMaxLength(120).IsRequired();
             e.Property(x => x.Role).HasConversion<string>().HasMaxLength(20).IsRequired();
+            e.Property(x => x.OrganizerStatus).HasConversion<string>().HasMaxLength(20).IsRequired();
+        });
+
+        b.Entity<Admin>(e =>
+        {
+            e.HasOne(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasIndex(x => x.UserId).IsUnique();
         });
 
         b.Entity<Event>(e =>
@@ -131,6 +142,12 @@ public class SchoolEventsDbContext : DbContext
         }
 
         foreach (var entry in ChangeTracker.Entries<Notification>())
+        {
+            if (entry.State == EntityState.Added && entry.Entity.CreatedAt == default)
+                entry.Entity.CreatedAt = now;
+        }
+
+        foreach (var entry in ChangeTracker.Entries<Admin>())
         {
             if (entry.State == EntityState.Added && entry.Entity.CreatedAt == default)
                 entry.Entity.CreatedAt = now;

@@ -14,6 +14,9 @@ const NOTIF_META = {
     RegistrationCancelled: { icon: "fa-circle-minus", color: "slate" },
     EventCancelled: { icon: "fa-calendar-xmark", color: "rose" },
     AccountWelcome: { icon: "fa-hand-sparkles", color: "brand" },
+    OrganizerPending: { icon: "fa-user-clock", color: "amber" },
+    OrganizerApproved: { icon: "fa-user-check", color: "emerald" },
+    OrganizerRejected: { icon: "fa-user-xmark", color: "rose" },
 };
 
 function notifMeta(type) {
@@ -137,6 +140,7 @@ export function renderNav() {
             user.role === "organizer"
                 ? [["/organizer", "fa-gauge-high", "Dashboard"], ["/organizer/new", "fa-plus", "New event"]]
                 : [["/events", "fa-compass", "Events"], ["/my-registrations", "fa-ticket", "My registrations"]];
+        if (user.isAdmin) links.push(["/admin", "fa-shield-halved", "Admin"]);
         center.innerHTML = '<nav class="hidden items-center gap-1 md:flex">' + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav>";
         right.innerHTML = '<div class="flex items-center gap-1.5">' + bell() + avatar(user) + '<button id="burger" class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 md:hidden"><i class="fa-solid fa-bars text-lg"></i></button></div>';
         mobile.innerHTML = '<div id="mobile-menu" class="hidden border-t border-slate-200 bg-white px-4 py-3 md:hidden"><nav class="flex flex-col gap-1">' + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav></div>";

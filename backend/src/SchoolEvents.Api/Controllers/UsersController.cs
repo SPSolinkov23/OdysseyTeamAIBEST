@@ -23,7 +23,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Me()
     {
         var user = await _db.Users.FindAsync(User.GetUserId()) ?? throw ApiException.Unauthorized();
-        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt) });
+        var isAdmin = await _db.IsAdminAsync(user.Id);
+        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin) });
     }
 
     [HttpPatch("me")]
@@ -32,7 +33,8 @@ public class UsersController : ControllerBase
         var user = await _db.Users.FindAsync(User.GetUserId()) ?? throw ApiException.Unauthorized();
         user.DisplayName = req.DisplayName.Trim();
         await _db.SaveChangesAsync();
-        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt) });
+        var isAdmin = await _db.IsAdminAsync(user.Id);
+        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin) });
     }
 
     [HttpPost("me/password")]

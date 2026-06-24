@@ -69,6 +69,8 @@ function mapUser(u) {
         name: u.display_name,
         email: u.email,
         role: u.role,
+        organizerStatus: u.organizer_status,
+        isAdmin: !!u.is_admin,
         createdAt: u.created_at,
     };
 }
@@ -275,11 +277,14 @@ export const API = {
     },
 
     async getEventAttendees(eventId) {
-        const data = await request("GET", "/events/" + eventId + "/registrations");
+        const [reg, wait] = await Promise.all([
+            request("GET", "/events/" + eventId + "/registrations"),
+            request("GET", "/events/" + eventId + "/waitlist"),
+        ]);
 
         return {
-            confirmed: (data.registrations || []).map(mapAttendee),
-            waitlist: (data.waitlist || []).map(mapAttendee),
+            confirmed: (reg.registrations || []).map(mapAttendee),
+            waitlist: (wait.waitlist || []).map(mapAttendee),
         };
     },
 
@@ -303,5 +308,24 @@ export const API = {
         await request("POST", "/notifications/read");
         const seen = Store.getNotifications().map((n) => Object.assign({}, n, { read: true }));
         Store.setNotifications(seen);
+    },
+
+    async adminListPending() {
+        const data = await request("GET", "/admin/pending-organizers");
+
+        return (data.pending_organizers || []).map((u) => ({
+            id: u.id,
+            name: u.display_name,
+            email: u.email,
+            createdAt: u.created_at,
+        }));
+    },
+
+    async adminApprove(id) {
+        return request("POST", "/admin/organizers/" + id + "/approve");
+    },
+
+    async adminReject(id) {
+        return request("POST", "/admin/organizers/" + id + "/reject");
     },
 };

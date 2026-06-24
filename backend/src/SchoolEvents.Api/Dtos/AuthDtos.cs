@@ -32,7 +32,7 @@ public class ChangePasswordRequest
     public string NewPassword { get; set; } = string.Empty;
 }
 
-public record UserDto(long Id, string Email, string DisplayName, UserRole Role, DateTime CreatedAt);
+public record UserDto(long Id, string Email, string DisplayName, UserRole Role, DateTime CreatedAt, OrganizerStatus OrganizerStatus, bool IsAdmin);
 
 public class AuthResponse
 {

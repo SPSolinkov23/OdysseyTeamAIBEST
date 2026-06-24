@@ -221,10 +221,10 @@ public class EventService
 
     public async Task<EventRegistrationsResponse> GetAttendeesAsync(long id, long organizerId)
     {
-        await LoadOwnedAsync(id, organizerId); // ownership + existence check
+        await LoadOwnedAsync(id, organizerId);
 
-        var rows = await _db.Registrations.AsNoTracking()
-            .Where(r => r.EventId == id && r.Status != RegistrationStatus.Cancelled)
+        var confirmed = await _db.Registrations.AsNoTracking()
+            .Where(r => r.EventId == id && r.Status == RegistrationStatus.Confirmed)
             .OrderBy(r => r.CreatedAt).ThenBy(r => r.Id)
             .Select(r => new AttendeeDto
             {
@@ -237,11 +237,30 @@ public class EventService
             })
             .ToListAsync();
 
-        var confirmed = rows.Where(a => a.Status == RegistrationStatus.Confirmed).ToList();
-        var waitlist = rows.Where(a => a.Status == RegistrationStatus.Waitlisted).ToList();
+        return new EventRegistrationsResponse { Registrations = confirmed };
+    }
+
+    public async Task<WaitlistResponse> GetWaitlistAsync(long id, long organizerId)
+    {
+        await LoadOwnedAsync(id, organizerId);
+
+        var waitlist = await _db.Registrations.AsNoTracking()
+            .Where(r => r.EventId == id && r.Status == RegistrationStatus.Waitlisted)
+            .OrderBy(r => r.CreatedAt).ThenBy(r => r.Id)
+            .Select(r => new AttendeeDto
+            {
+                Id = r.Id,
+                UserId = r.UserId,
+                UserName = r.User!.DisplayName,
+                Email = r.User.Email,
+                Status = r.Status,
+                CreatedAt = r.CreatedAt,
+            })
+            .ToListAsync();
+
         for (var i = 0; i < waitlist.Count; i++) waitlist[i].WaitlistPosition = i + 1;
 
-        return new EventRegistrationsResponse { Registrations = confirmed, Waitlist = waitlist };
+        return new WaitlistResponse { Waitlist = waitlist };
     }
 
     private async Task<MyRegistrationDto?> GetMyRegistrationAsync(long eventId, long userId)

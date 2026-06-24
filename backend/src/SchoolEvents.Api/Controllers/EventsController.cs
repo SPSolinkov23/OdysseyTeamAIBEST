@@ -77,6 +77,13 @@ public class EventsController : ControllerBase
         return Ok(await _events.GetAttendeesAsync(id, User.GetUserId()));
     }
 
+    [HttpGet("{id:long}/waitlist")]
+    [Authorize(Roles = nameof(UserRole.Organizer))]
+    public async Task<ActionResult<WaitlistResponse>> Waitlist(long id)
+    {
+        return Ok(await _events.GetWaitlistAsync(id, User.GetUserId()));
+    }
+
     private long? CallerId() =>
         User.Identity?.IsAuthenticated == true ? User.GetUserId() : null;
 }

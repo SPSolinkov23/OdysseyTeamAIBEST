@@ -13,6 +13,8 @@ public class User : ITimestamped
 
     public UserRole Role { get; set; } = UserRole.Student;
 
+    public OrganizerStatus OrganizerStatus { get; set; } = OrganizerStatus.None;
+
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
