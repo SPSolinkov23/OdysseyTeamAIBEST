@@ -46,4 +46,7 @@ public static class JobTypes
     public const string RegistrationCancelled = "RegistrationCancelled";
     public const string WaitlistPromoted = "WaitlistPromoted";
     public const string EventCancelled = "EventCancelled";
+    public const string OrganizerPending = "OrganizerPending";
+    public const string OrganizerApproved = "OrganizerApproved";
+    public const string OrganizerRejected = "OrganizerRejected";
 }

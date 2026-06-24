@@ -7,6 +7,15 @@ public enum UserRole
     Organizer,
 }
 
+/// <summary>Lifecycle of an organizer application. Pending applicants keep Student rights until approved.</summary>
+public enum OrganizerStatus
+{
+    None,
+    Pending,
+    Approved,
+    Rejected,
+}
+
 /// <summary>Lifecycle of an event. Only Published events are visible to students.</summary>
 public enum EventStatus
 {

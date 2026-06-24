@@ -44,11 +44,13 @@ export const Auth = {
         if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password))
             throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character (@$!%*?&).");
 
+        const role = data.role === "organizer" ? "organizer" : "student";
+
         const res = await API.authRegister({
             email: email,
             password: password,
             display_name: name,
-            role: "student",
+            role: role,
         });
         return afterAuth(res);
     },
