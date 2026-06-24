@@ -24,17 +24,20 @@ public class UsersController : ControllerBase
     {
         var user = await _db.Users.FindAsync(User.GetUserId()) ?? throw ApiException.Unauthorized();
         var isAdmin = await _db.IsAdminAsync(user.Id);
-        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin) });
+        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language) });
     }
 
     [HttpPatch("me")]
     public async Task<IActionResult> Update(UpdateMeRequest req)
     {
         var user = await _db.Users.FindAsync(User.GetUserId()) ?? throw ApiException.Unauthorized();
-        user.DisplayName = req.DisplayName.Trim();
+        if (!string.IsNullOrWhiteSpace(req.DisplayName))
+            user.DisplayName = req.DisplayName.Trim();
+        if (req.Language is not null)
+            user.Language = req.Language;
         await _db.SaveChangesAsync();
         var isAdmin = await _db.IsAdminAsync(user.Id);
-        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin) });
+        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language) });
     }
 
     [HttpPost("me/password")]

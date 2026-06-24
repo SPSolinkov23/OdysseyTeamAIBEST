@@ -2,6 +2,7 @@ import { Auth } from "../core/auth.js";
 import { UI } from "../core/ui.js";
 import { Bus } from "../core/bus.js";
 import { Router } from "../core/router.js";
+import { I18n } from "../core/i18n.js";
 
 function brandPanel() {
     return (
@@ -11,13 +12,13 @@ function brandPanel() {
         '<div class="pointer-events-none absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-sky-300/20 blur-3xl"></div>' +
         '<div class="relative">' +
         '<div class="inline-flex items-center gap-2 rounded-2xl bg-white/15 px-3 py-2 ring-1 ring-white/30"><i class="fa-solid fa-graduation-cap text-lg"></i><span class="font-display text-sm font-semibold tracking-wide">Team Odyssey</span></div>' +
-        '<h2 class="mt-8 font-display text-4xl font-bold leading-tight text-balance">School events, all in one place.</h2>' +
-        '<p class="mt-4 max-w-sm text-white/80">Create, publish and register for lectures, clubs and workshops. Smart waitlist and real-time notifications.</p>' +
+        '<h2 class="mt-8 font-display text-4xl font-bold leading-tight text-balance">' + I18n.t("auth.brandTitle") + '</h2>' +
+        '<p class="mt-4 max-w-sm text-white/80">' + I18n.t("auth.brandSubtitle") + '</p>' +
         "</div>" +
         '<div class="relative mt-10 space-y-3">' +
-        feature("fa-calendar-check", "One-tap registration") +
-        feature("fa-people-arrows", "Fair FIFO waitlist") +
-        feature("fa-bell", "Notifications on every change") +
+        feature("fa-calendar-check", I18n.t("auth.feature1")) +
+        feature("fa-people-arrows", I18n.t("auth.feature2")) +
+        feature("fa-bell", I18n.t("auth.feature3")) +
         "</div></div>"
     );
 }
@@ -46,29 +47,29 @@ export function auth(mode) {
         '<div class="flex items-center" data-aos="fade-left">' +
         '<div class="card w-full p-7 sm:p-9">' +
         '<div class="mb-6 lg:hidden"><div class="inline-flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2 text-brand-700"><i class="fa-solid fa-graduation-cap"></i><span class="font-display font-semibold">Team Odyssey</span></div></div>' +
-        '<h1 class="font-display text-2xl font-bold text-slate-800">' + (isLogin ? "Sign in" : "Create account") + "</h1>" +
-        '<p class="mt-1 text-sm text-slate-500">' + (isLogin ? "Glad to see you again." : "Just a few fields and you're set.") + "</p>" +
+        '<h1 class="font-display text-2xl font-bold text-slate-800">' + (isLogin ? I18n.t("auth.signInTitle") : I18n.t("auth.createTitle")) + "</h1>" +
+        '<p class="mt-1 text-sm text-slate-500">' + (isLogin ? I18n.t("auth.signInSub") : I18n.t("auth.createSub")) + "</p>" +
         '<form id="auth-form" class="mt-6 space-y-4" novalidate>' +
         (isLogin
             ? ""
-            : '<div><label class="label" for="f-name">Full name</label><input id="f-name" name="name" class="input" placeholder="Jane Smith" autocomplete="name"></div>') +
+            : '<div><label class="label" for="f-name">' + I18n.t("auth.fullName") + '</label><input id="f-name" name="name" class="input" placeholder="' + I18n.t("auth.fullNamePlaceholder") + '" autocomplete="name"></div>') +
         (isLogin
             ? ""
-            : '<div><label class="label">Register as</label><div class="grid grid-cols-2 gap-3">' +
-              roleCard("student", "fa-user-graduate", "Student", true) +
-              roleCard("organizer", "fa-user-tie", "Organizer", false) +
+            : '<div><label class="label">' + I18n.t("auth.registerAs") + '</label><div class="grid grid-cols-2 gap-3">' +
+              roleCard("student", "fa-user-graduate", I18n.t("auth.student"), true) +
+              roleCard("organizer", "fa-user-tie", I18n.t("auth.organizer"), false) +
               '</div><input type="hidden" name="role" id="f-role" value="student">' +
-              '<p class="mt-1.5 text-xs text-slate-400">Organizer accounts need admin approval. Until approved you keep student access.</p></div>') +
-        '<div><label class="label" for="f-email">Email</label><input id="f-email" type="email" name="email" class="input" placeholder="jane@school.edu" autocomplete="email"></div>' +
-        '<div><label class="label" for="f-pass">Password</label><div class="relative"><input id="f-pass" type="password" name="password" class="input pr-11" placeholder="••••••" autocomplete="' + (isLogin ? "current-password" : "new-password") + '"><button type="button" id="toggle-pass" class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 hover:text-brand-600"><i class="fa-solid fa-eye"></i></button></div>' +
-        (isLogin ? "" : '<p class="mt-1 text-xs text-slate-400">At least 8 characters, with one uppercase letter, one number, and one special character (@$!%*?&amp;).</p>') +
+              '<p class="mt-1.5 text-xs text-slate-400">' + I18n.t("auth.organizerNote") + '</p></div>') +
+        '<div><label class="label" for="f-email">' + I18n.t("auth.email") + '</label><input id="f-email" type="email" name="email" class="input" placeholder="' + I18n.t("auth.emailPlaceholder") + '" autocomplete="email"></div>' +
+        '<div><label class="label" for="f-pass">' + I18n.t("auth.password") + '</label><div class="relative"><input id="f-pass" type="password" name="password" class="input pr-11" placeholder="••••••" autocomplete="' + (isLogin ? "current-password" : "new-password") + '"><button type="button" id="toggle-pass" class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 hover:text-brand-600"><i class="fa-solid fa-eye"></i></button></div>' +
+        (isLogin ? "" : '<p class="mt-1 text-xs text-slate-400">' + I18n.t("auth.passwordHint") + '</p>') +
         "</div>" +
-        '<button type="submit" class="btn-primary w-full"><i class="fa-solid ' + (isLogin ? "fa-right-to-bracket" : "fa-user-plus") + '"></i>' + (isLogin ? "Sign in" : "Sign up") + "</button>" +
+        '<button type="submit" class="btn-primary w-full"><i class="fa-solid ' + (isLogin ? "fa-right-to-bracket" : "fa-user-plus") + '"></i>' + (isLogin ? I18n.t("auth.signInBtn") : I18n.t("auth.signUpBtn")) + "</button>" +
         "</form>" +
         '<p class="mt-6 text-center text-sm text-slate-500">' +
         (isLogin
-            ? "Don't have an account? <a href=\"/register\" class=\"font-semibold text-brand-600 hover:text-brand-700\">Create one</a>"
-            : 'Already have an account? <a href="/login" class="font-semibold text-brand-600 hover:text-brand-700">Sign in</a>') +
+            ? I18n.t("auth.noAccount") + ' <a href="/register" class="font-semibold text-brand-600 hover:text-brand-700">' + I18n.t("auth.createOne") + "</a>"
+            : I18n.t("auth.haveAccount") + ' <a href="/login" class="font-semibold text-brand-600 hover:text-brand-700">' + I18n.t("auth.signInBtn") + "</a>") +
         "</p></div></div></div></section>";
 
     return { html: html, onMount: (root) => bind(root, isLogin) };
@@ -115,7 +116,7 @@ function bind(root, isLogin) {
 }
 
 function done(user) {
-    UI.toast("Hi, " + user.name.split(" ")[0] + "!", "success");
+    UI.toast(I18n.t("auth.greeting", { name: user.name.split(" ")[0] }), "success");
     Bus.emit("auth");
     Router.navigate(user.role === "organizer" ? "/organizer" : "/events");
 }

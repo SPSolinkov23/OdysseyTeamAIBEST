@@ -6,10 +6,6 @@ using SchoolEvents.Worker.Options;
 
 namespace SchoolEvents.Worker.Email;
 
-/// <summary>
-/// Sends via SMTP when <see cref="SmtpOptions.Enabled"/> is true; otherwise logs
-/// the message so the queue pipeline is fully exercisable without a mail server.
-/// </summary>
 public class SmtpEmailSender : IEmailSender
 {
     private readonly SmtpOptions _options;

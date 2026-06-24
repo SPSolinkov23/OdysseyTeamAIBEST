@@ -2,10 +2,6 @@ using SchoolEvents.Data.Entities;
 
 namespace SchoolEvents.Api.Infrastructure;
 
-/// <summary>
-/// Builds in-app <see cref="Notification"/> rows with user-facing (Bulgarian) copy
-/// that mirrors the email templates and the original client wording.
-/// </summary>
 public static class AppNotifications
 {
     public static Notification Build(long userId, string type, long eventId, string eventTitle, int? waitlistPosition = null)
@@ -37,7 +33,6 @@ public static class AppNotifications
         };
     }
 
-    /// <summary>The one-off greeting shown to a freshly registered student.</summary>
     public static Notification Welcome(long userId, string name) => new()
     {
         UserId = userId,

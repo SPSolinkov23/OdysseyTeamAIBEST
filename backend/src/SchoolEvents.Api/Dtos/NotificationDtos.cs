@@ -1,6 +1,5 @@
 namespace SchoolEvents.Api.Dtos;
 
-/// <summary>A single in-app notification for the notification center.</summary>
 public class NotificationDto
 {
     public long Id { get; set; }

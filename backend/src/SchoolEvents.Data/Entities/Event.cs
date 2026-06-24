@@ -8,16 +8,13 @@ public class Event : ITimestamped
     public string? Description { get; set; }
     public string? Location { get; set; }
 
-    /// <summary>Free-form category label (drives the UI icon/colour), e.g. "Уъркшоп".</summary>
     public string? Category { get; set; }
 
-    /// <summary>Optional external link (meeting URL, info page, etc.).</summary>
     public string? Url { get; set; }
 
     public DateTime StartsAt { get; set; }
     public DateTime? EndsAt { get; set; }
 
-    /// <summary>Maximum number of <see cref="RegistrationStatus.Confirmed"/> seats.</summary>
     public int Capacity { get; set; }
 
     public EventStatus Status { get; set; } = EventStatus.Draft;

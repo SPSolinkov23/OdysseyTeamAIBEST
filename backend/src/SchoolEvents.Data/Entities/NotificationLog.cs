@@ -1,10 +1,5 @@
 namespace SchoolEvents.Data.Entities;
 
-/// <summary>
-/// Append-only record of a delivered notification. The Worker checks this table
-/// (by <see cref="IdempotencyKey"/>) before sending so a retried job never
-/// emails the same person twice.
-/// </summary>
 public class NotificationLog
 {
     public long Id { get; set; }

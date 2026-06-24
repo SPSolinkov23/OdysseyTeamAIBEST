@@ -8,12 +8,6 @@ using SchoolEvents.Worker.Options;
 
 namespace SchoolEvents.Worker;
 
-/// <summary>
-/// Polls the <c>notification_jobs</c> queue, claiming a batch with
-/// <c>FOR UPDATE SKIP LOCKED</c> so multiple workers never grab the same row.
-/// Delivery is idempotent (guarded by <c>notification_logs</c>) and failures are
-/// retried with exponential back-off up to <c>max_attempts</c>.
-/// </summary>
 public class NotificationWorker : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
@@ -54,7 +48,6 @@ public class NotificationWorker : BackgroundService
                 _logger.LogError(ex, "Worker poll failed; will retry after the poll interval");
             }
 
-            // Only sleep when the queue was empty; otherwise drain it as fast as we can.
             if (processed == 0)
             {
                 try { await Task.Delay(TimeSpan.FromSeconds(_options.PollIntervalSeconds), stoppingToken); }
@@ -85,8 +78,6 @@ public class NotificationWorker : BackgroundService
 
         await using var tx = await db.Database.BeginTransactionAsync(ct);
 
-        // batchSize is an internal int (clamped), so it is safe to inline into the SQL;
-        // the timestamps are passed as real parameters.
         var sql =
             $@"SELECT * FROM notification_jobs
                WHERE (status = 'Pending' AND available_at <= {{0}})
@@ -123,7 +114,6 @@ public class NotificationWorker : BackgroundService
             var payload = NotificationJson.Deserialize(job.Payload);
             var idempotencyKey = $"job:{job.Id}";
 
-            // Delivery-level idempotency: a retried job must not email the same person twice.
             var alreadyDelivered = await db.NotificationLogs.AnyAsync(l => l.IdempotencyKey == idempotencyKey, ct);
             if (!alreadyDelivered)
             {

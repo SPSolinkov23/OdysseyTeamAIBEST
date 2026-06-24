@@ -17,7 +17,6 @@ public class EventService
         _db = db;
     }
 
-    /// <summary>Reusable LINQ projection from entity to DTO (seat counts via correlated subqueries).</summary>
     private static readonly Expression<Func<Event, EventDto>> ToDto = e => new EventDto
     {
         Id = e.Id,
@@ -73,7 +72,6 @@ public class EventService
             .FirstOrDefaultAsync()
             ?? throw ApiException.NotFound("Event not found.");
 
-        // Non-published events are only visible to their owning organizer.
         if (dto.Status != EventStatus.Published)
         {
             var ownsIt = callerId is not null && callerIsOrganizer && dto.OrganizerId == callerId;
@@ -143,11 +141,7 @@ public class EventService
         await _db.SaveChangesAsync();
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
-
-    /// <summary>
-    /// Cancels the event, cancels every active registration, and fans out an
-    /// <c>EventCancelled</c> notification to each affected attendee.
-    /// </summary>
+    
     public async Task<EventDto> CancelAsync(long id, long organizerId)
     {
         await using var tx = await _db.Database.BeginTransactionAsync();

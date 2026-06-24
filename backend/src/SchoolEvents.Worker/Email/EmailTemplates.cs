@@ -4,7 +4,6 @@ using SchoolEvents.Data.Notifications;
 
 namespace SchoolEvents.Worker.Email;
 
-/// <summary>Renders the subject + plain-text body for each notification job type.</summary>
 public static class EmailTemplates
 {
     public static (string Subject, string Body) Build(string jobType, NotificationPayload p)
