@@ -45,11 +45,11 @@ public class AuthController : ControllerBase
             DisplayName = req.DisplayName.Trim(),
             Role = UserRole.Student,
             OrganizerStatus = appliedAsOrganizer ? OrganizerStatus.Pending : OrganizerStatus.None,
+            Language = req.Language ?? "bg",
         };
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
 
-        // Enqueue a welcome email; the Worker delivers it asynchronously.
         _db.NotificationJobs.Add(new NotificationJob
         {
             Type = JobTypes.AccountWelcome,
@@ -58,13 +58,13 @@ public class AuthController : ControllerBase
                 UserId = user.Id,
                 Email = user.Email,
                 Name = user.DisplayName,
+                Language = user.Language,
             }),
             Status = JobStatus.Pending,
             MaxAttempts = 5,
             AvailableAt = DateTime.UtcNow,
         });
 
-        // Mirror it as an in-app notification so the bell isn't empty on first login.
         _db.Notifications.Add(AppNotifications.Welcome(user.Id, user.DisplayName));
 
         if (appliedAsOrganizer)
@@ -88,7 +88,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("logout")]
-    public IActionResult Logout() => NoContent(); // JWT is stateless; the client drops the token
+    public IActionResult Logout() => NoContent();
 
     private async Task<AuthResponse> BuildAuthAsync(User user)
     {
@@ -98,7 +98,7 @@ public class AuthController : ControllerBase
         {
             Token = token,
             ExpiresAt = expiresAt,
-            User = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin),
+            User = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language),
         };
     }
 }

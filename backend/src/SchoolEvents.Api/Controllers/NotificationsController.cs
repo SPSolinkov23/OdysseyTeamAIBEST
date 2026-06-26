@@ -8,7 +8,6 @@ using SchoolEvents.Data.Entities;
 
 namespace SchoolEvents.Api.Controllers;
 
-/// <summary>In-app notification center for the signed-in user (both roles).</summary>
 [ApiController]
 [Route("notifications")]
 [Authorize]
@@ -37,6 +36,7 @@ public class NotificationsController : ControllerBase
                 Type = n.Type,
                 EventId = n.EventId,
                 Message = n.Message,
+                Data = n.Data,
                 Read = n.IsRead,
                 CreatedAt = n.CreatedAt,
             })

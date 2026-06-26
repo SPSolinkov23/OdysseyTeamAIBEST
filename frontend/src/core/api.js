@@ -1,5 +1,6 @@
 import { Store } from "./store.js";
 import { Bus } from "./bus.js";
+import { I18n } from "./i18n.js";
 
 async function request(method, path, body) {
     const headers = { Accept: "application/json" };
@@ -17,7 +18,7 @@ async function request(method, path, body) {
             body: body !== undefined ? JSON.stringify(body) : undefined,
         });
     } catch (e) {
-        throw new Error("Can't reach the server. Check your connection.");
+        throw new Error(I18n.t("api.cantReach"));
     }
 
     const text = await res.text();
@@ -39,7 +40,7 @@ async function request(method, path, body) {
         }
 
         const err = (data && data.error) || {};
-        let msg = err.message || "Request failed (" + res.status + ").";
+        let msg = err.message || I18n.t("api.requestFailed", { status: res.status });
 
         if (err.details && typeof err.details === "object") {
             const firstField = Object.keys(err.details)[0];
@@ -72,6 +73,7 @@ function mapUser(u) {
         organizerStatus: u.organizer_status,
         isAdmin: !!u.is_admin,
         createdAt: u.created_at,
+        language: u.language,
     };
 }
 
@@ -126,24 +128,31 @@ function mapAttendee(a) {
     };
 }
 
+function parseData(raw) {
+    if (raw == null) return null;
+    if (typeof raw === "object") return raw;
+    try { return JSON.parse(raw); } catch (e) { return null; }
+}
+
 function mapNotification(n) {
     return {
         id: n.id,
         type: n.type,
         eventId: n.event_id,
         message: n.message,
+        data: parseData(n.data),
         read: !!n.read,
         createdAt: n.created_at,
     };
 }
 
 function eventBody(data) {
-    if (!data.title || !data.title.trim()) throw new Error("Title is required.");
+    if (!data.title || !data.title.trim()) throw new Error(I18n.t("form.titleRequired"));
 
     const cap = parseInt(data.capacity, 10);
 
-    if (!Number.isInteger(cap) || cap < 1) throw new Error("Capacity must be a whole number ≥ 1.");
-    if (!data.startsAt) throw new Error("Start date and time are required.");
+    if (!Number.isInteger(cap) || cap < 1) throw new Error(I18n.t("form.capacityWhole"));
+    if (!data.startsAt) throw new Error(I18n.t("form.startRequired"));
 
     const body = {
         title: data.title.trim(),
@@ -170,6 +179,11 @@ export const API = {
 
     async logout() {
         await request("POST", "/auth/logout");
+    },
+
+    async updateLanguage(language) {
+        const data = await request("PATCH", "/users/me", { language: language });
+        return mapUser(data.user);
     },
 
     async me() {

@@ -7,10 +7,6 @@ using SchoolEvents.Data.Entities;
 
 namespace SchoolEvents.Api.Controllers;
 
-/// <summary>
-/// Read-only window into the queue so organizers can see what async work was
-/// enqueued (and its delivery state). This is the "observability" surface.
-/// </summary>
 [ApiController]
 [Route("notification-jobs")]
 [Authorize(Roles = nameof(UserRole.Organizer))]

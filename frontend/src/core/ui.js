@@ -1,5 +1,13 @@
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const monthsFull = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+import { I18n } from "./i18n.js";
+
+const months = {
+    en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    bg: ["Яну", "Фев", "Мар", "Апр", "Май", "Юни", "Юли", "Авг", "Сеп", "Окт", "Ное", "Дек"],
+};
+const monthsFull = {
+    en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    bg: ["Януари", "Февруари", "Март", "Април", "Май", "Юни", "Юли", "Август", "Септември", "Октомври", "Ноември", "Декември"],
+};
 
 const CATEGORIES = {
     "Workshop": { icon: "fa-laptop-code", color: "sky" },
@@ -12,15 +20,15 @@ const CATEGORIES = {
 };
 
 const REG_STATUS = {
-    CONFIRMED: { label: "Confirmed", color: "emerald", icon: "fa-circle-check" },
-    WAITLISTED: { label: "Waitlist", color: "amber", icon: "fa-hourglass-half" },
-    CANCELLED: { label: "Cancelled", color: "slate", icon: "fa-ban" },
+    CONFIRMED: { labelKey: "reg.confirmed", color: "emerald", icon: "fa-circle-check" },
+    WAITLISTED: { labelKey: "reg.waitlist", color: "amber", icon: "fa-hourglass-half" },
+    CANCELLED: { labelKey: "reg.cancelled", color: "slate", icon: "fa-ban" },
 };
 
 const EVENT_STATUS = {
-    DRAFT: { label: "Draft", color: "slate", icon: "fa-pen-ruler" },
-    PUBLISHED: { label: "Published", color: "sky", icon: "fa-tower-broadcast" },
-    CANCELLED: { label: "Cancelled", color: "rose", icon: "fa-ban" },
+    DRAFT: { labelKey: "event.draft", color: "slate", icon: "fa-pen-ruler" },
+    PUBLISHED: { labelKey: "event.published", color: "sky", icon: "fa-tower-broadcast" },
+    CANCELLED: { labelKey: "event.cancelled", color: "rose", icon: "fa-ban" },
 };
 
 let toastifyLib = null;
@@ -42,7 +50,7 @@ function escape(s) {
 
 function fmtDate(iso) {
     const d = new Date(iso);
-    return d.getDate() + " " + monthsFull[d.getMonth()] + " " + d.getFullYear();
+    return d.getDate() + " " + (monthsFull[I18n.get()] || monthsFull.en)[d.getMonth()] + " " + d.getFullYear();
 }
 
 function fmtTime(iso) {
@@ -60,32 +68,40 @@ function fmtRange(startIso, endIso) {
 
 function fmtShort(iso) {
     const d = new Date(iso);
-    return d.getDate() + " " + months[d.getMonth()];
+    return d.getDate() + " " + (months[I18n.get()] || months.en)[d.getMonth()];
 }
 
 function fmtRelative(iso) {
     const diff = Date.now() - new Date(iso).getTime();
     const m = Math.round(diff / 60000);
-    if (m < 1) return "just now";
-    if (m < 60) return m + " min ago";
+    if (m < 1) return I18n.t("time.justNow");
+    if (m < 60) return I18n.t("time.minAgo", { n: m });
     const h = Math.round(m / 60);
-    if (h < 24) return h + " h ago";
+    if (h < 24) return I18n.t("time.hAgo", { n: h });
     const d = Math.round(h / 24);
-    return d + " days ago";
+    return I18n.t("time.daysAgo", { n: d });
 }
 
 function categoryMeta(cat) {
     return CATEGORIES[cat] || { icon: "fa-calendar-star", color: "slate" };
 }
 
+function notifText(n) {
+    const d = n.data || {};
+    let key = "notif." + n.type;
+    if (n.type === "RegistrationWaitlisted" && d.position == null) key = "notif.RegistrationWaitlistedNoPos";
+    if (!I18n.exists(key)) return n.message || "";
+    return I18n.t(key, { event: d.eventTitle, position: d.position, name: d.name });
+}
+
 function regBadge(status) {
     const m = REG_STATUS[status] || REG_STATUS.CANCELLED;
-    return '<span class="badge bg-' + m.color + '-100 text-' + m.color + '-700 ring-' + m.color + '-200"><i class="fa-solid ' + m.icon + '"></i>' + m.label + "</span>";
+    return '<span class="badge bg-' + m.color + '-100 text-' + m.color + '-700 ring-' + m.color + '-200"><i class="fa-solid ' + m.icon + '"></i>' + I18n.t(m.labelKey) + "</span>";
 }
 
 function eventBadge(status) {
     const m = EVENT_STATUS[status] || EVENT_STATUS.DRAFT;
-    return '<span class="badge bg-' + m.color + '-100 text-' + m.color + '-700 ring-' + m.color + '-200"><i class="fa-solid ' + m.icon + '"></i>' + m.label + "</span>";
+    return '<span class="badge bg-' + m.color + '-100 text-' + m.color + '-700 ring-' + m.color + '-200"><i class="fa-solid ' + m.icon + '"></i>' + I18n.t(m.labelKey) + "</span>";
 }
 
 function toast(message, type) {
@@ -123,12 +139,12 @@ async function confirmDialog(opts) {
     const o = opts || {};
     const Swal = await getSwal();
     return Swal.fire({
-        title: o.title || "Are you sure?",
+        title: o.title || I18n.t("dialog.areYouSure"),
         html: o.text || "",
         icon: o.icon || "question",
         showCancelButton: true,
-        confirmButtonText: o.confirmText || "Confirm",
-        cancelButtonText: o.cancelText || "Cancel",
+        confirmButtonText: o.confirmText || I18n.t("dialog.confirm"),
+        cancelButtonText: o.cancelText || I18n.t("dialog.cancel"),
         reverseButtons: true,
         buttonsStyling: false,
         customClass: {
@@ -147,7 +163,7 @@ async function alertDialog(opts) {
         title: o.title || "",
         html: o.text || "",
         icon: o.icon || "success",
-        confirmButtonText: o.confirmText || "OK",
+        confirmButtonText: o.confirmText || I18n.t("dialog.ok"),
         buttonsStyling: false,
         customClass: { popup: "rounded-2xl", title: "!text-slate-800 !font-display", confirmButton: "btn-primary" },
     });
@@ -157,7 +173,7 @@ function empty(o) {
     return (
         '<div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white/60 px-6 py-16 text-center" data-aos="zoom-in">' +
         '<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-2xl text-brand-500"><i class="fa-solid ' + (o.icon || "fa-inbox") + '"></i></div>' +
-        '<h3 class="font-display text-lg font-semibold text-slate-800">' + escape(o.title || "Nothing here yet") + "</h3>" +
+        '<h3 class="font-display text-lg font-semibold text-slate-800">' + escape(o.title || I18n.t("ui.nothingHere")) + "</h3>" +
         '<p class="mt-1 max-w-sm text-sm text-slate-500">' + escape(o.text || "") + "</p>" +
         (o.actionHtml ? '<div class="mt-5">' + o.actionHtml + "</div>" : "") +
         "</div>"
@@ -170,7 +186,7 @@ function guard(title, text) {
         '<div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50 text-2xl text-rose-500"><i class="fa-solid fa-lock"></i></div>' +
         '<h2 class="font-display text-2xl font-bold text-slate-800">' + escape(title) + "</h2>" +
         '<p class="mt-2 text-slate-500">' + escape(text) + "</p>" +
-        '<a href="/" class="btn-primary mt-6"><i class="fa-solid fa-house"></i> Go home</a></div></section>'
+        '<a href="/" class="btn-primary mt-6"><i class="fa-solid fa-house"></i> ' + I18n.t("ui.goHome") + '</a></div></section>'
     );
 }
 
@@ -195,6 +211,8 @@ export const UI = {
     fmtShort,
     fmtRelative,
     categoryMeta,
+    catLabel: (name) => I18n.cat(name),
+    notifText,
     regBadge,
     eventBadge,
     toast,

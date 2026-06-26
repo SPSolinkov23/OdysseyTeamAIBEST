@@ -1,6 +1,5 @@
 namespace SchoolEvents.Api.Auth;
 
-/// <summary>BCrypt-based password hashing (slow, salted).</summary>
 public static class PasswordHasher
 {
     private const int WorkFactor = 11;

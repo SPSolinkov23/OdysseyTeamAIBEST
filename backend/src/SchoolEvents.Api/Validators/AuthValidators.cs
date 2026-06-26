@@ -37,6 +37,11 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
             .Must(role => role is null or "student" or "organizer")
                 .WithMessage("The role can only be 'student' or 'organizer'.")
             .When(x => x.Role is not null);
+
+        RuleFor(x => x.Language)
+            .Must(lang => lang is null or "en" or "bg")
+                .WithMessage("The language can only be 'en' or 'bg'.")
+            .When(x => x.Language is not null);
     }
 }
  
@@ -61,10 +66,14 @@ public class UpdateMeRequestValidator : AbstractValidator<UpdateMeRequest>
     public UpdateMeRequestValidator()
     {
         RuleFor(x => x.DisplayName)
-            .NotEmpty()
-                .WithMessage("The display name is required.")
             .MaximumLength(120)
-                .WithMessage("The display name cannot be longer than 120 characters.");
+                .WithMessage("The display name cannot be longer than 120 characters.")
+            .When(x => !string.IsNullOrWhiteSpace(x.DisplayName));
+
+        RuleFor(x => x.Language)
+            .Must(lang => lang is null or "en" or "bg")
+                .WithMessage("The language can only be 'en' or 'bg'.")
+            .When(x => x.Language is not null);
     }
 }
  

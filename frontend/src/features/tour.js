@@ -1,23 +1,24 @@
 import { Auth } from "../core/auth.js";
 import { scrollToEl } from "../core/scroll.js";
+import { I18n } from "../core/i18n.js";
 
 const TOURS_KEY = "odyssey_tours_v1";
 
 const STEPS = {
     student: [
-        { el: '#nav a[href="/"]', placement: "bottom-start", icon: "fa-hand-sparkles", title: "Welcome! 👋", text: "This is the school events hub. Let us show you the basics in 30 seconds." },
-        { el: '#nav a[href="/events"]', placement: "bottom", icon: "fa-compass", title: "Events", text: "Browse all of the school's published events here." },
-        { el: "#ev-search", placement: "bottom", icon: "fa-magnifying-glass", title: "Search & filters", text: "Quickly find an event by keyword or category." },
-        { el: "[data-register]", placement: "top", icon: "fa-bolt", title: "Registration", text: "Register with one tap. If the event is full, you join a fair FIFO waitlist." },
-        { el: '#nav a[href="/my-registrations"]', placement: "bottom", icon: "fa-ticket", title: "My registrations", text: "Track your status and your position on the waitlist." },
-        { el: '#nav a[href="/notifications"]', placement: "bottom-end", icon: "fa-bell", title: "Notifications", text: "Get a real-time notification on confirmation, promotion or change." },
+        { el: '#nav a[href="/"]', placement: "bottom-start", icon: "fa-hand-sparkles", key: "tour.student.1" },
+        { el: '#nav a[href="/events"]', placement: "bottom", icon: "fa-compass", key: "tour.student.2" },
+        { el: "#ev-search", placement: "bottom", icon: "fa-magnifying-glass", key: "tour.student.3" },
+        { el: "[data-register]", placement: "top", icon: "fa-bolt", key: "tour.student.4" },
+        { el: '#nav a[href="/my-registrations"]', placement: "bottom", icon: "fa-ticket", key: "tour.student.5" },
+        { el: '#nav a[href="/notifications"]', placement: "bottom-end", icon: "fa-bell", key: "tour.student.6" },
     ],
     organizer: [
-        { el: '#nav a[href="/"]', placement: "bottom-start", icon: "fa-hand-sparkles", title: "Welcome! 👋", text: "Manage your events from here. Here's a quick tour." },
-        { el: '#nav a[href="/organizer/new"]', placement: "bottom", icon: "fa-plus", title: "New event", text: "Create an event as a draft with a live preview before you publish it." },
-        { el: "[data-publish]", placement: "top", icon: "fa-paper-plane", title: "Publishing", text: "Publish the draft to make it visible to students." },
-        { el: '[href^="/organizer/events/"]', placement: "top", icon: "fa-users", title: "Registrations & waitlist", text: "See confirmed registrations and the ordered waitlist for each of your events." },
-        { el: '#nav a[href="/notifications"]', placement: "bottom-end", icon: "fa-bell", title: "Notifications", text: "Event-driven notifications arrive here." },
+        { el: '#nav a[href="/"]', placement: "bottom-start", icon: "fa-hand-sparkles", key: "tour.organizer.1" },
+        { el: '#nav a[href="/organizer/new"]', placement: "bottom", icon: "fa-plus", key: "tour.organizer.2" },
+        { el: "[data-publish]", placement: "top", icon: "fa-paper-plane", key: "tour.organizer.3" },
+        { el: '[href^="/organizer/events/"]', placement: "top", icon: "fa-users", key: "tour.organizer.4" },
+        { el: '#nav a[href="/notifications"]', placement: "bottom-end", icon: "fa-bell", key: "tour.organizer.5" },
     ],
 };
 
@@ -69,16 +70,16 @@ function buildContent(step) {
     wrap.className = "w-72 p-1";
     wrap.innerHTML =
         '<div class="flex items-center gap-2.5"><span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-brand-100 text-brand-600"><i class="fa-solid ' + step.icon + '"></i></span>' +
-        '<h4 class="font-display text-sm font-bold text-slate-800">' + step.title + "</h4></div>" +
-        '<p class="mt-2 text-sm leading-relaxed text-slate-600">' + step.text + "</p>" +
+        '<h4 class="font-display text-sm font-bold text-slate-800">' + I18n.t(step.key + ".title") + "</h4></div>" +
+        '<p class="mt-2 text-sm leading-relaxed text-slate-600">' + I18n.t(step.key + ".text") + "</p>" +
         '<div class="mt-4 flex items-center justify-between">' +
-        '<button data-skip class="text-xs font-medium text-slate-400 hover:text-slate-600">Skip</button>' +
+        '<button data-skip class="text-xs font-medium text-slate-400 hover:text-slate-600">' + I18n.t("tour.skip") + '</button>' +
         '<div class="flex items-center gap-1.5">' +
         steps.map((_, i) => '<span class="h-1.5 rounded-full transition-all ' + (i === idx ? "w-4 bg-brand-500" : "w-1.5 bg-slate-200") + '"></span>').join("") +
         "</div>" +
         '<div class="flex gap-1.5">' +
-        (idx > 0 ? '<button data-prev class="btn-secondary btn-sm">Back</button>' : "") +
-        '<button data-next class="btn-primary btn-sm">' + (isLast ? "Done" : "Next") + "</button>" +
+        (idx > 0 ? '<button data-prev class="btn-secondary btn-sm">' + I18n.t("tour.back") + '</button>' : "") +
+        '<button data-next class="btn-primary btn-sm">' + (isLast ? I18n.t("tour.done") : I18n.t("tour.next")) + "</button>" +
         "</div></div>";
 
     wrap.querySelector("[data-skip]").addEventListener("click", finish);

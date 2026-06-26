@@ -1,10 +1,5 @@
 namespace SchoolEvents.Api.Infrastructure;
 
-/// <summary>
-/// Thrown by controllers/services to short-circuit a request with a specific HTTP
-/// status and a machine-readable code. Translated to JSON by
-/// <see cref="ErrorHandlingMiddleware"/>.
-/// </summary>
 public class ApiException : Exception
 {
     public int StatusCode { get; }

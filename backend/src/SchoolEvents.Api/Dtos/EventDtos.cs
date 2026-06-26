@@ -60,7 +60,6 @@ public class EventDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    /// <summary>The caller's own registration for this event, if any (students only).</summary>
     public MyRegistrationDto? MyRegistration { get; set; }
 }
 

@@ -11,8 +11,9 @@ public class RegisterRequest
 
     public string DisplayName { get; set; } = string.Empty;
 
-    /// <summary>Optional: "student" (default) or "organizer" (only if signup is allowed).</summary>
     public string? Role { get; set; }
+
+    public string? Language { get; set; }
 }
 
 public class LoginRequest
@@ -24,6 +25,8 @@ public class LoginRequest
 public class UpdateMeRequest
 {
     public string DisplayName { get; set; } = string.Empty;
+
+    public string? Language { get; set; }
 }
 
 public class ChangePasswordRequest
@@ -32,7 +35,7 @@ public class ChangePasswordRequest
     public string NewPassword { get; set; } = string.Empty;
 }
 
-public record UserDto(long Id, string Email, string DisplayName, UserRole Role, DateTime CreatedAt, OrganizerStatus OrganizerStatus, bool IsAdmin);
+public record UserDto(long Id, string Email, string DisplayName, UserRole Role, DateTime CreatedAt, OrganizerStatus OrganizerStatus, bool IsAdmin, string Language);
 
 public class AuthResponse
 {

@@ -3,6 +3,7 @@ import { UI } from "./ui.js";
 import { Bus } from "./bus.js";
 import { scrollTop } from "./scroll.js";
 import { refreshAos } from "./anim.js";
+import { I18n } from "./i18n.js";
 
 function home() {
     const u = Auth.current();
@@ -26,7 +27,7 @@ const routes = [
 ];
 
 function notFound() {
-    return { html: UI.guard("Page not found", "The link is invalid or the content has moved."), onMount: null };
+    return { html: UI.guard(I18n.t("router.pageNotFoundTitle"), I18n.t("router.pageNotFoundText")), onMount: null };
 }
 
 function loader() {
@@ -76,7 +77,7 @@ export const Router = {
                     return;
                 }
                 if (user.role !== r.role) {
-                    this.render({ html: UI.guard("Wrong access", "This section is for " + (r.role === "student" ? "students" : "organizers") + " only."), onMount: null });
+                    this.render({ html: UI.guard(I18n.t("router.wrongAccess"), r.role === "student" ? I18n.t("router.forStudents") : I18n.t("router.forOrganizers")), onMount: null });
                     return;
                 }
             } else if (r.role === "admin") {
@@ -85,7 +86,7 @@ export const Router = {
                     return;
                 }
                 if (!user.isAdmin) {
-                    this.render({ html: UI.guard("Admin only", "This area is restricted to administrators."), onMount: null });
+                    this.render({ html: UI.guard(I18n.t("router.adminOnlyTitle"), I18n.t("router.adminOnlyText")), onMount: null });
                     return;
                 }
             }
@@ -105,7 +106,7 @@ export const Router = {
         try {
             view = await producer(match);
         } catch (e) {
-            view = { html: UI.guard("Something went wrong", e.message || "Please try again in a moment."), onMount: null };
+            view = { html: UI.guard(I18n.t("router.somethingWrong"), e.message || I18n.t("router.tryAgain")), onMount: null };
         }
         this.render(view);
     },

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolEvents.Data;
 
@@ -11,9 +12,11 @@ using SchoolEvents.Data;
 namespace SchoolEvents.Data.Migrations
 {
     [DbContext(typeof(SchoolEventsDbContext))]
-    partial class SchoolEventsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260624192149_AddUserLanguage")]
+    partial class AddUserLanguage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,10 +143,6 @@ namespace SchoolEvents.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at");
-
-                    b.Property<string>("Data")
-                        .HasColumnType("json")
-                        .HasColumnName("data");
 
                     b.Property<long?>("EventId")
                         .HasColumnType("bigint")

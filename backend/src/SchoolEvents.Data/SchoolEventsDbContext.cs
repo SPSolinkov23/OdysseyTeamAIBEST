@@ -27,6 +27,7 @@ public class SchoolEventsDbContext : DbContext
             e.Property(x => x.DisplayName).HasMaxLength(120).IsRequired();
             e.Property(x => x.Role).HasConversion<string>().HasMaxLength(20).IsRequired();
             e.Property(x => x.OrganizerStatus).HasConversion<string>().HasMaxLength(20).IsRequired();
+            e.Property(x => x.Language).HasMaxLength(2).IsRequired();
         });
 
         b.Entity<Admin>(e =>
@@ -66,7 +67,6 @@ public class SchoolEventsDbContext : DbContext
                 .WithMany(u => u.Registrations)
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            // One row per (event, user): re-registering after a cancel re-uses the row.
             e.HasIndex(x => new { x.EventId, x.UserId }).IsUnique();
             e.HasIndex(x => new { x.EventId, x.Status });
         });
@@ -98,11 +98,11 @@ public class SchoolEventsDbContext : DbContext
         {
             e.Property(x => x.Type).HasMaxLength(60).IsRequired();
             e.Property(x => x.Message).HasMaxLength(500).IsRequired();
+            e.Property(x => x.Data).HasColumnType("json");
             e.HasOne(x => x.User)
                 .WithMany()
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            // Feed query: newest-first per user.
             e.HasIndex(x => new { x.UserId, x.CreatedAt });
         });
     }

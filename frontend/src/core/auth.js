@@ -1,5 +1,6 @@
 import { Store } from "./store.js";
 import { API } from "./api.js";
+import { I18n } from "./i18n.js";
 
 const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -7,6 +8,7 @@ async function afterAuth(data) {
     Store.setToken(data.token);
     const user = API.mapUser(data.user);
     Store.setUser(user);
+    if (user.language && user.language !== I18n.get()) I18n.set(user.language);
     try { await API.refreshNotifications(); } catch (e) { }
     return user;
 }
@@ -29,8 +31,8 @@ export const Auth = {
 
     async login(email, password) {
         const e = String(email || "").trim().toLowerCase();
-        if (!emailRe.test(e)) throw new Error("Enter a valid email.");
-        if (!password) throw new Error("Enter your password.");
+        if (!emailRe.test(e)) throw new Error(I18n.t("auth.err.invalidEmail"));
+        if (!password) throw new Error(I18n.t("auth.err.enterPassword"));
         const data = await API.authLogin(e, password);
         return afterAuth(data);
     },
@@ -39,10 +41,10 @@ export const Auth = {
         const name = String(data.name || "").trim();
         const email = String(data.email || "").trim().toLowerCase();
         const password = String(data.password || "");
-        if (!name) throw new Error("Name is required.");
-        if (!emailRe.test(email)) throw new Error("Enter a valid email.");
+        if (!name) throw new Error(I18n.t("auth.err.nameRequired"));
+        if (!emailRe.test(email)) throw new Error(I18n.t("auth.err.invalidEmail"));
         if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password))
-            throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character (@$!%*?&).");
+            throw new Error(I18n.t("auth.err.passwordRules"));
 
         const role = data.role === "organizer" ? "organizer" : "student";
 
@@ -51,6 +53,7 @@ export const Auth = {
             password: password,
             display_name: name,
             role: role,
+            language: I18n.get(),
         });
         return afterAuth(res);
     },

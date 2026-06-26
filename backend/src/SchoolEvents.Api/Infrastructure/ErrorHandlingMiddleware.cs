@@ -1,9 +1,5 @@
 namespace SchoolEvents.Api.Infrastructure;
 
-/// <summary>
-/// Converts thrown exceptions into a consistent JSON envelope:
-/// <c>{ "error": { "code": "...", "message": "..." } }</c>.
-/// </summary>
 public class ErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;

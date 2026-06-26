@@ -6,8 +6,10 @@ import { refreshNotifications } from "./core/notifications.js";
 import { initAos } from "./core/anim.js";
 import { initScroll } from "./core/scroll.js";
 import { Tour } from "./features/tour.js";
+import { I18n } from "./core/i18n.js";
 
 async function boot() {
+    document.documentElement.lang = I18n.get();
     await Auth.restore();
     await initAos();
     initScroll();
@@ -16,6 +18,7 @@ async function boot() {
     Bus.on("auth", refreshNotifications);
     Bus.on("route", renderNav);
     Bus.on("notifications", updateBell);
+    Bus.on("lang", () => { renderNav(); Router.handle(); });
 
     Bus.on("route", (path) => {
         const u = Auth.current();

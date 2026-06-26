@@ -7,11 +7,6 @@ using SchoolEvents.Data.Notifications;
 
 namespace SchoolEvents.Api.Services;
 
-/// <summary>
-/// Owns the seat-allocation rules. Every mutation runs inside a transaction that
-/// first takes a row lock on the event (<c>SELECT ... FOR UPDATE</c>), which
-/// serializes concurrent sign-ups and guarantees we never overbook.
-/// </summary>
 public class RegistrationService
 {
     private readonly SchoolEventsDbContext _db;
@@ -51,13 +46,12 @@ public class RegistrationService
         {
             var ahead = await _db.Registrations
                 .CountAsync(r => r.EventId == eventId && r.Status == RegistrationStatus.Waitlisted);
-            waitlistPosition = ahead + 1; // this sign-up joins the back of the queue
+            waitlistPosition = ahead + 1;
         }
 
         Registration reg;
         if (existing is not null)
         {
-            // Re-using a previously cancelled row; send them to the back of the queue.
             existing.Status = target;
             existing.CreatedAt = DateTime.UtcNow;
             reg = existing;
@@ -114,13 +108,11 @@ public class RegistrationService
         var wasConfirmed = reg.Status == RegistrationStatus.Confirmed;
         reg.Status = RegistrationStatus.Cancelled;
 
-        // In-app confirmation for the person who cancelled (no email for this one).
         _db.Notifications.Add(AppNotifications.Build(userId, JobTypes.RegistrationCancelled, ev.Id, ev.Title));
 
         long? promoted = null;
         if (wasConfirmed)
         {
-            // A confirmed seat opened up: promote the oldest waitlister (FIFO).
             var next = await _db.Registrations
                 .Where(r => r.EventId == reg.EventId && r.Status == RegistrationStatus.Waitlisted)
                 .OrderBy(r => r.CreatedAt).ThenBy(r => r.Id)
@@ -143,18 +135,14 @@ public class RegistrationService
         return new CancelResult { PromotedRegistration = promoted };
     }
 
-    /// <summary>Loads and row-locks the event for the duration of the transaction.</summary>
     private async Task<Event?> LockEventAsync(long eventId)
     {
-        // FromSql + ToListAsync executes verbatim (no subquery wrapping), so the
-        // FOR UPDATE lock is actually taken on the matched row.
         var rows = await _db.Events
             .FromSqlInterpolated($"SELECT * FROM events WHERE id = {eventId} FOR UPDATE")
             .ToListAsync();
         return rows.FirstOrDefault();
     }
 
-    /// <summary>Enqueues the email job AND writes the matching in-app notification.</summary>
     private void AddJob(string type, Event ev, User recipient, int? waitlistPosition)
     {
         var payload = new NotificationPayload
@@ -162,6 +150,7 @@ public class RegistrationService
             UserId = recipient.Id,
             Email = recipient.Email,
             Name = recipient.DisplayName,
+            Language = recipient.Language,
             EventId = ev.Id,
             EventTitle = ev.Title,
             EventStartsAt = ev.StartsAt,
