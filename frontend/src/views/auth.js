@@ -32,8 +32,8 @@ function feature(icon, text) {
 }
 
 const ROLE_BASE = "role-card flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-medium transition";
-const ROLE_ON = "border-brand-500 bg-brand-50 text-brand-700 ring-1 ring-brand-200";
-const ROLE_OFF = "border-slate-200 text-slate-600 hover:border-brand-300 hover:bg-slate-50";
+const ROLE_ON = "border-brand-500 bg-brand-50 text-brand-700 ring-1 ring-brand-200 dark:border-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
+const ROLE_OFF = "border-slate-200 text-slate-600 hover:border-brand-300 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:border-brand-600 dark:hover:bg-slate-700";
 
 function roleCard(value, icon, label, active) {
     return '<button type="button" data-role="' + value + '" class="' + ROLE_BASE + " " + (active ? ROLE_ON : ROLE_OFF) + '"><i class="fa-solid ' + icon + '"></i>' + label + "</button>";
@@ -46,9 +46,9 @@ export function auth(mode) {
         '<div data-aos="fade-right">' + brandPanel() + "</div>" +
         '<div class="flex items-center" data-aos="fade-left">' +
         '<div class="card w-full p-7 sm:p-9">' +
-        '<div class="mb-6 lg:hidden"><div class="inline-flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2 text-brand-700"><i class="fa-solid fa-graduation-cap"></i><span class="font-display font-semibold">Team Odyssey</span></div></div>' +
-        '<h1 class="font-display text-2xl font-bold text-slate-800">' + (isLogin ? I18n.t("auth.signInTitle") : I18n.t("auth.createTitle")) + "</h1>" +
-        '<p class="mt-1 text-sm text-slate-500">' + (isLogin ? I18n.t("auth.signInSub") : I18n.t("auth.createSub")) + "</p>" +
+        '<div class="mb-6 lg:hidden"><div class="inline-flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400"><i class="fa-solid fa-graduation-cap"></i><span class="font-display font-semibold">Team Odyssey</span></div></div>' +
+        '<h1 class="font-display text-2xl font-bold text-slate-800 dark:text-slate-100">' + (isLogin ? I18n.t("auth.signInTitle") : I18n.t("auth.createTitle")) + "</h1>" +
+        '<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">' + (isLogin ? I18n.t("auth.signInSub") : I18n.t("auth.createSub")) + "</p>" +
         '<form id="auth-form" class="mt-6 space-y-4" novalidate>' +
         (isLogin
             ? ""
@@ -66,7 +66,7 @@ export function auth(mode) {
         "</div>" +
         '<button type="submit" class="btn-primary w-full"><i class="fa-solid ' + (isLogin ? "fa-right-to-bracket" : "fa-user-plus") + '"></i>' + (isLogin ? I18n.t("auth.signInBtn") : I18n.t("auth.signUpBtn")) + "</button>" +
         "</form>" +
-        '<p class="mt-6 text-center text-sm text-slate-500">' +
+        '<p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">' +
         (isLogin
             ? I18n.t("auth.noAccount") + ' <a href="/register" class="font-semibold text-brand-600 hover:text-brand-700">' + I18n.t("auth.createOne") + "</a>"
             : I18n.t("auth.haveAccount") + ' <a href="/login" class="font-semibold text-brand-600 hover:text-brand-700">' + I18n.t("auth.signInBtn") + "</a>") +

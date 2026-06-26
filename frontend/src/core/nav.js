@@ -7,13 +7,32 @@ import { Router } from "./router.js";
 import { Tour } from "../features/tour.js";
 import { refreshNotifications } from "./notifications.js";
 import { I18n } from "./i18n.js";
+import { Theme } from "./theme.js";
+
+function themeToggle() {
+    const dark = Theme.get() === "dark";
+    return '<button type="button" id="theme-toggle" aria-label="Toggle theme" class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-brand-400">' +
+        '<i class="fa-solid ' + (dark ? "fa-sun" : "fa-moon") + ' text-lg"></i></button>';
+}
+
+async function setTheme(theme) {
+    if (theme === Theme.get()) return;
+    Theme.set(theme);
+    const u = Auth.current();
+    if (u) {
+        try {
+            const updated = await API.updateTheme(theme);
+            Store.setUser(updated);
+        } catch (e) { }
+    }
+}
 
 function langToggle() {
     const cur = I18n.get();
     const btn = (code) =>
         '<button type="button" data-lang="' + code + '" class="rounded-lg px-2.5 py-1.5 text-xs font-bold uppercase transition ' +
-        (cur === code ? "bg-white text-brand-700 shadow-sm" : "text-slate-500 hover:text-slate-700") + '">' + code + "</button>";
-    return '<div class="inline-flex items-center rounded-xl bg-slate-100 p-0.5">' + btn("bg") + btn("en") + "</div>";
+        (cur === code ? "bg-white text-brand-700 shadow-sm dark:bg-slate-700 dark:text-brand-400" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200") + '">' + code + "</button>";
+    return '<div class="inline-flex items-center rounded-xl bg-slate-100 p-0.5 dark:bg-slate-700/50">' + btn("bg") + btn("en") + "</div>";
 }
 
 async function setLang(lang) {
@@ -51,8 +70,8 @@ function isActive(href, cur) {
 }
 
 function navLink(href, icon, label, cur) {
-    const base = "relative inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-brand-50 hover:text-brand-700";
-    const state = isActive(href, cur) ? "bg-brand-50 text-brand-700" : "text-slate-600";
+    const base = "relative inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-900/30 dark:hover:text-brand-400";
+    const state = isActive(href, cur) ? "bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400" : "text-slate-600 dark:text-slate-300";
     return '<a href="' + href + '" class="' + base + ' ' + state + '"><i class="fa-solid ' + icon + '"></i> ' + label + "</a>";
 }
 
@@ -65,16 +84,16 @@ function bell() {
     const n = API.unreadCount();
     return (
         '<div class="relative" id="notif-wrap">' +
-        '<button id="bell-btn" type="button" aria-label="Notifications" aria-haspopup="true" class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600">' +
+        '<button id="bell-btn" type="button" aria-label="Notifications" aria-haspopup="true" class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-brand-400">' +
         '<i class="fa-solid fa-bell text-lg"></i>' + bellBadge(n) +
         '</button>' +
-        '<div id="notif-panel" class="hidden absolute right-0 top-full z-50 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-96 origin-top-right overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft">' +
-        '<div class="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-3">' +
+        '<div id="notif-panel" class="hidden absolute right-0 top-full z-50 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-96 origin-top-right overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft dark:border-slate-700 dark:bg-slate-800">' +
+        '<div class="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-3 dark:border-slate-700">' +
         '<div class="flex items-center gap-2">' +
-        '<span class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><i class="fa-solid fa-bell text-sm"></i></span>' +
-        '<h3 class="font-display text-sm font-bold text-slate-800">' + I18n.t("nav.notifications") + '</h3>' +
+        '<span class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400"><i class="fa-solid fa-bell text-sm"></i></span>' +
+        '<h3 class="font-display text-sm font-bold text-slate-800 dark:text-slate-100">' + I18n.t("nav.notifications") + '</h3>' +
         '</div>' +
-        '<button id="notif-mark-read" type="button" class="hidden inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-brand-600 transition hover:bg-brand-50">' +
+        '<button id="notif-mark-read" type="button" class="hidden inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-brand-600 transition hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-slate-700">' +
         '<i class="fa-solid fa-check-double"></i> ' + I18n.t("nav.markAllRead") +
         '</button>' +
         '</div>' +
@@ -87,11 +106,11 @@ function bell() {
 function notifItem(n) {
     const m = notifMeta(n.type);
     return (
-        '<div class="flex items-start gap-3 border-b border-slate-100 px-4 py-3 last:border-b-0 transition hover:bg-slate-50 ' + (n.read ? "" : "bg-brand-50/40") + '">' +
+        '<div class="flex items-start gap-3 border-b border-slate-100 px-4 py-3 last:border-b-0 transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-700/50 ' + (n.read ? "" : "bg-brand-50/40 dark:bg-brand-900/20") + '">' +
         '<span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-' + m.color + "-100 text-" + m.color + '-600"><i class="fa-solid ' + m.icon + '"></i></span>' +
         '<div class="min-w-0 flex-1">' +
-        '<p class="text-sm leading-snug text-slate-700">' + UI.escape(UI.notifText(n)) + '</p>' +
-        '<p class="mt-0.5 text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i>' + UI.escape(UI.fmtRelative(n.createdAt)) + '</p>' +
+        '<p class="text-sm leading-snug text-slate-700 dark:text-slate-200">' + UI.escape(UI.notifText(n)) + '</p>' +
+        '<p class="mt-0.5 text-xs text-slate-400 dark:text-slate-500"><i class="fa-regular fa-clock mr-1"></i>' + UI.escape(UI.fmtRelative(n.createdAt)) + '</p>' +
         '</div>' +
         (n.read ? "" : '<span class="mt-1.5 h-2 w-2 flex-none rounded-full bg-brand-500" aria-label="Unread"></span>') +
         '</div>'
@@ -101,9 +120,9 @@ function notifItem(n) {
 function emptyNotif() {
     return (
         '<div class="px-6 py-12 text-center">' +
-        '<div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-xl text-brand-500"><i class="fa-solid fa-bell-slash"></i></div>' +
-        '<h4 class="font-display text-sm font-semibold text-slate-800">' + I18n.t("nav.noNotifTitle") + '</h4>' +
-        '<p class="mt-1 text-xs text-slate-500">' + I18n.t("nav.noNotifText") + '</p>' +
+        '<div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-xl text-brand-500 dark:bg-brand-900/30 dark:text-brand-400"><i class="fa-solid fa-bell-slash"></i></div>' +
+        '<h4 class="font-display text-sm font-semibold text-slate-800 dark:text-slate-100">' + I18n.t("nav.noNotifTitle") + '</h4>' +
+        '<p class="mt-1 text-xs text-slate-500 dark:text-slate-400">' + I18n.t("nav.noNotifText") + '</p>' +
         '</div>'
     );
 }
@@ -113,10 +132,10 @@ function loadingNotif() {
         '<div class="space-y-3 p-4">' +
         Array.from({ length: 3 }).map(() =>
             '<div class="flex items-start gap-3">' +
-            '<div class="h-9 w-9 flex-none animate-pulse rounded-xl bg-slate-100"></div>' +
+            '<div class="h-9 w-9 flex-none animate-pulse rounded-xl bg-slate-100 dark:bg-slate-700"></div>' +
             '<div class="flex-1 space-y-2">' +
-            '<div class="h-3 w-4/5 animate-pulse rounded bg-slate-100"></div>' +
-            '<div class="h-3 w-2/5 animate-pulse rounded bg-slate-100"></div>' +
+            '<div class="h-3 w-4/5 animate-pulse rounded bg-slate-100 dark:bg-slate-700"></div>' +
+            '<div class="h-3 w-2/5 animate-pulse rounded bg-slate-100 dark:bg-slate-700"></div>' +
             '</div></div>'
         ).join("") +
         '</div>'
@@ -135,14 +154,14 @@ function renderNotifList() {
 function avatar(user) {
     const initials = user.name.split(" ").map((p) => p[0]).slice(0, 2).join("");
     return (
-        '<div class="relative" id="user-menu"><button id="user-btn" class="flex items-center gap-2 rounded-xl py-1 pl-1 pr-2 transition hover:bg-slate-100">' +
+        '<div class="relative" id="user-menu"><button id="user-btn" class="flex items-center gap-2 rounded-xl py-1 pl-1 pr-2 transition hover:bg-slate-100 dark:hover:bg-slate-700">' +
         '<span class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-sky-500 text-sm font-bold text-white">' + UI.escape(initials) + "</span>" +
-        '<span class="hidden text-left sm:block"><span class="block text-sm font-semibold leading-tight text-slate-800">' + UI.escape(user.name.split(" ")[0]) + '</span><span class="block text-[11px] leading-tight text-slate-400">' + (user.role === "organizer" ? I18n.t("nav.roleOrganizer") : I18n.t("nav.roleStudent")) + "</span></span>" +
+        '<span class="hidden text-left sm:block"><span class="block text-sm font-semibold leading-tight text-slate-800 dark:text-slate-100">' + UI.escape(user.name.split(" ")[0]) + '</span><span class="block text-[11px] leading-tight text-slate-400 dark:text-slate-500">' + (user.role === "organizer" ? I18n.t("nav.roleOrganizer") : I18n.t("nav.roleStudent")) + "</span></span>" +
         '<i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></button>' +
-        '<div id="user-dropdown" class="absolute right-0 z-50 mt-2 hidden w-56 origin-top-right rounded-2xl border border-slate-200 bg-white p-2 shadow-soft">' +
-        '<div class="border-b border-slate-100 px-3 py-2"><div class="text-sm font-semibold text-slate-800">' + UI.escape(user.name) + '</div><div class="truncate text-xs text-slate-500">' + UI.escape(user.email) + "</div></div>" +
-        '<button id="tour-btn" class="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"><i class="fa-solid fa-route w-4"></i> ' + I18n.t("nav.replayTour") + '</button>' +
-        '<button id="logout-btn" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50"><i class="fa-solid fa-right-from-bracket w-4"></i> ' + I18n.t("nav.signOut") + '</button>' +
+        '<div id="user-dropdown" class="absolute right-0 z-50 mt-2 hidden w-56 origin-top-right rounded-2xl border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-700 dark:bg-slate-800">' +
+        '<div class="border-b border-slate-100 px-3 py-2 dark:border-slate-700"><div class="text-sm font-semibold text-slate-800 dark:text-slate-100">' + UI.escape(user.name) + '</div><div class="truncate text-xs text-slate-500 dark:text-slate-400">' + UI.escape(user.email) + "</div></div>" +
+        '<button id="tour-btn" class="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"><i class="fa-solid fa-route w-4"></i> ' + I18n.t("nav.replayTour") + '</button>' +
+        '<button id="logout-btn" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20"><i class="fa-solid fa-right-from-bracket w-4"></i> ' + I18n.t("nav.signOut") + '</button>' +
         "</div></div>"
     );
 }
@@ -163,11 +182,11 @@ export function renderNav() {
                 : [["/events", "fa-compass", I18n.t("nav.events")], ["/my-registrations", "fa-ticket", I18n.t("nav.myRegistrations")]];
         if (user.isAdmin) links.push(["/admin", "fa-shield-halved", I18n.t("nav.admin")]);
         center.innerHTML = '<nav class="hidden items-center gap-1 md:flex">' + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav>";
-        right.innerHTML = '<div class="flex items-center gap-1.5">' + langToggle() + bell() + avatar(user) + '<button id="burger" class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 md:hidden"><i class="fa-solid fa-bars text-lg"></i></button></div>';
-        mobile.innerHTML = '<div id="mobile-menu" class="hidden border-t border-slate-200 bg-white px-4 py-3 md:hidden"><nav class="flex flex-col gap-1">' + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav></div>";
+        right.innerHTML = '<div class="flex items-center gap-1.5">' + themeToggle() + langToggle() + bell() + avatar(user) + '<button id="burger" class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 md:hidden"><i class="fa-solid fa-bars text-lg"></i></button></div>';
+        mobile.innerHTML = '<div id="mobile-menu" class="hidden border-t border-slate-200 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900 md:hidden"><nav class="flex flex-col gap-1">' + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav></div>";
     } else {
         center.innerHTML = "";
-        right.innerHTML = '<div class="flex items-center gap-2">' + langToggle() + '<a href="/login" class="btn-ghost"><i class="fa-solid fa-right-to-bracket"></i> ' + I18n.t("nav.signIn") + '</a><a href="/register" class="btn-primary">' + I18n.t("nav.createAccount") + '</a></div>';
+        right.innerHTML = '<div class="flex items-center gap-2">' + themeToggle() + langToggle() + '<a href="/login" class="btn-ghost"><i class="fa-solid fa-right-to-bracket"></i> ' + I18n.t("nav.signIn") + '</a><a href="/register" class="btn-primary">' + I18n.t("nav.createAccount") + '</a></div>';
         mobile.innerHTML = "";
     }
 
@@ -217,6 +236,14 @@ function closeNotifPanel() {
 }
 
 function wireNav() {
+    const themeBtn = document.getElementById("theme-toggle");
+    if (themeBtn) {
+        themeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            setTheme(Theme.get() === "dark" ? "light" : "dark");
+        });
+    }
+
     document.querySelectorAll("[data-lang]").forEach((btn) => {
         btn.addEventListener("click", (e) => {
             e.stopPropagation();

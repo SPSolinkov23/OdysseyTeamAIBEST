@@ -74,6 +74,7 @@ function mapUser(u) {
         isAdmin: !!u.is_admin,
         createdAt: u.created_at,
         language: u.language,
+        theme: u.theme || "light",
     };
 }
 
@@ -183,6 +184,11 @@ export const API = {
 
     async updateLanguage(language) {
         const data = await request("PATCH", "/users/me", { language: language });
+        return mapUser(data.user);
+    },
+
+    async updateTheme(theme) {
+        const data = await request("PATCH", "/users/me", { theme: theme });
         return mapUser(data.user);
     },
 

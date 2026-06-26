@@ -24,7 +24,7 @@ public class UsersController : ControllerBase
     {
         var user = await _db.Users.FindAsync(User.GetUserId()) ?? throw ApiException.Unauthorized();
         var isAdmin = await _db.IsAdminAsync(user.Id);
-        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language) });
+        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language, user.Theme) });
     }
 
     [HttpPatch("me")]
@@ -35,9 +35,11 @@ public class UsersController : ControllerBase
             user.DisplayName = req.DisplayName.Trim();
         if (req.Language is not null)
             user.Language = req.Language;
+        if (req.Theme is not null)
+            user.Theme = req.Theme;
         await _db.SaveChangesAsync();
         var isAdmin = await _db.IsAdminAsync(user.Id);
-        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language) });
+        return Ok(new { user = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language, user.Theme) });
     }
 
     [HttpPost("me/password")]

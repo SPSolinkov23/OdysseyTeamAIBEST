@@ -149,7 +149,7 @@ async function confirmDialog(opts) {
         buttonsStyling: false,
         customClass: {
             popup: "rounded-2xl",
-            title: "!text-slate-800 !font-display",
+            title: "!text-slate-800 dark:!text-slate-100 !font-display",
             confirmButton: o.danger ? "btn-danger mx-1" : "btn-primary mx-1",
             cancelButton: "btn-secondary mx-1",
         },
@@ -165,16 +165,16 @@ async function alertDialog(opts) {
         icon: o.icon || "success",
         confirmButtonText: o.confirmText || I18n.t("dialog.ok"),
         buttonsStyling: false,
-        customClass: { popup: "rounded-2xl", title: "!text-slate-800 !font-display", confirmButton: "btn-primary" },
+        customClass: { popup: "rounded-2xl", title: "!text-slate-800 dark:!text-slate-100 !font-display", confirmButton: "btn-primary" },
     });
 }
 
 function empty(o) {
     return (
-        '<div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white/60 px-6 py-16 text-center" data-aos="zoom-in">' +
-        '<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-2xl text-brand-500"><i class="fa-solid ' + (o.icon || "fa-inbox") + '"></i></div>' +
-        '<h3 class="font-display text-lg font-semibold text-slate-800">' + escape(o.title || I18n.t("ui.nothingHere")) + "</h3>" +
-        '<p class="mt-1 max-w-sm text-sm text-slate-500">' + escape(o.text || "") + "</p>" +
+        '<div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white/60 px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-800/40" data-aos="zoom-in">' +
+        '<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-2xl text-brand-500 dark:bg-brand-900/30 dark:text-brand-400"><i class="fa-solid ' + (o.icon || "fa-inbox") + '"></i></div>' +
+        '<h3 class="font-display text-lg font-semibold text-slate-800 dark:text-slate-100">' + escape(o.title || I18n.t("ui.nothingHere")) + "</h3>" +
+        '<p class="mt-1 max-w-sm text-sm text-slate-500 dark:text-slate-400">' + escape(o.text || "") + "</p>" +
         (o.actionHtml ? '<div class="mt-5">' + o.actionHtml + "</div>" : "") +
         "</div>"
     );
@@ -182,10 +182,10 @@ function empty(o) {
 
 function guard(title, text) {
     return (
-        '<section class="container-app py-20"><div class="mx-auto max-w-lg rounded-2xl border border-rose-100 bg-white p-10 text-center shadow-soft" data-aos="flip-up">' +
-        '<div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50 text-2xl text-rose-500"><i class="fa-solid fa-lock"></i></div>' +
-        '<h2 class="font-display text-2xl font-bold text-slate-800">' + escape(title) + "</h2>" +
-        '<p class="mt-2 text-slate-500">' + escape(text) + "</p>" +
+        '<section class="container-app py-20"><div class="mx-auto max-w-lg rounded-2xl border border-rose-100 bg-white p-10 text-center shadow-soft dark:border-rose-900/30 dark:bg-slate-800" data-aos="flip-up">' +
+        '<div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50 text-2xl text-rose-500 dark:bg-rose-900/30"><i class="fa-solid fa-lock"></i></div>' +
+        '<h2 class="font-display text-2xl font-bold text-slate-800 dark:text-slate-100">' + escape(title) + "</h2>" +
+        '<p class="mt-2 text-slate-500 dark:text-slate-400">' + escape(text) + "</p>" +
         '<a href="/" class="btn-primary mt-6"><i class="fa-solid fa-house"></i> ' + I18n.t("ui.goHome") + '</a></div></section>'
     );
 }
@@ -199,7 +199,7 @@ function progressBar(value, max, color) {
     const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
     const c = color || "brand";
     return (
-        '<div class="h-2 w-full overflow-hidden rounded-full bg-slate-100"><div class="h-full rounded-full bg-' + c + '-500 transition-all duration-700" style="width:' + pct + '%"></div></div>'
+        '<div class="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700"><div class="h-full rounded-full bg-' + c + '-500 transition-all duration-700" style="width:' + pct + '%"></div></div>'
     );
 }
 

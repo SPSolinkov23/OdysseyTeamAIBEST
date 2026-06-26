@@ -16,6 +16,8 @@ public class User : ITimestamped
 
     public string Language { get; set; } = "bg";
 
+    public string Theme { get; set; } = "light";
+
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 

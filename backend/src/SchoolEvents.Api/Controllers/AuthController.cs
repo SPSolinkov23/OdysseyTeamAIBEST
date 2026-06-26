@@ -46,6 +46,7 @@ public class AuthController : ControllerBase
             Role = UserRole.Student,
             OrganizerStatus = appliedAsOrganizer ? OrganizerStatus.Pending : OrganizerStatus.None,
             Language = req.Language ?? "bg",
+            Theme = req.Theme ?? "light",
         };
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
@@ -98,7 +99,7 @@ public class AuthController : ControllerBase
         {
             Token = token,
             ExpiresAt = expiresAt,
-            User = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language),
+            User = new UserDto(user.Id, user.Email, user.DisplayName, user.Role, user.CreatedAt, user.OrganizerStatus, isAdmin, user.Language, user.Theme),
         };
     }
 }
