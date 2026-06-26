@@ -39,7 +39,7 @@ public class EventService
         UpdatedAt = e.UpdatedAt,
     };
 
-    public async Task<EventListResponse> ListAsync(long? callerId, string? status, string? q, bool mine, int page, int pageSize)
+    public async Task<EventListResponse> ListAsync(long? callerId, string? status, string? q, string? category, bool mine, int page, int pageSize)
     {
         page = Math.Max(1, page);
         pageSize = Math.Clamp(pageSize, 1, 50);
@@ -65,15 +65,51 @@ public class EventService
             query = query.Where(e => e.Title.Contains(term) || (e.Location != null && e.Location.Contains(term)));
         }
 
+        var categories = await query
+            .Where(e => e.Category != null && e.Category != "")
+            .Select(e => e.Category!)
+            .Distinct()
+            .OrderBy(c => c)
+            .ToListAsync();
+
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            var selectedCategory = category.Trim();
+            query = query.Where(e => e.Category == selectedCategory);
+        }
+
+        var stats = await query
+            .Select(e => new
+            {
+                e.Status,
+                e.Capacity,
+                ConfirmedCount = e.Registrations.Count(r => r.Status == RegistrationStatus.Confirmed),
+                WaitlistCount = e.Registrations.Count(r => r.Status == RegistrationStatus.Waitlisted),
+            })
+            .GroupBy(_ => 1)
+            .Select(g => new EventListStatsDto
+            {
+                TotalEvents = g.Count(),
+                PublishedCount = g.Count(e => e.Status == EventStatus.Published),
+                DraftCount = g.Count(e => e.Status == EventStatus.Draft),
+                CancelledCount = g.Count(e => e.Status == EventStatus.Cancelled),
+                ConfirmedRegistrationCount = g.Sum(e => e.ConfirmedCount),
+                WaitlistCount = g.Sum(e => e.WaitlistCount),
+                SeatsAvailable = g.Sum(e => e.Capacity - e.ConfirmedCount),
+            })
+            .FirstOrDefaultAsync() ?? new EventListStatsDto();
+
         var totalCount = await query.CountAsync();
         var totalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pageSize);
 
         if (totalPages > 0 && page > totalPages)
             page = totalPages;
 
-        var events = await query
-            .OrderBy(e => e.StartsAt)
-            .ThenBy(e => e.Id)
+        var ordered = mine
+            ? query.OrderByDescending(e => e.CreatedAt).ThenByDescending(e => e.Id)
+            : query.OrderBy(e => e.StartsAt).ThenBy(e => e.Id);
+
+        var events = await ordered
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(ToDto)
@@ -82,6 +118,8 @@ public class EventService
         return new EventListResponse
         {
             Events = events,
+            Categories = categories,
+            Stats = stats,
             Page = page,
             PageSize = pageSize,
             TotalCount = totalCount,

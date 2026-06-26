@@ -79,10 +79,23 @@ public class EventEnvelope
 public class EventListResponse
 {
     public IReadOnlyList<EventDto> Events { get; set; } = Array.Empty<EventDto>();
+    public IReadOnlyList<string> Categories { get; set; } = Array.Empty<string>();
+    public EventListStatsDto Stats { get; set; } = new();
     public int Page { get; set; }
     public int PageSize { get; set; }
     public int TotalCount { get; set; }
     public int TotalPages { get; set; }
     public bool HasPreviousPage { get; set; }
     public bool HasNextPage { get; set; }
+}
+
+public class EventListStatsDto
+{
+    public int TotalEvents { get; set; }
+    public int PublishedCount { get; set; }
+    public int DraftCount { get; set; }
+    public int CancelledCount { get; set; }
+    public int ConfirmedRegistrationCount { get; set; }
+    public int WaitlistCount { get; set; }
+    public int SeatsAvailable { get; set; }
 }

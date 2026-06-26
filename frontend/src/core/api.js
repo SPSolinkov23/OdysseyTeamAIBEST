@@ -170,8 +170,20 @@ function query(params) {
 }
 
 function mapEventPage(data) {
+    const stats = data.stats || {};
+
     return {
         events: (data.events || []).map(mapEvent),
+        categories: data.categories || [],
+        stats: {
+            totalEvents: stats.total_events || 0,
+            publishedCount: stats.published_count || 0,
+            draftCount: stats.draft_count || 0,
+            cancelledCount: stats.cancelled_count || 0,
+            confirmedRegistrationCount: stats.confirmed_registration_count || 0,
+            waitlistCount: stats.waitlist_count || 0,
+            seatsAvailable: stats.seats_available || 0,
+        },
         page: data.page || 1,
         pageSize: data.page_size || 9,
         totalCount: data.total_count || 0,
@@ -206,6 +218,7 @@ export const API = {
             page: options.page || 1,
             pageSize: options.pageSize || 9,
             q: options.q || "",
+            category: options.category || "",
         }));
 
         return mapEventPage(data);
@@ -217,11 +230,9 @@ export const API = {
             page: options.page || 1,
             pageSize: options.pageSize || 8,
             q: options.q || "",
+            category: options.category || "",
         }));
-        const page = mapEventPage(data);
-
-        page.events = page.events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        return page;
+        return mapEventPage(data);
     },
 
     async getEvent(id) {

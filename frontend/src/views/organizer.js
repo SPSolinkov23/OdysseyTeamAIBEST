@@ -53,15 +53,12 @@ function toLocalInput(iso) {
 export async function organizer() {
     const page = await API.listOrganizerEvents(readOrganizerPage(8));
     const list = page.events;
-    const published = list.filter((e) => e.status === "PUBLISHED").length;
-    const drafts = list.filter((e) => e.status === "DRAFT").length;
-    const totalRegs = list.reduce((a, e) => a + e.confirmedCount + e.waitlistCount, 0);
 
     const stats = [
-        { icon: "fa-layer-group", label: "Total events", value: page.totalCount, color: "brand" },
-        { icon: "fa-tower-broadcast", label: "Published on page", value: published, color: "sky" },
-        { icon: "fa-pen-ruler", label: "Drafts on page", value: drafts, color: "slate" },
-        { icon: "fa-users", label: "Registrations on page", value: totalRegs, color: "emerald" },
+        { icon: "fa-layer-group", label: "Total events", value: page.stats.totalEvents, color: "brand" },
+        { icon: "fa-tower-broadcast", label: "Published", value: page.stats.publishedCount, color: "sky" },
+        { icon: "fa-pen-ruler", label: "Drafts", value: page.stats.draftCount, color: "slate" },
+        { icon: "fa-users", label: "Registrations", value: page.stats.confirmedRegistrationCount + page.stats.waitlistCount, color: "emerald" },
     ];
 
     const rows = list.length
