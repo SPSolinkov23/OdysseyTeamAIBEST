@@ -54,16 +54,60 @@ function eventCard(ev, mine, i) {
     );
 }
 
+function readPageState(defaultSize) {
+    const params = new URLSearchParams(location.search);
+    return {
+        page: Math.max(1, parseInt(params.get("page") || "1", 10) || 1),
+        pageSize: defaultSize,
+        q: params.get("q") || "",
+        category: params.get("category") || "",
+    };
+}
+
+function setPageState(page, q, category) {
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", page);
+    if (q) params.set("q", q);
+    if (category) params.set("category", category);
+    history.pushState(null, "", "/events" + (params.toString() ? "?" + params.toString() : ""));
+    Router.handle();
+}
+
+function pagination(meta) {
+    if (meta.totalPages <= 1) return "";
+
+    const buttons = [];
+    for (let p = 1; p <= meta.totalPages; p++) {
+        if (p === 1 || p === meta.totalPages || Math.abs(p - meta.page) <= 1) {
+            buttons.push('<button class="chip ' + (p === meta.page ? "is-active" : "") + '" data-page="' + p + '">' + p + "</button>");
+        } else if (buttons[buttons.length - 1] !== '<span class="px-1 text-slate-400 dark:text-slate-500">...</span>') {
+            buttons.push('<span class="px-1 text-slate-400 dark:text-slate-500">...</span>');
+        }
+    }
+
+    return (
+        '<div id="ev-pagination" class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
+        '<p class="text-sm text-slate-500 dark:text-slate-400">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
+        '<div class="flex flex-wrap items-center gap-2">' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> ' + I18n.t("pagination.previous") + '</button>' +
+        buttons.join("") +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>' + I18n.t("pagination.next") + ' <i class="fa-solid fa-chevron-right"></i></button>' +
+        "</div></div>"
+    );
+}
+
 export async function events() {
     const user = Auth.current();
-    const list = await API.listPublishedEvents();
+    const state = readPageState(9);
+    const page = await API.listPublishedEvents(state);
+    const list = page.events;
     const mine = await myMap();
-    const cats = Array.from(new Set(list.map((e) => e.category)));
+    const cats = page.categories;
 
     const stats = [
-        { icon: "fa-calendar-star", label: I18n.t("events.statActive"), value: list.length, color: "brand" },
-        { icon: "fa-circle-check", label: I18n.t("events.statFree"), value: list.reduce((a, e) => a + e.spotsLeft, 0), color: "emerald" },
-        { icon: "fa-hourglass-half", label: I18n.t("events.statWaitlist"), value: list.reduce((a, e) => a + e.waitlistCount, 0), color: "amber" },
+        { icon: "fa-calendar-star", label: I18n.t("events.statActive"), value: page.stats.totalEvents, color: "brand" },
+        { icon: "fa-circle-check", label: I18n.t("events.statFree"), value: page.stats.seatsAvailable, color: "emerald" },
+        { icon: "fa-hourglass-half", label: I18n.t("events.statWaitlist"), value: page.stats.waitlistCount, color: "amber" },
     ];
 
     const html =
@@ -79,14 +123,15 @@ export async function events() {
         ).join("") +
         "</div></div></section>" +
         '<section class="container-app py-8"><div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
-        '<div class="relative w-full sm:max-w-xs"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i><input id="ev-search" class="input pl-10" placeholder="' + I18n.t("events.searchPlaceholder") + '"></div>' +
-        '<div id="ev-cats" class="flex flex-wrap gap-2"><button class="chip is-active" data-cat="all">' + I18n.t("events.all") + '</button>' +
-        cats.map((c) => '<button class="chip" data-cat="' + UI.escape(c) + '">' + UI.escape(UI.catLabel(c)) + "</button>").join("") +
+        '<div class="relative w-full sm:max-w-xs"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i><input id="ev-search" class="input pl-10" value="' + UI.escape(state.q) + '" placeholder="' + I18n.t("events.searchPlaceholder") + '"></div>' +
+        '<div id="ev-cats" class="flex flex-wrap gap-2"><button class="chip ' + (!state.category ? "is-active" : "") + '" data-cat="">' + I18n.t("events.all") + '</button>' +
+        cats.map((c) => '<button class="chip ' + (c === state.category ? "is-active" : "") + '" data-cat="' + UI.escape(c) + '">' + UI.escape(UI.catLabel(c)) + "</button>").join("") +
         "</div></div>" +
-        '<div id="ev-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">' +
+        '<div id="ev-grid" class="' + (list.length ? "grid" : "hidden") + ' gap-5 sm:grid-cols-2 lg:grid-cols-3">' +
         list.map((e, i) => eventCard(e, mine, i)).join("") +
         "</div>" +
-        '<div id="ev-empty" class="hidden">' + UI.empty({ icon: "fa-calendar-xmark", title: I18n.t("events.noFoundTitle"), text: I18n.t("events.noFoundText") }) + "</div>" +
+        '<div id="ev-empty" class="' + (list.length ? "hidden" : "") + '">' + UI.empty({ icon: "fa-calendar-xmark", title: I18n.t("events.noFoundTitle"), text: I18n.t("events.noFoundText") }) + "</div>" +
+        pagination(page) +
         "</section>";
 
     return { html: html, onMount: bindEvents };
@@ -94,34 +139,24 @@ export async function events() {
 
 function bindEvents(root) {
     const search = root.querySelector("#ev-search");
-    const grid = root.querySelector("#ev-grid");
-    const empty = root.querySelector("#ev-empty");
-    let activeCat = "all";
+    let searchTimer = null;
+    const currentCategory = new URLSearchParams(location.search).get("category") || "";
 
-    function apply() {
-        const q = (search.value || "").trim().toLowerCase();
-        let shown = 0;
-        grid.querySelectorAll("[data-card]").forEach((card) => {
-            const okText = !q || card.getAttribute("data-title").includes(q);
-            const okCat = activeCat === "all" || card.getAttribute("data-cat") === activeCat;
-            const ok = okText && okCat;
-            card.classList.toggle("hidden", !ok);
-            if (ok) shown++;
-        });
-        empty.classList.toggle("hidden", shown !== 0);
-        grid.classList.toggle("hidden", shown === 0);
-    }
-
-    search.addEventListener("input", apply);
+    search.addEventListener("input", () => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => setPageState(1, (search.value || "").trim(), currentCategory), 300);
+    });
     root.querySelectorAll("#ev-cats .chip").forEach((btn) => {
         btn.addEventListener("click", () => {
-            root.querySelectorAll("#ev-cats .chip").forEach((b) => b.classList.remove("is-active"));
-            btn.classList.add("is-active");
-            activeCat = btn.getAttribute("data-cat");
-            apply();
+            setPageState(1, (search.value || "").trim(), btn.getAttribute("data-cat") || "");
         });
     });
 
+    root.querySelectorAll("#ev-pagination [data-page]").forEach((btn) => {
+        btn.addEventListener("click", () => setPageState(parseInt(btn.getAttribute("data-page"), 10), (search.value || "").trim(), currentCategory));
+    });
+
+    const grid = root.querySelector("#ev-grid");
     grid.querySelectorAll("[data-register]").forEach((btn) => {
         btn.addEventListener("click", () => quickRegister(btn.getAttribute("data-register"), btn));
     });

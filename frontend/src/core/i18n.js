@@ -74,6 +74,9 @@ const DICT = {
         "events.toastConfirmed": "Your spot is confirmed! 🎉",
         "events.toastWaitlist": "Added to the waitlist (position {pos}).",
 
+        "pagination.previous": "Previous",
+        "pagination.next": "Next",
+
         "detail.unavailableTitle": "Event unavailable",
         "detail.unavailableText": "It may be a draft, cancelled or removed.",
         "detail.confirmedReserved": "Your spot is reserved. You'll be notified of any change.",
@@ -341,6 +344,9 @@ const DICT = {
         "events.capFree": "{free} от {cap} свободни",
         "events.toastConfirmed": "Мястото ти е потвърдено! 🎉",
         "events.toastWaitlist": "Добавен си в списъка на чакащите (позиция {pos}).",
+
+        "pagination.previous": "Предишна",
+        "pagination.next": "Следваща",
 
         "detail.unavailableTitle": "Събитието не е налично",
         "detail.unavailableText": "Може да е чернова, отменено или премахнато.",
