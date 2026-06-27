@@ -1,4 +1,4 @@
-const TOKEN_KEY = "team_odyssey_localstorage_key";
+const TOKEN_KEY = "odyssey_school_events_localstorage_key";
 
 let currentUser = null;
 let notifications = [];

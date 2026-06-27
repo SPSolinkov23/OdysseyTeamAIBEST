@@ -2,7 +2,7 @@ import { Auth } from "../core/auth.js";
 import { scrollToEl } from "../core/scroll.js";
 import { I18n } from "../core/i18n.js";
 
-const TOURS_KEY = "odyssey_tours_v1";
+const TOURS_KEY = "odyssey_school_events_tours";
 
 const STEPS = {
     student: [
@@ -69,13 +69,13 @@ function buildContent(step) {
     const wrap = document.createElement("div");
     wrap.className = "w-72 p-1";
     wrap.innerHTML =
-        '<div class="flex items-center gap-2.5"><span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-brand-100 text-brand-600"><i class="fa-solid ' + step.icon + '"></i></span>' +
-        '<h4 class="font-display text-sm font-bold text-slate-800">' + I18n.t(step.key + ".title") + "</h4></div>" +
-        '<p class="mt-2 text-sm leading-relaxed text-slate-600">' + I18n.t(step.key + ".text") + "</p>" +
+        '<div class="flex items-center gap-2.5"><span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300"><i class="fa-solid ' + step.icon + '"></i></span>' +
+        '<h4 class="font-display text-sm font-bold text-slate-800 dark:text-slate-100">' + I18n.t(step.key + ".title") + "</h4></div>" +
+        '<p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">' + I18n.t(step.key + ".text") + "</p>" +
         '<div class="mt-4 flex items-center justify-between">' +
-        '<button data-skip class="text-xs font-medium text-slate-400 hover:text-slate-600">' + I18n.t("tour.skip") + '</button>' +
+        '<button data-skip class="text-xs font-medium text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">' + I18n.t("tour.skip") + '</button>' +
         '<div class="flex items-center gap-1.5">' +
-        steps.map((_, i) => '<span class="h-1.5 rounded-full transition-all ' + (i === idx ? "w-4 bg-brand-500" : "w-1.5 bg-slate-200") + '"></span>').join("") +
+        steps.map((_, i) => '<span class="h-1.5 rounded-full transition-all ' + (i === idx ? "w-4 bg-brand-500" : "w-1.5 bg-slate-200 dark:bg-slate-600") + '"></span>').join("") +
         "</div>" +
         '<div class="flex gap-1.5">' +
         (idx > 0 ? '<button data-prev class="btn-secondary btn-sm">' + I18n.t("tour.back") + '</button>' : "") +

@@ -1,6 +1,7 @@
 import { Store } from "./store.js";
 import { API } from "./api.js";
 import { I18n } from "./i18n.js";
+import { Theme } from "./theme.js";
 
 const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -9,6 +10,7 @@ async function afterAuth(data) {
     const user = API.mapUser(data.user);
     Store.setUser(user);
     if (user.language && user.language !== I18n.get()) I18n.set(user.language);
+    if (user.theme && user.theme !== Theme.get()) Theme.set(user.theme);
     try { await API.refreshNotifications(); } catch (e) { }
     return user;
 }
@@ -54,6 +56,7 @@ export const Auth = {
             display_name: name,
             role: role,
             language: I18n.get(),
+            theme: Theme.get(),
         });
         return afterAuth(res);
     },
@@ -68,6 +71,7 @@ export const Auth = {
         try {
             const user = await API.me();
             Store.setUser(user);
+            if (user.theme && user.theme !== Theme.get()) Theme.set(user.theme);
             try { await API.refreshNotifications(); } catch (e) { }
             return user;
         } catch (e) {

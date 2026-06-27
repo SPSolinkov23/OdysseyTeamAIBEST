@@ -7,9 +7,11 @@ import { initAos } from "./core/anim.js";
 import { initScroll } from "./core/scroll.js";
 import { Tour } from "./features/tour.js";
 import { I18n } from "./core/i18n.js";
+import { Theme } from "./core/theme.js";
 
 async function boot() {
     document.documentElement.lang = I18n.get();
+    Theme.apply(Theme.get());
     await Auth.restore();
     await initAos();
     initScroll();
@@ -19,6 +21,7 @@ async function boot() {
     Bus.on("route", renderNav);
     Bus.on("notifications", updateBell);
     Bus.on("lang", () => { renderNav(); Router.handle(); });
+    Bus.on("theme", renderNav);
 
     Bus.on("route", (path) => {
         const u = Auth.current();

@@ -370,12 +370,12 @@ const DICT = {
         "detail.cancelledPromoted": " Отказахте се.",
 
         "myreg.title": "Моите записвания",
-        "myreg.summary": "{confirmed} потвърдени · {waiting} в списъка",
+        "myreg.summary": "{confirmed} потвърдени · {waiting} в списъка за чакащи",
         "myreg.newRegistration": "Ново записване",
         "myreg.emptyTitle": "Все още няма записвания",
         "myreg.emptyText": "Разгледай събитията и запази мястото си.",
         "myreg.browseEvents": "Разгледай събитията",
-        "myreg.positionOnWaitlist": "позиция {n} в списъка",
+        "myreg.positionOnWaitlist": "позиция {n} в списъка за чакащи",
         "myreg.cancel": "Откажи",
 
         "reg.confirmed": "Потвърдено",

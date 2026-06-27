@@ -4,11 +4,11 @@
 
 @layer base {
     body {
-        @apply bg-slate-50 text-slate-800 font-sans antialiased;
+        @apply bg-slate-50 text-slate-800 font-sans antialiased dark:bg-slate-900 dark:text-slate-100;
     }
 
     ::selection {
-        @apply bg-brand-200 text-brand-900;
+        @apply bg-brand-200 text-brand-900 dark:bg-brand-800 dark:text-brand-100;
     }
 }
 
@@ -26,11 +26,11 @@
     }
 
     .btn-secondary {
-        @apply btn bg-white text-brand-700 ring-1 ring-inset ring-brand-200 hover:bg-brand-50 hover:-translate-y-0.5;
+        @apply btn bg-white text-brand-700 ring-1 ring-inset ring-brand-200 hover:bg-brand-50 hover:-translate-y-0.5 dark:bg-slate-800 dark:text-brand-400 dark:ring-brand-700 dark:hover:bg-slate-700;
     }
 
     .btn-ghost {
-        @apply btn bg-transparent text-slate-600 hover:bg-slate-100;
+        @apply btn bg-transparent text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700;
     }
 
     .btn-danger {
@@ -42,15 +42,15 @@
     }
 
     .card {
-        @apply rounded-2xl border border-slate-200/70 bg-white shadow-sm transition-all duration-300;
+        @apply rounded-2xl border border-slate-200/70 bg-white shadow-sm transition-all duration-300 dark:border-slate-700/70 dark:bg-slate-800;
     }
 
     .input {
-        @apply w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 transition focus:border-brand-400 focus:outline-none focus:ring-4 focus:ring-brand-100;
+        @apply w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 transition focus:border-brand-400 focus:outline-none focus:ring-4 focus:ring-brand-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-brand-900;
     }
 
     .label {
-        @apply mb-1.5 block text-sm font-medium text-slate-700;
+        @apply mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300;
     }
 
     .badge {
@@ -58,7 +58,7 @@
     }
 
     .chip {
-        @apply inline-flex items-center rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-300 hover:text-brand-700;
+        @apply inline-flex items-center rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-300 hover:text-brand-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-brand-600 dark:hover:text-brand-400;
     }
 
     .chip.is-active {
@@ -66,11 +66,11 @@
     }
 
     .tab {
-        @apply rounded-lg px-4 py-2 text-sm font-semibold text-slate-500 transition hover:text-slate-700;
+        @apply rounded-lg px-4 py-2 text-sm font-semibold text-slate-500 transition hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200;
     }
 
     .tab.is-active {
-        @apply bg-white text-brand-700 shadow-sm;
+        @apply bg-white text-brand-700 shadow-sm dark:bg-slate-800 dark:text-brand-400;
     }
 }
 
@@ -100,6 +100,29 @@
 
 .tippy-box[data-theme~="odyssey"][data-placement^="right"]>.tippy-arrow::before {
     border-right-color: #ffffff;
+}
+
+.dark .tippy-box[data-theme~="odyssey"] {
+    background: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+    box-shadow: 0 20px 48px -16px rgba(0, 0, 0, 0.6);
+}
+
+.dark .tippy-box[data-theme~="odyssey"][data-placement^="top"]>.tippy-arrow::before {
+    border-top-color: #1e293b;
+}
+
+.dark .tippy-box[data-theme~="odyssey"][data-placement^="bottom"]>.tippy-arrow::before {
+    border-bottom-color: #1e293b;
+}
+
+.dark .tippy-box[data-theme~="odyssey"][data-placement^="left"]>.tippy-arrow::before {
+    border-left-color: #1e293b;
+}
+
+.dark .tippy-box[data-theme~="odyssey"][data-placement^="right"]>.tippy-arrow::before {
+    border-right-color: #1e293b;
 }
 
 #tour-overlay {
@@ -156,4 +179,47 @@
 .choices__list--dropdown .choices__item--selectable.is-highlighted, .choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
     background: #eff6ff;
     color: #1d4ed8;
+}
+
+.dark .choices__inner {
+    background: #1e293b;
+    border-color: #475569;
+    color: #f1f5f9;
+}
+
+.dark .choices__list--single .choices__item, .dark .choices__inner .choices__placeholder {
+    color: #f1f5f9;
+}
+
+.dark .choices.is-focused .choices__inner {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.4);
+}
+
+.dark .choices__list--dropdown, .dark .choices__list[aria-expanded] {
+    background: #1e293b;
+    border-color: #475569;
+    color: #f1f5f9;
+}
+
+.dark .choices__list--dropdown .choices__item, .dark .choices__list[aria-expanded] .choices__item {
+    color: #e2e8f0;
+}
+
+.dark .choices__list--dropdown .choices__item--selectable.is-highlighted, .dark .choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+    background: #334155;
+    color: #93c5fd;
+}
+
+.dark .swal2-popup {
+    background: #1e293b;
+    color: #f1f5f9;
+}
+
+.dark .swal2-html-container {
+    color: #cbd5e1;
+}
+
+.dark .swal2-popup .swal2-close {
+    color: #94a3b8;
 }

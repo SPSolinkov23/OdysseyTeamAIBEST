@@ -1,4 +1,5 @@
 module.exports = {
+    darkMode: 'class',
     content: ["index.html", "src/**/*.js"],
     theme: {
         extend: {
@@ -56,6 +57,9 @@ module.exports = {
         {
             pattern: /(bg|text|ring|border|from|to)-(emerald|amber|slate|sky|rose|blue|indigo|violet)-(50|100|200|300|500|600|700)/,
         },
+        "dark:bg-emerald-900/20", "dark:text-emerald-400", "dark:ring-emerald-800",
+        "dark:bg-amber-900/20", "dark:text-amber-400", "dark:ring-amber-800",
+        "dark:bg-brand-900/20", "dark:text-brand-400",
     ],
     plugins: [],
 }

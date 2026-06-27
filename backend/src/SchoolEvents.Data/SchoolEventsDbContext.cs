@@ -28,6 +28,7 @@ public class SchoolEventsDbContext : DbContext
             e.Property(x => x.Role).HasConversion<string>().HasMaxLength(20).IsRequired();
             e.Property(x => x.OrganizerStatus).HasConversion<string>().HasMaxLength(20).IsRequired();
             e.Property(x => x.Language).HasMaxLength(2).IsRequired();
+            e.Property(x => x.Theme).HasMaxLength(5).IsRequired();
         });
 
         b.Entity<Admin>(e =>

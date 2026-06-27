@@ -14,6 +14,8 @@ public class RegisterRequest
     public string? Role { get; set; }
 
     public string? Language { get; set; }
+
+    public string? Theme { get; set; }
 }
 
 public class LoginRequest
@@ -27,6 +29,8 @@ public class UpdateMeRequest
     public string DisplayName { get; set; } = string.Empty;
 
     public string? Language { get; set; }
+
+    public string? Theme { get; set; }
 }
 
 public class ChangePasswordRequest
@@ -35,7 +39,7 @@ public class ChangePasswordRequest
     public string NewPassword { get; set; } = string.Empty;
 }
 
-public record UserDto(long Id, string Email, string DisplayName, UserRole Role, DateTime CreatedAt, OrganizerStatus OrganizerStatus, bool IsAdmin, string Language);
+public record UserDto(long Id, string Email, string DisplayName, UserRole Role, DateTime CreatedAt, OrganizerStatus OrganizerStatus, bool IsAdmin, string Language, string Theme);
 
 public class AuthResponse
 {
