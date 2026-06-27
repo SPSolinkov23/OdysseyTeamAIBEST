@@ -28,18 +28,18 @@ function pagination(meta) {
     for (let p = 1; p <= meta.totalPages; p++) {
         if (p === 1 || p === meta.totalPages || Math.abs(p - meta.page) <= 1) {
             buttons.push('<button class="chip ' + (p === meta.page ? "is-active" : "") + '" data-page="' + p + '">' + p + "</button>");
-        } else if (buttons[buttons.length - 1] !== '<span class="px-1 text-slate-400">...</span>') {
-            buttons.push('<span class="px-1 text-slate-400">...</span>');
+        } else if (buttons[buttons.length - 1] !== '<span class="px-1 text-slate-400 dark:text-slate-500">...</span>') {
+            buttons.push('<span class="px-1 text-slate-400 dark:text-slate-500">...</span>');
         }
     }
 
     return (
         '<div id="org-pagination" class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
-        '<p class="text-sm text-slate-500">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
+        '<p class="text-sm text-slate-500 dark:text-slate-400">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
         '<div class="flex flex-wrap items-center gap-2">' +
-        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> Previous</button>' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> ' + I18n.t("pagination.previous") + '</button>' +
         buttons.join("") +
-        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>Next <i class="fa-solid fa-chevron-right"></i></button>' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>' + I18n.t("pagination.next") + ' <i class="fa-solid fa-chevron-right"></i></button>' +
         "</div></div>"
     );
 }
