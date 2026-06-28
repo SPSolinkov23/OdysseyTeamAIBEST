@@ -62,6 +62,9 @@ export function auth(mode) {
               '<p class="mt-1.5 text-xs text-slate-400">' + I18n.t("auth.organizerNote") + '</p></div>') +
         '<div><label class="label" for="f-email">' + I18n.t("auth.email") + '</label><input id="f-email" type="email" name="email" class="input" placeholder="' + I18n.t("auth.emailPlaceholder") + '" autocomplete="email"></div>' +
         '<div><label class="label" for="f-pass">' + I18n.t("auth.password") + '</label><div class="relative"><input id="f-pass" type="password" name="password" class="input pr-11" placeholder="••••••" autocomplete="' + (isLogin ? "current-password" : "new-password") + '"><button type="button" id="toggle-pass" class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 hover:text-brand-600"><i class="fa-solid fa-eye"></i></button></div>' +
+        (isLogin ? "" : '<div id="pass-meter" class="mt-2 hidden"><div class="flex gap-1">' +
+            '<span class="pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700"></span><span class="pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700"></span><span class="pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700"></span><span class="pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700"></span>' +
+            '</div><p id="pass-label" class="mt-1 text-xs font-medium text-slate-400"></p></div>') +
         (isLogin ? "" : '<p class="mt-1 text-xs text-slate-400">' + I18n.t("auth.passwordHint") + '</p>') +
         "</div>" +
         '<button type="submit" class="btn-primary w-full"><i class="fa-solid ' + (isLogin ? "fa-right-to-bracket" : "fa-user-plus") + '"></i>' + (isLogin ? I18n.t("auth.signInBtn") : I18n.t("auth.signUpBtn")) + "</button>" +
@@ -75,10 +78,42 @@ export function auth(mode) {
     return { html: html, onMount: (root) => bind(root, isLogin) };
 }
 
+function passScore(pw) {
+    let s = 0;
+    if (pw.length >= 8) s++;
+    if (pw.length >= 12) s++;
+    if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) s++;
+    if (/\d/.test(pw)) s++;
+    if (/[@$!%*?&]/.test(pw)) s++;
+    return s;
+}
+
 function bind(root, isLogin) {
     const form = root.querySelector("#auth-form");
     const toggle = root.querySelector("#toggle-pass");
     const roleInput = root.querySelector("#f-role");
+
+    if (!isLogin) {
+        const pass = root.querySelector("#f-pass");
+        const meter = root.querySelector("#pass-meter");
+        const segs = root.querySelectorAll("#pass-meter .pass-seg");
+        const label = root.querySelector("#pass-label");
+        const colors = ["", "bg-rose-500", "bg-amber-500", "bg-sky-500", "bg-emerald-500"];
+        const texts = ["", "text-rose-500", "text-amber-500", "text-sky-500", "text-emerald-500"];
+        const labels = ["", I18n.t("auth.pwWeak"), I18n.t("auth.pwFair"), I18n.t("auth.pwGood"), I18n.t("auth.pwStrong")];
+        pass.addEventListener("input", () => {
+            const v = pass.value;
+            if (!v) { meter.classList.add("hidden"); return; }
+            meter.classList.remove("hidden");
+            const s = passScore(v);
+            const level = s <= 1 ? 1 : s <= 3 ? 2 : s === 4 ? 3 : 4;
+            segs.forEach((seg, i) => {
+                seg.className = "pass-seg h-1.5 flex-1 rounded-full transition-colors " + (i < level ? colors[level] : "bg-slate-200 dark:bg-slate-700");
+            });
+            label.className = "mt-1 text-xs font-medium " + texts[level];
+            label.textContent = labels[level];
+        });
+    }
     if (roleInput) {
         root.querySelectorAll(".role-card").forEach((card) => {
             card.addEventListener("click", () => {

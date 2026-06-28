@@ -4,6 +4,15 @@ import { API } from "../core/api.js";
 import { Router } from "../core/router.js";
 import { refreshNotifications } from "../core/notifications.js";
 import { I18n } from "../core/i18n.js";
+import { scrollToEl } from "../core/scroll.js";
+
+const FUSE_OPTS = {
+    keys: [{ name: "title", weight: 0.7 }, { name: "location", weight: 0.2 }, { name: "category", weight: 0.1 }],
+    includeMatches: true,
+    threshold: 0.4,
+    ignoreLocation: true,
+    minMatchCharLength: 2,
+};
 
 async function myMap() {
     const map = {};
@@ -26,7 +35,7 @@ function capacityLine(ev) {
     );
 }
 
-function eventCard(ev, mine, i) {
+function eventCard(ev, mine, titleHtml) {
     const cat = UI.categoryMeta(ev.category);
     const reg = mine[ev.id];
     let action;
@@ -38,12 +47,12 @@ function eventCard(ev, mine, i) {
             '<button data-register="' + ev.id + '" class="btn-primary btn-sm flex-1">' + (ev.isFull ? '<i class="fa-solid fa-hourglass-half"></i> ' + I18n.t("events.joinWaitlist") : '<i class="fa-solid fa-bolt"></i> ' + I18n.t("events.register")) + "</button></div>";
     }
     return (
-        '<article class="card flex flex-col p-5 hover:-translate-y-1 hover:shadow-soft hover:border-brand-200" data-card data-title="' + UI.escape((ev.title + " " + ev.category + " " + ev.location).toLowerCase()) + '" data-cat="' + UI.escape(ev.category) + '" data-aos="' + UI.aos(i) + '" data-aos-delay="' + ((i % 4) * 70) + '">' +
+        '<article class="card flex flex-col p-5 transition hover:-translate-y-1 hover:shadow-soft hover:border-brand-200" data-card>' +
         '<div class="flex items-start justify-between gap-3">' +
         '<span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-' + cat.color + "-100 text-" + cat.color + '-600 text-lg"><i class="fa-solid ' + cat.icon + '"></i></span>' +
         (ev.isFull ? '<span class="badge bg-rose-100 text-rose-700 ring-rose-200"><i class="fa-solid fa-circle-xmark"></i>' + I18n.t("events.full") + '</span>' : '<span class="badge bg-' + cat.color + "-50 text-" + cat.color + "-700 ring-" + cat.color + '-200">' + UI.escape(UI.catLabel(ev.category)) + "</span>") +
         "</div>" +
-        '<h3 class="mt-4 font-display text-lg font-semibold leading-snug text-slate-800 dark:text-slate-100">' + UI.escape(ev.title) + "</h3>" +
+        '<h3 class="mt-4 font-display text-lg font-semibold leading-snug text-slate-800 dark:text-slate-100">' + (titleHtml || UI.escape(ev.title)) + "</h3>" +
         '<div class="mt-2 space-y-1.5 text-sm text-slate-500 dark:text-slate-400">' +
         '<p><i class="fa-regular fa-calendar mr-2 text-brand-500"></i>' + UI.escape(UI.fmtRange(ev.startsAt, ev.endsAt)) + "</p>" +
         '<p><i class="fa-solid fa-location-dot mr-2 text-brand-500"></i>' + UI.escape(ev.location || I18n.t("events.online")) + "</p>" +
@@ -64,15 +73,6 @@ function readPageState(defaultSize) {
     };
 }
 
-function setPageState(page, q, category) {
-    const params = new URLSearchParams();
-    if (page > 1) params.set("page", page);
-    if (q) params.set("q", q);
-    if (category) params.set("category", category);
-    history.pushState(null, "", "/events" + (params.toString() ? "?" + params.toString() : ""));
-    Router.handle();
-}
-
 function pagination(meta) {
     if (meta.totalPages <= 1) return "";
 
@@ -86,28 +86,95 @@ function pagination(meta) {
     }
 
     return (
-        '<div id="ev-pagination" class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
-        '<p class="text-sm text-slate-500 dark:text-slate-400">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
-        '<div class="flex flex-wrap items-center gap-2">' +
-        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> ' + I18n.t("pagination.previous") + '</button>' +
-        buttons.join("") +
-        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>' + I18n.t("pagination.next") + ' <i class="fa-solid fa-chevron-right"></i></button>' +
+        '<div id="ev-pagination" class="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">' +
+        '<p class="order-2 text-sm text-slate-500 dark:text-slate-400 sm:order-1">' + I18n.t("pagination.summary", { page: meta.page, total: meta.totalPages, count: meta.totalCount }) + "</p>" +
+        '<div class="order-1 flex w-full items-center justify-center gap-2 sm:order-2 sm:w-auto">' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i><span class="hidden sm:inline"> ' + I18n.t("pagination.previous") + '</span></button>' +
+        '<div class="hidden items-center gap-2 sm:flex">' + buttons.join("") + '</div>' +
+        '<span class="min-w-[3.5rem] text-center text-sm font-semibold text-slate-600 dark:text-slate-300 sm:hidden">' + meta.page + " / " + meta.totalPages + '</span>' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '><span class="hidden sm:inline">' + I18n.t("pagination.next") + ' </span><i class="fa-solid fa-chevron-right"></i></button>' +
         "</div></div>"
     );
 }
 
+async function fetchAllPublished() {
+    let page = 1;
+    let all = [];
+    let first = null;
+    while (page <= 20) {
+        const res = await API.listPublishedEvents({ page: page, pageSize: 50 });
+        if (!first) first = res;
+        all = all.concat(res.events);
+        if (!res.hasNextPage) break;
+        page++;
+    }
+    return { events: all, categories: first.categories, stats: first.stats };
+}
+
+function titleIndices(result) {
+    const m = (result.matches || []).find((x) => x.key === "title");
+    return m ? m.indices.slice().sort((a, b) => a[0] - b[0]) : null;
+}
+
+function highlightTitle(title, indices) {
+    if (!indices || !indices.length) return UI.escape(title);
+    let html = "";
+    let last = 0;
+    indices.forEach((pair) => {
+        const s = pair[0];
+        const e = pair[1];
+        if (s < last) return;
+        if (s > last) html += UI.escape(title.slice(last, s));
+        html += '<mark class="rounded bg-brand-100 px-0.5 text-brand-800 dark:bg-brand-500/30 dark:text-brand-100">' + UI.escape(title.slice(s, e + 1)) + "</mark>";
+        last = e + 1;
+    });
+    if (last < title.length) html += UI.escape(title.slice(last));
+    return html;
+}
+
+function filterEntries(ctx, q, category) {
+    let entries;
+    if (q && q.length >= 2) {
+        entries = ctx.fuse.search(q).map((r) => ({ ev: r.item, indices: titleIndices(r) }));
+        if (category) entries = entries.filter((x) => x.ev.category === category);
+    } else {
+        let base = ctx.all;
+        if (category) base = base.filter((e) => e.category === category);
+        entries = base.map((e) => ({ ev: e, indices: null }));
+    }
+    return entries;
+}
+
+function computeResults(ctx, q, category, page) {
+    const entries = filterEntries(ctx, q, category);
+    const total = entries.length;
+    const totalPages = total === 0 ? 0 : Math.ceil(total / ctx.pageSize);
+    const p = Math.min(Math.max(1, page), Math.max(1, totalPages));
+    const slice = entries.slice((p - 1) * ctx.pageSize, p * ctx.pageSize);
+    const meta = { page: p, totalPages: totalPages, totalCount: total, hasPreviousPage: p > 1, hasNextPage: p < totalPages };
+    const html =
+        '<div id="ev-grid" class="' + (slice.length ? "grid" : "hidden") + ' gap-5 sm:grid-cols-2 lg:grid-cols-3">' +
+        slice.map((x) => eventCard(x.ev, ctx.mine, highlightTitle(x.ev.title, x.indices))).join("") +
+        "</div>" +
+        '<div id="ev-empty" class="' + (slice.length ? "hidden" : "") + '">' + UI.empty({ icon: "fa-calendar-xmark", title: I18n.t("events.noFoundTitle"), text: I18n.t("events.noFoundText") }) + "</div>" +
+        pagination(meta);
+    return { html: html, page: p };
+}
+
 export async function events() {
     const user = Auth.current();
-    const state = readPageState(9);
-    const page = await API.listPublishedEvents(state);
-    const list = page.events;
+    const init = readPageState(9);
+    const data = await fetchAllPublished();
     const mine = await myMap();
-    const cats = page.categories;
+    const cats = data.categories;
+    const Fuse = (await import("fuse.js")).default;
+    const ctx = { all: data.events, mine: mine, Fuse: Fuse, fuse: new Fuse(data.events, FUSE_OPTS), pageSize: 9 };
+    const first = computeResults(ctx, init.q, init.category, init.page);
 
     const stats = [
-        { icon: "fa-calendar-star", label: I18n.t("events.statActive"), value: page.stats.totalEvents, color: "brand" },
-        { icon: "fa-circle-check", label: I18n.t("events.statFree"), value: page.stats.seatsAvailable, color: "emerald" },
-        { icon: "fa-hourglass-half", label: I18n.t("events.statWaitlist"), value: page.stats.waitlistCount, color: "amber" },
+        { icon: "fa-calendar-star", label: I18n.t("events.statActive"), value: data.stats.totalEvents, color: "brand" },
+        { icon: "fa-circle-check", label: I18n.t("events.statFree"), value: data.stats.seatsAvailable, color: "emerald" },
+        { icon: "fa-hourglass-half", label: I18n.t("events.statWaitlist"), value: data.stats.waitlistCount, color: "amber" },
     ];
 
     const html =
@@ -123,53 +190,99 @@ export async function events() {
         ).join("") +
         "</div></div></section>" +
         '<section class="container-app py-8"><div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
-        '<div class="relative w-full sm:max-w-xs"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i><input id="ev-search" class="input pl-10" value="' + UI.escape(state.q) + '" placeholder="' + I18n.t("events.searchPlaceholder") + '"></div>' +
-        '<div id="ev-cats" class="flex flex-wrap gap-2"><button class="chip ' + (!state.category ? "is-active" : "") + '" data-cat="">' + I18n.t("events.all") + '</button>' +
-        cats.map((c) => '<button class="chip ' + (c === state.category ? "is-active" : "") + '" data-cat="' + UI.escape(c) + '">' + UI.escape(UI.catLabel(c)) + "</button>").join("") +
+        '<div class="relative w-full sm:max-w-xs"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i><input id="ev-search" type="search" autocomplete="off" class="input pl-10" value="' + UI.escape(init.q) + '" placeholder="' + I18n.t("events.searchPlaceholder") + '"></div>' +
+        '<div id="ev-cats" class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0"><button class="chip flex-none ' + (!init.category ? "is-active" : "") + '" data-cat="">' + I18n.t("events.all") + '</button>' +
+        cats.map((c) => '<button class="chip flex-none ' + (c === init.category ? "is-active" : "") + '" data-cat="' + UI.escape(c) + '">' + UI.escape(UI.catLabel(c)) + "</button>").join("") +
         "</div></div>" +
-        '<div id="ev-grid" class="' + (list.length ? "grid" : "hidden") + ' gap-5 sm:grid-cols-2 lg:grid-cols-3">' +
-        list.map((e, i) => eventCard(e, mine, i)).join("") +
-        "</div>" +
-        '<div id="ev-empty" class="' + (list.length ? "hidden" : "") + '">' + UI.empty({ icon: "fa-calendar-xmark", title: I18n.t("events.noFoundTitle"), text: I18n.t("events.noFoundText") }) + "</div>" +
-        pagination(page) +
+        '<div id="ev-results">' + first.html + "</div>" +
         "</section>";
 
-    return { html: html, onMount: bindEvents };
+    return { html: html, onMount: (root) => bindEvents(root, ctx, init) };
 }
 
-function bindEvents(root) {
+function bindEvents(root, ctx, init) {
     const search = root.querySelector("#ev-search");
-    let searchTimer = null;
-    const currentCategory = new URLSearchParams(location.search).get("category") || "";
+    const results = root.querySelector("#ev-results");
+    const catsWrap = root.querySelector("#ev-cats");
+    const state = { page: init.page, q: init.q, category: init.category };
+
+    function syncUrl() {
+        const params = new URLSearchParams();
+        if (state.page > 1) params.set("page", state.page);
+        if (state.q) params.set("q", state.q);
+        if (state.category) params.set("category", state.category);
+        history.pushState(null, "", "/events" + (params.toString() ? "?" + params.toString() : ""));
+    }
+
+    function syncChips() {
+        catsWrap.querySelectorAll(".chip").forEach((btn) => {
+            btn.classList.toggle("is-active", (btn.getAttribute("data-cat") || "") === state.category);
+        });
+    }
+
+    function render(scrollToResults) {
+        const r = computeResults(ctx, state.q, state.category, state.page);
+        state.page = r.page;
+        results.innerHTML = r.html;
+        bindResults();
+        if (scrollToResults) scrollToEl(results);
+    }
+
+    function bindResults() {
+        results.querySelectorAll("#ev-pagination [data-page]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                state.page = parseInt(btn.getAttribute("data-page"), 10) || 1;
+                syncUrl();
+                render(true);
+            });
+        });
+        results.querySelectorAll("[data-register]").forEach((btn) => {
+            btn.addEventListener("click", () => quickRegister(btn.getAttribute("data-register"), btn, () => onRegistered(ctx, render)));
+        });
+    }
 
     search.addEventListener("input", () => {
-        window.clearTimeout(searchTimer);
-        searchTimer = window.setTimeout(() => setPageState(1, (search.value || "").trim(), currentCategory), 300);
+        window.clearTimeout(search._t);
+        search._t = window.setTimeout(() => {
+            state.q = (search.value || "").trim();
+            state.page = 1;
+            syncUrl();
+            render(false);
+        }, 120);
     });
-    root.querySelectorAll("#ev-cats .chip").forEach((btn) => {
+
+    catsWrap.querySelectorAll(".chip").forEach((btn) => {
         btn.addEventListener("click", () => {
-            setPageState(1, (search.value || "").trim(), btn.getAttribute("data-cat") || "");
+            state.category = btn.getAttribute("data-cat") || "";
+            state.page = 1;
+            syncChips();
+            syncUrl();
+            render(false);
         });
     });
 
-    root.querySelectorAll("#ev-pagination [data-page]").forEach((btn) => {
-        btn.addEventListener("click", () => setPageState(parseInt(btn.getAttribute("data-page"), 10), (search.value || "").trim(), currentCategory));
-    });
-
-    const grid = root.querySelector("#ev-grid");
-    grid.querySelectorAll("[data-register]").forEach((btn) => {
-        btn.addEventListener("click", () => quickRegister(btn.getAttribute("data-register"), btn));
-    });
+    bindResults();
 }
 
-async function quickRegister(eventId, btn) {
+async function onRegistered(ctx, render) {
+    try {
+        const data = await fetchAllPublished();
+        ctx.all = data.events;
+        ctx.fuse = new ctx.Fuse(data.events, FUSE_OPTS);
+        ctx.mine = await myMap();
+    } catch (e) { }
+    render(false);
+}
+
+async function quickRegister(eventId, btn, onDone) {
     if (btn) btn.disabled = true;
     try {
         const res = await API.registerForEvent(Auth.current().id, eventId);
         if (res.status === "CONFIRMED") UI.toast(I18n.t("events.toastConfirmed"), "success");
         else UI.toast(I18n.t("events.toastWaitlist", { pos: res.position }), "warn");
         await refreshNotifications();
-        Router.handle();
+        if (onDone) onDone();
+        else Router.handle();
     } catch (e) {
         UI.toast(e.message, "error");
         if (btn) btn.disabled = false;

@@ -74,6 +74,117 @@
     }
 }
 
+#nav {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+}
+
+#nav>div {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 767px) {
+    #nav>div {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background-color: #ffffff;
+    }
+
+    .dark #nav>div {
+        background-color: #0f172a;
+    }
+
+    #mobile-menu>nav {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background-color: #ffffff;
+    }
+
+    .dark #mobile-menu>nav {
+        background-color: #0f172a;
+    }
+}
+
+#mobile-menu {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height .38s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
+}
+
+#mobile-menu.is-open {
+    max-height: 85vh;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#mobile-menu .m-link {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+#mobile-menu.is-open .m-link {
+    animation: m-link-in .32s ease forwards;
+}
+
+#mobile-menu.is-open .m-link:nth-child(1) {
+    animation-delay: .04s;
+}
+
+#mobile-menu.is-open .m-link:nth-child(2) {
+    animation-delay: .09s;
+}
+
+#mobile-menu.is-open .m-link:nth-child(3) {
+    animation-delay: .14s;
+}
+
+#mobile-menu.is-open .m-link:nth-child(4) {
+    animation-delay: .19s;
+}
+
+@keyframes m-link-in {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#burger i {
+    transition: transform .25s ease;
+}
+
+#burger[aria-expanded="true"] i {
+    transform: rotate(90deg);
+}
+
+#ev-results,
+#org-results {
+    transition: opacity .2s ease;
+}
+
+.results-loading {
+    opacity: .45;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #mobile-menu,
+    #mobile-menu .m-link,
+    #burger i {
+        transition: none;
+        animation: none;
+    }
+}
+
 .tippy-box[data-theme~="odyssey"] {
     background: #ffffff;
     color: #1e293b;
@@ -176,6 +287,13 @@
     box-shadow: 0 14px 34px -14px rgba(2, 132, 199, 0.35);
 }
 
+.choices__list--dropdown .choices__list {
+    max-height: 15rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
 .choices__list--dropdown .choices__item--selectable.is-highlighted, .choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
     background: #eff6ff;
     color: #1d4ed8;
@@ -222,4 +340,77 @@
 
 .dark .swal2-popup .swal2-close {
     color: #94a3b8;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.flatpickr-day.today {
+    border-color: #60a5fa;
+}
+
+.dark .flatpickr-calendar {
+    background: #1e293b;
+    border-color: #334155;
+    color: #e2e8f0;
+    box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.6);
+}
+
+.dark .flatpickr-calendar.arrowTop::before,
+.dark .flatpickr-calendar.arrowTop::after {
+    border-bottom-color: #1e293b;
+}
+
+.dark .flatpickr-calendar.arrowBottom::before,
+.dark .flatpickr-calendar.arrowBottom::after {
+    border-top-color: #1e293b;
+}
+
+.dark .flatpickr-months .flatpickr-month,
+.dark .flatpickr-current-month .flatpickr-monthDropdown-months,
+.dark .flatpickr-weekday,
+.dark .flatpickr-current-month input.cur-year {
+    color: #e2e8f0;
+    fill: #e2e8f0;
+}
+
+.dark .flatpickr-months .flatpickr-prev-month svg,
+.dark .flatpickr-months .flatpickr-next-month svg {
+    fill: #cbd5e1;
+}
+
+.dark .flatpickr-day {
+    color: #cbd5e1;
+}
+
+.dark .flatpickr-day:hover {
+    background: #334155;
+    border-color: #334155;
+}
+
+.dark .flatpickr-day.flatpickr-disabled,
+.dark .flatpickr-day.prevMonthDay,
+.dark .flatpickr-day.nextMonthDay {
+    color: #64748b;
+}
+
+.dark .flatpickr-time input,
+.dark .flatpickr-time .flatpickr-time-separator,
+.dark .flatpickr-time .flatpickr-am-pm {
+    color: #e2e8f0;
+}
+
+.dark .flatpickr-time input:hover,
+.dark .flatpickr-time .flatpickr-am-pm:hover,
+.dark .flatpickr-time input:focus {
+    background: #334155;
+}
+
+.dark .numInputWrapper span {
+    border-color: #475569;
 }

@@ -8,10 +8,12 @@ import { initScroll } from "./core/scroll.js";
 import { Tour } from "./features/tour.js";
 import { I18n } from "./core/i18n.js";
 import { Theme } from "./core/theme.js";
+import { UI } from "./core/ui.js";
 
 async function boot() {
     document.documentElement.lang = I18n.get();
     Theme.apply(Theme.get());
+    await UI.initDates();
     await Auth.restore();
     await initAos();
     initScroll();

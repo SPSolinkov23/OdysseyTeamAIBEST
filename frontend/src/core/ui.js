@@ -33,6 +33,21 @@ const EVENT_STATUS = {
 
 let toastifyLib = null;
 let swalLib = null;
+let dayjsLib = null;
+
+async function initDates() {
+    try {
+        dayjsLib = (await import("dayjs")).default;
+        const relativeTime = (await import("dayjs/plugin/relativeTime")).default;
+        dayjsLib.extend(relativeTime);
+        try {
+            const bg = (await import("dayjs/locale/bg")).default;
+            if (bg) dayjsLib.locale("bg", bg, true);
+        } catch (e) { }
+    } catch (e) {
+        dayjsLib = null;
+    }
+}
 
 async function getToastify() {
     if (!toastifyLib) toastifyLib = (await import("toastify-js")).default;
@@ -72,6 +87,9 @@ function fmtShort(iso) {
 }
 
 function fmtRelative(iso) {
+    if (dayjsLib) {
+        try { return dayjsLib(iso).locale(I18n.get()).fromNow(); } catch (e) { }
+    }
     const diff = Date.now() - new Date(iso).getTime();
     const m = Math.round(diff / 60000);
     if (m < 1) return I18n.t("time.justNow");
@@ -204,6 +222,7 @@ function progressBar(value, max, color) {
 }
 
 export const UI = {
+    initDates,
     escape,
     fmtDate,
     fmtTime,

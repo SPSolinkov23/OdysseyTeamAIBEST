@@ -75,6 +75,22 @@ function navLink(href, icon, label, cur) {
     return '<a href="' + href + '" class="' + base + ' ' + state + '"><i class="fa-solid ' + icon + '"></i> ' + label + "</a>";
 }
 
+function mobileLink(href, icon, label, cur) {
+    const active = isActive(href, cur);
+    const wrap = active
+        ? "bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400"
+        : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800";
+    const badge = active
+        ? "bg-brand-600 text-white"
+        : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400";
+    return (
+        '<a href="' + href + '" data-mobile-link class="m-link group flex items-center gap-3 rounded-2xl px-3 py-3 text-[15px] font-semibold transition ' + wrap + '">' +
+        '<span class="flex h-10 w-10 flex-none items-center justify-center rounded-xl ' + badge + '"><i class="fa-solid ' + icon + '"></i></span>' +
+        '<span class="flex-1">' + label + '</span>' +
+        '<i class="fa-solid fa-chevron-right text-xs ' + (active ? "text-brand-400" : "text-slate-300 dark:text-slate-600") + '"></i></a>'
+    );
+}
+
 function bellBadge(n) {
     if (n <= 0) return "";
     return '<span data-bell-badge class="pointer-events-none absolute -right-0.5 -top-0.5 flex min-w-[18px] items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white ring-2 ring-white">' + (n > 9 ? "9+" : n) + "</span>";
@@ -87,7 +103,7 @@ function bell() {
         '<button id="bell-btn" type="button" aria-label="Notifications" aria-haspopup="true" class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-brand-400">' +
         '<i class="fa-solid fa-bell text-lg"></i>' + bellBadge(n) +
         '</button>' +
-        '<div id="notif-panel" class="hidden absolute right-0 top-full z-50 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-96 origin-top-right overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft dark:border-slate-700 dark:bg-slate-800">' +
+        '<div id="notif-panel" class="hidden fixed inset-x-2 top-[4.25rem] z-50 origin-top overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-96 dark:border-slate-700 dark:bg-slate-800">' +
         '<div class="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-3 dark:border-slate-700">' +
         '<div class="flex items-center gap-2">' +
         '<span class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400"><i class="fa-solid fa-bell text-sm"></i></span>' +
@@ -97,7 +113,7 @@ function bell() {
         '<i class="fa-solid fa-check-double"></i> ' + I18n.t("nav.markAllRead") +
         '</button>' +
         '</div>' +
-        '<div id="notif-list" class="max-h-[28rem] overflow-y-auto"></div>' +
+        '<div id="notif-list" class="max-h-[70vh] overflow-y-auto sm:max-h-[28rem]"></div>' +
         '</div>' +
         '</div>'
     );
@@ -157,7 +173,7 @@ function avatar(user) {
         '<div class="relative" id="user-menu"><button id="user-btn" class="flex items-center gap-2 rounded-xl py-1 pl-1 pr-2 transition hover:bg-slate-100 dark:hover:bg-slate-700">' +
         '<span class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-sky-500 text-sm font-bold text-white">' + UI.escape(initials) + "</span>" +
         '<span class="hidden text-left sm:block"><span class="block text-sm font-semibold leading-tight text-slate-800 dark:text-slate-100">' + UI.escape(user.name.split(" ")[0]) + '</span><span class="block text-[11px] leading-tight text-slate-400 dark:text-slate-500">' + (user.role === "organizer" ? I18n.t("nav.roleOrganizer") : I18n.t("nav.roleStudent")) + "</span></span>" +
-        '<i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></button>' +
+        '<i class="fa-solid fa-chevron-down hidden text-xs text-slate-400 sm:inline-block"></i></button>' +
         '<div id="user-dropdown" class="absolute right-0 z-50 mt-2 hidden w-56 origin-top-right rounded-2xl border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-700 dark:bg-slate-800">' +
         '<div class="border-b border-slate-100 px-3 py-2 dark:border-slate-700"><div class="text-sm font-semibold text-slate-800 dark:text-slate-100">' + UI.escape(user.name) + '</div><div class="truncate text-xs text-slate-500 dark:text-slate-400">' + UI.escape(user.email) + "</div></div>" +
         '<button id="tour-btn" class="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"><i class="fa-solid fa-route w-4"></i> ' + I18n.t("nav.replayTour") + '</button>' +
@@ -182,11 +198,16 @@ export function renderNav() {
                 : [["/events", "fa-compass", I18n.t("nav.events")], ["/my-registrations", "fa-ticket", I18n.t("nav.myRegistrations")]];
         if (user.isAdmin) links.push(["/admin", "fa-shield-halved", I18n.t("nav.admin")]);
         center.innerHTML = '<nav class="hidden items-center gap-1 md:flex">' + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav>";
-        right.innerHTML = '<div class="flex items-center gap-1.5">' + themeToggle() + langToggle() + bell() + avatar(user) + '<button id="burger" class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 md:hidden"><i class="fa-solid fa-bars text-lg"></i></button></div>';
-        mobile.innerHTML = '<div id="mobile-menu" class="hidden border-t border-slate-200 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900 md:hidden"><nav class="flex flex-col gap-1">' + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav></div>";
+        right.innerHTML = '<div class="flex items-center gap-1 sm:gap-1.5">' + themeToggle() + '<span class="hidden sm:inline-flex">' + langToggle() + '</span>' + bell() + avatar(user) + '<button id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu" class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700 md:hidden"><i class="fa-solid fa-bars text-lg"></i></button></div>';
+        mobile.innerHTML =
+            '<div id="mobile-menu" class="md:hidden"><nav class="container-app flex flex-col gap-1 border-t border-slate-200/70 bg-white/95 pb-4 pt-3 backdrop-blur-xl dark:border-slate-700/70 dark:bg-slate-900/95">' +
+            links.map((l) => mobileLink(l[0], l[1], l[2], cur)).join("") +
+            '<div class="my-1.5 h-px bg-slate-100 dark:bg-slate-800"></div>' +
+            '<div class="flex items-center justify-between px-1.5 py-1"><span class="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">' + I18n.t("nav.language") + '</span>' + langToggle() + '</div>' +
+            "</nav></div>";
     } else {
         center.innerHTML = "";
-        right.innerHTML = '<div class="flex items-center gap-2">' + themeToggle() + langToggle() + '<a href="/login" class="btn-ghost"><i class="fa-solid fa-right-to-bracket"></i> ' + I18n.t("nav.signIn") + '</a><a href="/register" class="btn-primary">' + I18n.t("nav.createAccount") + '</a></div>';
+        right.innerHTML = '<div class="flex items-center gap-1.5 sm:gap-2">' + themeToggle() + '<span class="hidden sm:inline-flex">' + langToggle() + '</span><a href="/login" class="btn-ghost"><i class="fa-solid fa-right-to-bracket"></i> ' + I18n.t("nav.signIn") + '</a><a href="/register" class="btn-primary">' + I18n.t("nav.createAccount") + '</a></div>';
         mobile.innerHTML = "";
     }
 
@@ -235,6 +256,17 @@ function closeNotifPanel() {
     if (panel) panel.classList.add("hidden");
 }
 
+function setMobileMenu(open) {
+    const menu = document.getElementById("mobile-menu");
+    const burger = document.getElementById("burger");
+    if (menu) menu.classList.toggle("is-open", open);
+    if (burger) {
+        burger.setAttribute("aria-expanded", open ? "true" : "false");
+        const icon = burger.querySelector("i");
+        if (icon) icon.className = "fa-solid " + (open ? "fa-xmark" : "fa-bars") + " text-lg";
+    }
+}
+
 function wireNav() {
     const themeBtn = document.getElementById("theme-toggle");
     if (themeBtn) {
@@ -252,7 +284,14 @@ function wireNav() {
     });
 
     const burger = document.getElementById("burger");
-    if (burger) burger.addEventListener("click", () => document.getElementById("mobile-menu").classList.toggle("hidden"));
+    if (burger) {
+        burger.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const menu = document.getElementById("mobile-menu");
+            setMobileMenu(menu && !menu.classList.contains("is-open"));
+        });
+        document.querySelectorAll("[data-mobile-link]").forEach((a) => a.addEventListener("click", () => setMobileMenu(false)));
+    }
 
     const bellBtn = document.getElementById("bell-btn");
     if (bellBtn) {
@@ -310,6 +349,12 @@ document.addEventListener("click", (e) => {
         const wrap = document.getElementById("notif-wrap");
         if (wrap && !wrap.contains(e.target)) panel.classList.add("hidden");
     }
+
+    const menu = document.getElementById("mobile-menu");
+    if (menu && menu.classList.contains("is-open")) {
+        const burger = document.getElementById("burger");
+        if (!menu.contains(e.target) && (!burger || !burger.contains(e.target))) setMobileMenu(false);
+    }
 });
 
 document.addEventListener("keydown", (e) => {
@@ -317,4 +362,5 @@ document.addEventListener("keydown", (e) => {
     const dd = document.getElementById("user-dropdown");
     if (dd) dd.classList.add("hidden");
     closeNotifPanel();
+    setMobileMenu(false);
 });
