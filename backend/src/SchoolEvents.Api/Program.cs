@@ -12,8 +12,10 @@ using Microsoft.IdentityModel.Tokens;
 using SchoolEvents.Api;
 using SchoolEvents.Api.Auth;
 using SchoolEvents.Api.Infrastructure;
+using SchoolEvents.Api.Messaging;
 using SchoolEvents.Api.Services;
 using SchoolEvents.Data;
+using SchoolEvents.Data.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +76,13 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<EventService>();
 builder.Services.AddScoped<RegistrationService>();
+
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(RabbitMqOptions.SectionName));
+var useRabbitMq = string.Equals(builder.Configuration["Messaging:Transport"], "RabbitMQ", StringComparison.OrdinalIgnoreCase);
+if (useRabbitMq)
+    builder.Services.AddSingleton<IJobQueue, RabbitMqJobQueue>();
+else
+    builder.Services.AddSingleton<IJobQueue, NullJobQueue>();
 
 builder.Services.AddControllers(options =>
 {

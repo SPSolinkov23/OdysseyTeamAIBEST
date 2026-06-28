@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SchoolEvents.Api.Auth;
 using SchoolEvents.Api.Dtos;
 using SchoolEvents.Api.Infrastructure;
+using SchoolEvents.Api.Messaging;
 using SchoolEvents.Data;
 using SchoolEvents.Data.Entities;
 using SchoolEvents.Data.Notifications;
@@ -15,11 +16,13 @@ public class AuthController : ControllerBase
 {
     private readonly SchoolEventsDbContext _db;
     private readonly TokenService _tokens;
+    private readonly IJobQueue _jobQueue;
 
-    public AuthController(SchoolEventsDbContext db, TokenService tokens)
+    public AuthController(SchoolEventsDbContext db, TokenService tokens, IJobQueue jobQueue)
     {
         _db = db;
         _tokens = tokens;
+        _jobQueue = jobQueue;
     }
 
     [HttpPost("register")]
@@ -72,6 +75,8 @@ public class AuthController : ControllerBase
             _db.Notifications.Add(AppNotifications.OrganizerPending(user.Id));
 
         await _db.SaveChangesAsync();
+
+        _jobQueue.NotifyJobReady();
 
         return StatusCode(StatusCodes.Status201Created, await BuildAuthAsync(user));
     }
