@@ -15,9 +15,27 @@ function themeToggle() {
         '<i class="fa-solid ' + (dark ? "fa-sun" : "fa-moon") + ' text-lg"></i></button>';
 }
 
-async function setTheme(theme) {
+function prefersReducedMotion() {
+    return typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+async function setTheme(theme, origin) {
     if (theme === Theme.get()) return;
-    Theme.set(theme);
+    const applyVisual = () => Theme.set(theme);
+    if (typeof document.startViewTransition === "function" && !prefersReducedMotion()) {
+        const root = document.documentElement;
+        const x = origin ? origin.x : window.innerWidth - 28;
+        const y = origin ? origin.y : 28;
+        const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+        root.style.setProperty("--vt-x", x + "px");
+        root.style.setProperty("--vt-y", y + "px");
+        root.style.setProperty("--vt-r", r + "px");
+        root.classList.add("vt-theme");
+        const transition = document.startViewTransition(applyVisual);
+        transition.finished.finally(() => root.classList.remove("vt-theme"));
+    } else {
+        applyVisual();
+    }
     const u = Auth.current();
     if (u) {
         try {
@@ -207,7 +225,7 @@ export function renderNav() {
             "</nav></div>";
     } else {
         center.innerHTML = "";
-        right.innerHTML = '<div class="flex items-center gap-1.5 sm:gap-2">' + themeToggle() + '<span class="hidden sm:inline-flex">' + langToggle() + '</span><a href="/login" class="btn-ghost"><i class="fa-solid fa-right-to-bracket"></i> ' + I18n.t("nav.signIn") + '</a><a href="/register" class="btn-primary">' + I18n.t("nav.createAccount") + '</a></div>';
+        right.innerHTML = '<div class="flex items-center gap-1.5 sm:gap-2">' + themeToggle() + '<span class="hidden sm:inline-flex">' + langToggle() + '</span><a href="/login" class="btn-ghost hidden whitespace-nowrap sm:inline-flex"><i class="fa-solid fa-right-to-bracket"></i> ' + I18n.t("nav.signIn") + '</a><a href="/register" class="btn-primary btn-sm whitespace-nowrap sm:px-4 sm:py-2.5 sm:text-sm sm:rounded-xl">' + I18n.t("nav.createAccount") + '</a></div>';
         mobile.innerHTML = "";
     }
 
@@ -272,7 +290,8 @@ function wireNav() {
     if (themeBtn) {
         themeBtn.addEventListener("click", (e) => {
             e.stopPropagation();
-            setTheme(Theme.get() === "dark" ? "light" : "dark");
+            const r = themeBtn.getBoundingClientRect();
+            setTheme(Theme.get() === "dark" ? "light" : "dark", { x: r.left + r.width / 2, y: r.top + r.height / 2 });
         });
     }
 

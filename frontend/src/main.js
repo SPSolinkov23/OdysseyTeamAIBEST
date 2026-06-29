@@ -22,7 +22,12 @@ async function boot() {
     Bus.on("auth", refreshNotifications);
     Bus.on("route", renderNav);
     Bus.on("notifications", updateBell);
-    Bus.on("lang", () => { renderNav(); Router.handle(); });
+    Bus.on("lang", () => {
+        const run = () => { renderNav(); return Router.handle(); };
+        const reduce = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (typeof document.startViewTransition === "function" && !reduce) document.startViewTransition(run);
+        else run();
+    });
     Bus.on("theme", renderNav);
 
     Bus.on("route", (path) => {
