@@ -6,7 +6,6 @@ on:
     paths:
       - 'backend/**'
       - '.github/workflows/**'
-  workflow_dispatch:
   pull_request:
     branches: [ "main" ]
     paths:
@@ -16,10 +15,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: ./backend/src
 
     steps:
     - name: Check out the repository code
@@ -30,11 +25,12 @@ jobs:
       with:
         dotnet-version: '9.0.x' 
 
+    # We now tell the robot exactly what folder the file is inside
     - name: Restore dependencies
-      run: dotnet restore SchoolEvents.sln
+      run: dotnet restore backend/src/SchoolEvents.sln
 
     - name: Build the solution
-      run: dotnet build SchoolEvents.sln --no-restore --configuration Release
+      run: dotnet build backend/src/SchoolEvents.sln --no-restore --configuration Release
 
     - name: Run tests
-      run: dotnet test SchoolEvents.sln --no-build --verbosity normal
+      run: dotnet test backend/src/SchoolEvents.sln --no-build --verbosity normal
