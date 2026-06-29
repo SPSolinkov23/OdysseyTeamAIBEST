@@ -25,12 +25,11 @@ jobs:
       with:
         dotnet-version: '9.0.x' 
 
-    # We now tell the robot exactly what folder the file is inside
     - name: Restore dependencies
-      run: dotnet restore backend/src/SchoolEvents.sln
+      run: dotnet restore backend/SchoolEvents.sln
 
     - name: Build the solution
-      run: dotnet build backend/src/SchoolEvents.sln --no-restore --configuration Release
+      run: dotnet build backend/SchoolEvents.sln --no-restore --configuration Release
 
     - name: Run tests
-      run: dotnet test backend/src/SchoolEvents.sln --no-build --verbosity normal
+      run: dotnet test backend/SchoolEvents.sln --no-build --verbosity normal
