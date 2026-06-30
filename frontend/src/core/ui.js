@@ -123,32 +123,18 @@ function eventBadge(status) {
 }
 
 function toast(message, type) {
-    const palette = {
-        success: "linear-gradient(135deg,#059669,#10b981)",
-        error: "linear-gradient(135deg,#e11d48,#fb7185)",
-        info: "linear-gradient(135deg,#2563eb,#38bdf8)",
-        warn: "linear-gradient(135deg,#d97706,#fbbf24)",
-    };
     const icons = { success: "fa-circle-check", error: "fa-circle-exclamation", info: "fa-circle-info", warn: "fa-triangle-exclamation" };
     const t = type || "info";
     getToastify().then((Toastify) => {
         Toastify({
-            text: '<i class="fa-solid ' + (icons[t] || icons.info) + '" style="margin-right:.55rem"></i><span>' + escape(message) + "</span>",
+            text: '<span class="ot-ico"><i class="fa-solid ' + (icons[t] || icons.info) + '"></i></span><span class="ot-msg">' + escape(message) + "</span>",
             escapeMarkup: false,
+            className: "ot ot--" + t,
             duration: 4200,
             gravity: "top",
             position: "right",
             close: true,
             stopOnFocus: true,
-            style: {
-                background: palette[t] || palette.info,
-                borderRadius: "14px",
-                boxShadow: "0 14px 34px -14px rgba(2,132,199,.5)",
-                fontWeight: "600",
-                display: "flex",
-                alignItems: "center",
-                padding: "12px 16px",
-            },
         }).showToast();
     });
 }

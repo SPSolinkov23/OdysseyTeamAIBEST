@@ -3,6 +3,7 @@ import { UI } from "../core/ui.js";
 import { Bus } from "../core/bus.js";
 import { Router } from "../core/router.js";
 import { I18n } from "../core/i18n.js";
+import { Tour } from "../features/tour.js";
 
 const ROLE_BASE = "role-card flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition";
 const ROLE_ON = "bg-white text-brand-700 shadow-sm ring-1 ring-slate-200 dark:bg-slate-700 dark:text-brand-400 dark:ring-slate-600";
@@ -39,7 +40,7 @@ export function auth(mode) {
     const html =
         '<section class="relative isolate flex min-h-[calc(100vh-9rem)] items-center justify-center overflow-hidden px-4 py-10">' +
         '<div class="absolute inset-0 -z-10 bg-gradient-to-br from-brand-50 via-white to-sky-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900"></div>' +
-        '<div class="absolute inset-0 -z-10 bg-hero-grid bg-grid-dots auth-grid opacity-60"></div>' +
+        '<div class="absolute inset-0 -z-10 bg-hero-grid bg-grid-dots opacity-60 dark:bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.14)_1px,transparent_0)]"></div>' +
         '<div class="auth-card card w-full max-w-md p-8" data-mode="' + (isLogin ? "login" : "register") + '">' +
         '<div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-600 to-sky-500 text-white shadow-soft"><i class="fa-solid fa-graduation-cap text-xl"></i></div>' +
         '<p class="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">' + (isLogin ? I18n.t("auth.signInSub") : I18n.t("auth.createSub")) + "</p>" +
@@ -140,7 +141,7 @@ function bind(root, isLogin) {
         const data = Object.fromEntries(new FormData(form).entries());
         try {
             const user = isLogin ? await Auth.login(data.email, data.password) : await Auth.register(data);
-            done(user);
+            done(user, isLogin);
         } catch (err) {
             UI.toast(err.message, "error");
             submit.disabled = false;
@@ -148,8 +149,9 @@ function bind(root, isLogin) {
     });
 }
 
-function done(user) {
+function done(user, isLogin) {
     UI.toast(I18n.t("auth.greeting", { name: user.name.split(" ")[0] }), "success");
     Bus.emit("auth");
     Router.navigate(user.role === "organizer" ? "/organizer" : "/events");
+    if (!isLogin) Tour.maybeStart(user);
 }

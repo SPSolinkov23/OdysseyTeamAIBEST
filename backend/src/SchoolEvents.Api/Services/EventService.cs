@@ -77,7 +77,7 @@ public class EventService
             query = query.Where(e => e.Category == selectedCategory);
         }
 
-        var stats = await query
+        var stats = (await query
             .Select(e => new
             {
                 e.Status,
@@ -95,8 +95,7 @@ public class EventService
                 ConfirmedRegistrationCount = g.Sum(e => e.ConfirmedCount),
                 WaitlistCount = g.Sum(e => e.WaitlistCount),
                 SeatsAvailable = g.Sum(e => e.Capacity - e.ConfirmedCount),
-            })
-            .FirstOrDefaultAsync() ?? new EventListStatsDto();
+            }).ToListAsync()).FirstOrDefault() ?? new EventListStatsDto();
 
         var totalCount = await query.CountAsync();
         var totalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pageSize);

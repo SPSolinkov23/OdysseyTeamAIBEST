@@ -5,7 +5,7 @@ import { renderNav, updateBell } from "./core/nav.js";
 import { refreshNotifications } from "./core/notifications.js";
 import { initAos } from "./core/anim.js";
 import { initScroll } from "./core/scroll.js";
-import { Tour } from "./features/tour.js";
+import { initStatus } from "./features/status.js";
 import { I18n } from "./core/i18n.js";
 import { Theme } from "./core/theme.js";
 import { UI } from "./core/ui.js";
@@ -30,11 +30,6 @@ async function boot() {
     });
     Bus.on("theme", renderNav);
 
-    Bus.on("route", (path) => {
-        const u = Auth.current();
-        if (u && (path === "/events" || path === "/organizer")) Tour.maybeStart(u);
-    });
-
     window.addEventListener("popstate", () => Router.handle());
 
     document.addEventListener("click", (e) => {
@@ -50,6 +45,8 @@ async function boot() {
 
     if (Auth.current()) refreshNotifications();
     setInterval(refreshNotifications, 30000);
+
+    initStatus();
 }
 
 if (document.readyState === "loading") {

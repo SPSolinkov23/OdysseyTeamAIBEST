@@ -301,7 +301,7 @@ function bindForm(root, user, ev) {
     }).catch(() => { });
 
     import("flatpickr").then(({ default: flatpickr }) => {
-        const opts = { enableTime: true, time_24hr: true, minuteIncrement: 5, dateFormat: "Y-m-d\\TH:i", altInput: true, altFormat: "D, d M Y · H:i", onChange: render };
+        const opts = { enableTime: true, time_24hr: true, minuteIncrement: 5, dateFormat: "Y-m-d\\TH:i", altInput: true, altFormat: "D, d M Y · H:i", disableMobile: true, onChange: render };
         fpStart = flatpickr(startInput, Object.assign({}, opts, { minDate: "today" }));
         fpEnd = flatpickr(endInput, opts);
     }).catch(() => { });
