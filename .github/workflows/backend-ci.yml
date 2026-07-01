@@ -32,4 +32,4 @@ jobs:
       run: dotnet build backend/SchoolEvents.sln --no-restore --configuration Release
 
     - name: Run tests
-      run: dotnet test backend/SchoolEvents.sln --no-build --verbosity normal
+      run: dotnet test backend/SchoolEvents.sln --verbosity normal
