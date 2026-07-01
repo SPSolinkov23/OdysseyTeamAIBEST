@@ -15,11 +15,13 @@ public class AuthController : ControllerBase
 {
     private readonly SchoolEventsDbContext _db;
     private readonly TokenService _tokens;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(SchoolEventsDbContext db, TokenService tokens)
+    public AuthController(SchoolEventsDbContext db, TokenService tokens, ILogger<AuthController> logger)
     {
         _db = db;
         _tokens = tokens;
+        _logger = logger;
     }
 
     [HttpPost("register")]
@@ -28,7 +30,10 @@ public class AuthController : ControllerBase
         var email = req.Email.Trim().ToLowerInvariant();
 
         if (await _db.Users.AnyAsync(u => u.Email == email))
+        {
+            _logger.LogWarning("Register rejected: email {Email} already taken", email);
             throw ApiException.Conflict("An account with that email already exists.", "email_taken");
+        }
 
         var appliedAsOrganizer = false;
         if (!string.IsNullOrWhiteSpace(req.Role))
@@ -69,7 +74,14 @@ public class AuthController : ControllerBase
         _db.Notifications.Add(AppNotifications.Welcome(user.Id, user.DisplayName));
 
         if (appliedAsOrganizer)
+        {
+            _logger.LogInformation("User {UserId} ({Email}) registered and applied as organizer (status=Pending)", user.Id, email);
             _db.Notifications.Add(AppNotifications.OrganizerPending(user.Id));
+        }
+        else
+        {
+            _logger.LogInformation("User {UserId} ({Email}) registered as student", user.Id, email);
+        }
 
         await _db.SaveChangesAsync();
 
@@ -83,14 +95,21 @@ public class AuthController : ControllerBase
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
 
         if (user is null || !PasswordHasher.Verify(req.Password, user.PasswordHash))
+        {
+            _logger.LogWarning("Login failed for email {Email} — invalid credentials", email);
             throw ApiException.Unauthorized("Invalid email or password.");
+        }
+        _logger.LogInformation("User {UserId} ({Email}) logged in successfully (role={Role})", user.Id, email, user.Role);
 
         return Ok(await BuildAuthAsync(user));
     }
 
     [HttpPost("logout")]
-    public IActionResult Logout() => NoContent();
-
+    public IActionResult Logout()
+    {
+        _logger.LogInformation("User {UserId} logged out", User.Identity?.Name ?? "unknown");
+        return NoContent();
+    }
     private async Task<AuthResponse> BuildAuthAsync(User user)
     {
         var (token, expiresAt) = _tokens.Create(user);

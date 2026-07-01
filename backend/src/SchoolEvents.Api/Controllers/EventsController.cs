@@ -12,10 +12,12 @@ namespace SchoolEvents.Api.Controllers;
 public class EventsController : ControllerBase
 {
     private readonly EventService _events;
+     private readonly ILogger<EventsController> _logger;
 
-    public EventsController(EventService events)
+    public EventsController(EventService events, ILogger<EventsController> logger)
     {
         _events = events;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -43,6 +45,9 @@ public class EventsController : ControllerBase
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventEnvelope>> Create(CreateEventRequest req)
     {
+        var organizerId = User.GetUserId();
+        _logger.LogInformation("POST /events called by organizer {OrganizerId} (title=\"{Title}\")", organizerId, req.Title);
+
         var dto = await _events.CreateAsync(User.GetUserId(), req);
         return StatusCode(StatusCodes.Status201Created, new EventEnvelope { Event = dto });
     }
@@ -51,6 +56,9 @@ public class EventsController : ControllerBase
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventEnvelope>> Update(long id, UpdateEventRequest req)
     {
+        var organizerId = User.GetUserId();
+        _logger.LogInformation("PATCH /events/{EventId} called by organizer {OrganizerId}", id, organizerId);
+
         var dto = await _events.UpdateAsync(id, User.GetUserId(), req);
         return Ok(new EventEnvelope { Event = dto });
     }
@@ -59,6 +67,9 @@ public class EventsController : ControllerBase
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventEnvelope>> Publish(long id)
     {
+        var organizerId = User.GetUserId();
+        _logger.LogInformation("POST /events/{EventId}/publish called by organizer {OrganizerId}", id, organizerId);
+
         var dto = await _events.PublishAsync(id, User.GetUserId());
         return Ok(new EventEnvelope { Event = dto });
     }
@@ -67,6 +78,9 @@ public class EventsController : ControllerBase
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventEnvelope>> Cancel(long id)
     {
+        var organizerId = User.GetUserId();
+        _logger.LogInformation("POST /events/{EventId}/cancel called by organizer {OrganizerId}", id, organizerId);
+        
         var dto = await _events.CancelAsync(id, User.GetUserId());
         return Ok(new EventEnvelope { Event = dto });
     }

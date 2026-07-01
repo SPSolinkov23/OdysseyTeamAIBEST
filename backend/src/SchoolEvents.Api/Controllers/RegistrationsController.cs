@@ -15,17 +15,21 @@ public class RegistrationsController : ControllerBase
 {
     private readonly RegistrationService _registrations;
     private readonly SchoolEventsDbContext _db;
+    private readonly ILogger<RegistrationsController> _logger;
 
-    public RegistrationsController(RegistrationService registrations, SchoolEventsDbContext db)
+    public RegistrationsController(RegistrationService registrations, SchoolEventsDbContext db, ILogger<RegistrationsController> logger)
     {
         _registrations = registrations;
         _db = db;
+        _logger = logger;
     }
 
     [HttpPost("events/{eventId:long}/registrations")]
     [Authorize(Roles = nameof(UserRole.Student))]
     public async Task<ActionResult<RegistrationDto>> Register(long eventId)
     {
+        var userId = User.GetUserId();
+        _logger.LogInformation("POST /events/{EventId}/registrations called by user {UserId}", eventId, userId);
         var dto = await _registrations.RegisterAsync(eventId, User.GetUserId());
         return StatusCode(StatusCodes.Status201Created, dto);
     }
@@ -65,12 +69,17 @@ public class RegistrationsController : ControllerBase
                 (x.CreatedAt < r.CreatedAt || (x.CreatedAt == r.CreatedAt && x.Id <= r.Id)));
         }
 
+        _logger.LogInformation("GET /registrations/me called by user {UserId}; returned {Count} registration(s)", userId, list.Count);
+
         return Ok(new RegistrationListResponse { Registrations = list });
     }
 
     [HttpDelete("registrations/{id:long}")]
     public async Task<ActionResult<CancelResult>> Cancel(long id)
     {
+        var userId = User.GetUserId();
+        _logger.LogInformation("DELETE /registrations/{RegistrationId} called by user {UserId}", id, userId);
+        
         return Ok(await _registrations.CancelAsync(id, User.GetUserId()));
     }
 }

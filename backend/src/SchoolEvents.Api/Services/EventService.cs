@@ -11,10 +11,12 @@ namespace SchoolEvents.Api.Services;
 public class EventService
 {
     private readonly SchoolEventsDbContext _db;
+    private readonly ILogger<EventService> _logger;
 
-    public EventService(SchoolEventsDbContext db)
+    public EventService(SchoolEventsDbContext db, ILogger<EventService> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
     private static readonly Expression<Func<Event, EventDto>> ToDto = e => new EventDto
@@ -113,6 +115,10 @@ public class EventService
             .Select(ToDto)
             .ToListAsync();
 
+        _logger.LogInformation(
+            "Event list query: mine={Mine}, status={Status}, q={Query}, category={Category}, page={Page}/{TotalPages}, returned {Count} of {TotalCount}",
+            mine, status, q, category, page, totalPages, events.Count, totalCount);
+
         return new EventListResponse
         {
             Events = events,
@@ -134,11 +140,21 @@ public class EventService
             .Select(ToDto)
             .FirstOrDefaultAsync()
             ?? throw ApiException.NotFound("Event not found.");
+        
+         if (dto is null)
+        {
+            _logger.LogWarning("GetAsync: event {EventId} not found", id);
+            throw ApiException.NotFound("Event not found.");
+        }
 
         if (dto.Status != EventStatus.Published)
         {
             var ownsIt = callerId is not null && callerIsOrganizer && dto.OrganizerId == callerId;
-            if (!ownsIt) throw ApiException.NotFound("Event not found.");
+            if (!ownsIt)
+            {
+                _logger.LogWarning("GetAsync: event {EventId} is not published and caller {CallerId} does not own it", id, callerId);
+                throw ApiException.NotFound("Event not found.");
+            }
         }
 
         if (callerId is not null)
@@ -168,6 +184,8 @@ public class EventService
         _db.Events.Add(ev);
         await _db.SaveChangesAsync();
 
+        _logger.LogInformation("Organizer {OrganizerId} created event {EventId} \"{Title}\" as DRAFT", organizerId, ev.Id, ev.Title);
+
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
 
@@ -191,6 +209,7 @@ public class EventService
         ValidateTimes(ev.StartsAt, ev.EndsAt);
 
         await _db.SaveChangesAsync();
+        _logger.LogInformation("Organizer {OrganizerId} updated event {EventId}", organizerId, id);
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
 
@@ -198,10 +217,13 @@ public class EventService
     {
         var ev = await LoadOwnedAsync(id, organizerId);
         if (ev.Status == EventStatus.Cancelled)
+        {
+            _logger.LogWarning("Publish rejected: event {EventId} is cancelled and cannot be published", id);
             throw ApiException.BadRequest("A cancelled event cannot be published.");
-
+        }
         ev.Status = EventStatus.Published;
         await _db.SaveChangesAsync();
+        _logger.LogInformation("Organizer {OrganizerId} published event {EventId} \"{Title}\"", organizerId, ev.Id, ev.Title);
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
     
@@ -245,6 +267,12 @@ public class EventService
 
             ev.Status = EventStatus.Cancelled;
             await _db.SaveChangesAsync();
+            _logger.LogInformation("Organizer {OrganizerId} cancelled event {EventId} \"{Title}\"; {AffectedCount} registration(s) cancelled and notified",
+                organizerId, ev.Id, ev.Title, affected.Count);
+        }
+        else
+        {
+             _logger.LogInformation("Event {EventId} was already cancelled; no-op", id);
         }
 
         await tx.CommitAsync();
@@ -318,10 +346,20 @@ public class EventService
 
     private async Task<Event> LoadOwnedAsync(long id, long organizerId)
     {
-        var ev = await _db.Events.FirstOrDefaultAsync(e => e.Id == id)
-                 ?? throw ApiException.NotFound("Event not found.");
+        var ev = await _db.Events.FirstOrDefaultAsync(e => e.Id == id);
+        
+        if (ev is null)
+        {
+            _logger.LogWarning("LoadOwnedAsync: event {EventId} not found", id);
+            throw ApiException.NotFound("Event not found.");
+        }
+ 
         if (ev.OrganizerId != organizerId)
+        {
+            _logger.LogWarning("Ownership violation: user {CallerId} attempted to manage event {EventId} owned by {OwnerId}", organizerId, id, ev.OrganizerId);
             throw ApiException.Forbidden("You can only manage events you created.");
+        }
+ 
         return ev;
     }
 
