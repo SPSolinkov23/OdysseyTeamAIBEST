@@ -6,35 +6,43 @@ using SchoolEvents.Api.Infrastructure;
 using SchoolEvents.Api.Services;
 using SchoolEvents.Data;
 using SchoolEvents.Data.Entities;
-
+ 
 namespace SchoolEvents.Api.Controllers;
-
+ 
 [ApiController]
 [Authorize]
 public class RegistrationsController : ControllerBase
 {
     private readonly RegistrationService _registrations;
     private readonly SchoolEventsDbContext _db;
-
-    public RegistrationsController(RegistrationService registrations, SchoolEventsDbContext db)
+    private readonly ILogger<RegistrationsController> _logger;
+ 
+    public RegistrationsController(
+        RegistrationService registrations,
+        SchoolEventsDbContext db,
+        ILogger<RegistrationsController> logger)
     {
         _registrations = registrations;
         _db = db;
+        _logger = logger;
     }
-
+ 
     [HttpPost("events/{eventId:long}/registrations")]
     [Authorize(Roles = nameof(UserRole.Student))]
     public async Task<ActionResult<RegistrationDto>> Register(long eventId)
     {
-        var dto = await _registrations.RegisterAsync(eventId, User.GetUserId());
+        var userId = User.GetUserId();
+        _logger.LogInformation("POST /events/{EventId}/registrations called by user {UserId}", eventId, userId);
+ 
+        var dto = await _registrations.RegisterAsync(eventId, userId);
         return StatusCode(StatusCodes.Status201Created, dto);
     }
-
+ 
     [HttpGet("registrations/me")]
     public async Task<ActionResult<RegistrationListResponse>> Mine()
     {
         var userId = User.GetUserId();
-
+ 
         var list = await _db.Registrations.AsNoTracking()
             .Where(r => r.UserId == userId && r.Status != RegistrationStatus.Cancelled)
             .OrderByDescending(r => r.CreatedAt)
@@ -56,7 +64,7 @@ public class RegistrationsController : ControllerBase
                 },
             })
             .ToListAsync();
-
+ 
         foreach (var r in list.Where(r => r.Status == RegistrationStatus.Waitlisted))
         {
             r.WaitlistPosition = await _db.Registrations.CountAsync(x =>
@@ -64,13 +72,18 @@ public class RegistrationsController : ControllerBase
                 x.Status == RegistrationStatus.Waitlisted &&
                 (x.CreatedAt < r.CreatedAt || (x.CreatedAt == r.CreatedAt && x.Id <= r.Id)));
         }
-
+ 
+        _logger.LogInformation("GET /registrations/me called by user {UserId}; returned {Count} registration(s)", userId, list.Count);
+ 
         return Ok(new RegistrationListResponse { Registrations = list });
     }
-
+ 
     [HttpDelete("registrations/{id:long}")]
     public async Task<ActionResult<CancelResult>> Cancel(long id)
     {
-        return Ok(await _registrations.CancelAsync(id, User.GetUserId()));
+        var userId = User.GetUserId();
+        _logger.LogInformation("DELETE /registrations/{RegistrationId} called by user {UserId}", id, userId);
+ 
+        return Ok(await _registrations.CancelAsync(id, userId));
     }
 }

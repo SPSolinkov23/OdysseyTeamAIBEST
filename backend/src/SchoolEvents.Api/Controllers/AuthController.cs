@@ -7,32 +7,35 @@ using SchoolEvents.Api.Messaging;
 using SchoolEvents.Data;
 using SchoolEvents.Data.Entities;
 using SchoolEvents.Data.Notifications;
-
+ 
 namespace SchoolEvents.Api.Controllers;
-
+ 
 [ApiController]
 [Route("auth")]
 public class AuthController : ControllerBase
 {
     private readonly SchoolEventsDbContext _db;
     private readonly TokenService _tokens;
-    private readonly IJobQueue _jobQueue;
-
-    public AuthController(SchoolEventsDbContext db, TokenService tokens, IJobQueue jobQueue)
+    private readonly ILogger<AuthController> _logger;
+ 
+    public AuthController(SchoolEventsDbContext db, TokenService tokens, ILogger<AuthController> logger)
     {
         _db = db;
         _tokens = tokens;
-        _jobQueue = jobQueue;
+        _logger = logger;
     }
-
+ 
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register(RegisterRequest req)
     {
         var email = req.Email.Trim().ToLowerInvariant();
-
+ 
         if (await _db.Users.AnyAsync(u => u.Email == email))
+        {
+            _logger.LogWarning("Register rejected: email {Email} already taken", email);
             throw ApiException.Conflict("An account with that email already exists.", "email_taken");
-
+        }
+ 
         var appliedAsOrganizer = false;
         if (!string.IsNullOrWhiteSpace(req.Role))
         {
@@ -40,7 +43,7 @@ public class AuthController : ControllerBase
                 throw ApiException.BadRequest("Unknown role.");
             appliedAsOrganizer = requestedRole == UserRole.Organizer;
         }
-
+ 
         var user = new User
         {
             Email = email,
@@ -53,7 +56,7 @@ public class AuthController : ControllerBase
         };
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
-
+ 
         _db.NotificationJobs.Add(new NotificationJob
         {
             Type = JobTypes.AccountWelcome,
@@ -68,34 +71,48 @@ public class AuthController : ControllerBase
             MaxAttempts = 5,
             AvailableAt = DateTime.UtcNow,
         });
-
+ 
         _db.Notifications.Add(AppNotifications.Welcome(user.Id, user.DisplayName));
-
+ 
         if (appliedAsOrganizer)
+        {
             _db.Notifications.Add(AppNotifications.OrganizerPending(user.Id));
-
+            _logger.LogInformation("User {UserId} ({Email}) registered and applied as organizer (status=Pending)", user.Id, email);
+        }
+        else
+        {
+            _logger.LogInformation("User {UserId} ({Email}) registered as student", user.Id, email);
+        }
+ 
         await _db.SaveChangesAsync();
-
-        _jobQueue.NotifyJobReady();
-
+ 
         return StatusCode(StatusCodes.Status201Created, await BuildAuthAsync(user));
     }
-
+ 
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest req)
     {
         var email = req.Email.Trim().ToLowerInvariant();
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
-
+ 
         if (user is null || !PasswordHasher.Verify(req.Password, user.PasswordHash))
+        {
+            _logger.LogWarning("Login failed for email {Email} — invalid credentials", email);
             throw ApiException.Unauthorized("Invalid email or password.");
-
+        }
+ 
+        _logger.LogInformation("User {UserId} ({Email}) logged in successfully (role={Role})", user.Id, email, user.Role);
+ 
         return Ok(await BuildAuthAsync(user));
     }
-
+ 
     [HttpPost("logout")]
-    public IActionResult Logout() => NoContent();
-
+    public IActionResult Logout()
+    {
+        _logger.LogInformation("User {UserId} logged out", User.Identity?.Name ?? "unknown");
+        return NoContent();
+    }
+ 
     private async Task<AuthResponse> BuildAuthAsync(User user)
     {
         var (token, expiresAt) = _tokens.Create(user);
