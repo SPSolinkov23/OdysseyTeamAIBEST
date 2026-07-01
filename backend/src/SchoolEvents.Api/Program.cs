@@ -16,27 +16,24 @@ using SchoolEvents.Api.Services;
 using SchoolEvents.Data;
 using Serilog;
  
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
-    .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.File(
-        path: "logs/api-.txt",
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 14,
-        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
-    .WriteTo.Seq("http://localhost:5341")
-    .CreateLogger();
- 
 try
 {
-    Log.Information("Starting SchoolEvents.Api");
- 
     var builder = WebApplication.CreateBuilder(args);
  
-    builder.Host.UseSerilog();
+    builder.Host.UseSerilog((context, config) =>
+    {
+        var seqUrl = context.Configuration["Seq:ServerUrl"];
+ 
+        config
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .WriteTo.Console();
+ 
+        if (!string.IsNullOrWhiteSpace(seqUrl))
+            config.WriteTo.Seq(seqUrl);
+    });
  
     var connectionString = builder.Configuration.GetConnectionString("Default")
         ?? throw new InvalidOperationException("ConnectionStrings:Default is required.");

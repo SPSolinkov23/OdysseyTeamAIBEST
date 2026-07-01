@@ -4,25 +4,24 @@ using SchoolEvents.Worker.Email;
 using SchoolEvents.Worker.Options;
 using Serilog;
  
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.File(
-        path: "logs/worker-.txt",
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 14,
-        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
-    .CreateLogger();
- 
 try
 {
-    Log.Information("Starting SchoolEvents.Worker");
- 
     var builder = Host.CreateApplicationBuilder(args);
  
-    builder.Services.AddSerilog();
+    builder.Services.AddSerilog((services, config) =>
+    {
+        var configuration = services.GetRequiredService<IConfiguration>();
+        var seqUrl = configuration["Seq:ServerUrl"];
+ 
+        config
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .WriteTo.Console();
+ 
+        if (!string.IsNullOrWhiteSpace(seqUrl))
+            config.WriteTo.Seq(seqUrl);
+    });
  
     var connectionString = builder.Configuration.GetConnectionString("Default")
         ?? throw new InvalidOperationException("ConnectionStrings:Default is required.");

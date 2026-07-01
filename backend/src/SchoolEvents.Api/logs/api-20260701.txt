@@ -1,0 +1,516 @@
+2026-07-01 03:57:56 [INF] : Starting SchoolEvents.Api
+2026-07-01 03:57:58 [INF] Microsoft.Hosting.Lifetime: Now listening on: http://localhost:5080
+2026-07-01 03:57:58 [INF] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-01 03:57:58 [INF] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2026-07-01 03:57:58 [INF] Microsoft.Hosting.Lifetime: Content root path: D:\Eray11v\OdysseyTeamAIBEST\backend\src\SchoolEvents.Api
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /index.html responded 304 in 960.8375 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /assets/fontawesome/css/regular.css responded 304 in 0.8998 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /assets/fontawesome/css/fontawesome.css responded 304 in 0.8976 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /assets/fontawesome/css/brands.css responded 304 in 0.9155 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /assets/fontawesome/css/solid.css responded 304 in 0.9064 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /css/output.css responded 304 in 0.1818 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/main.js responded 304 in 0.1006 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/bus.js responded 304 in 0.6653 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/auth.js responded 304 in 0.1459 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/nav.js responded 304 in 0.1191 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/router.js responded 304 in 0.3067 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/anim.js responded 304 in 0.1002 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/notifications.js responded 304 in 0.1131 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/scroll.js responded 304 in 0.3974 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/features/status.js responded 304 in 0.1170 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/i18n.js responded 304 in 0.2103 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/theme.js responded 304 in 0.1861 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/ui.js responded 304 in 0.1023 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/store.js responded 304 in 0.2179 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/api.js responded 304 in 0.2180 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/features/tour.js responded 304 in 0.1100 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /assets/fontawesome/webfonts/fa-solid-900.woff2 responded 304 in 0.5881 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /favicon.ico responded 404 in 2.1555 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/users/me responded 200 in 465.7134 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 71.3556 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/views/student.js responded 304 in 0.1421 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 2.7347 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 7.5947 ms
+2026-07-01 03:58:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 9.8528 ms
+2026-07-01 03:58:09 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=false, status=null, q=null, category=null, page=1/1, returned 3 of 3
+2026-07-01 03:58:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 151.5173 ms
+2026-07-01 03:58:10 [INF] SchoolEvents.Api.Controllers.RegistrationsController: GET /registrations/me called by user 10; returned 0 registration(s)
+2026-07-01 03:58:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/registrations/me responded 200 in 15.9350 ms
+2026-07-01 03:58:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /assets/fontawesome/webfonts/fa-regular-400.woff2 responded 304 in 0.3374 ms
+2026-07-01 03:58:13 [INF] SchoolEvents.Api.Controllers.AuthController: User 10 logged out
+2026-07-01 03:58:13 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/logout responded 204 in 3.5842 ms
+2026-07-01 03:58:13 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/views/auth.js responded 304 in 0.5978 ms
+2026-07-01 03:58:15 [INF] SchoolEvents.Api.Controllers.AuthController: User 5 (frt@gmail.com) logged in successfully (role="Organizer")
+2026-07-01 03:58:15 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/login responded 200 in 380.5765 ms
+2026-07-01 03:58:15 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.7628 ms
+2026-07-01 03:58:15 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/views/organizer.js responded 304 in 0.3091 ms
+2026-07-01 03:58:15 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.0184 ms
+2026-07-01 03:58:15 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 4 of 4
+2026-07-01 03:58:15 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 26.6394 ms
+2026-07-01 03:58:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.4354 ms
+2026-07-01 03:58:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.6247 ms
+2026-07-01 03:58:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 8.6348 ms
+2026-07-01 03:59:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.7805 ms
+2026-07-01 03:59:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3371 ms
+2026-07-01 03:59:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3985 ms
+2026-07-01 03:59:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1304 ms
+2026-07-01 03:59:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3600 ms
+2026-07-01 03:59:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3894 ms
+2026-07-01 04:00:08 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/events responded 400 in 38.0727 ms
+2026-07-01 04:00:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.3081 ms
+2026-07-01 04:00:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3684 ms
+2026-07-01 04:00:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.2231 ms
+2026-07-01 04:00:28 [INF] SchoolEvents.Api.Controllers.EventsController: POST /events called by organizer 5 (title="Swimming")
+2026-07-01 04:00:28 [INF] SchoolEvents.Api.Services.EventService: Organizer 5 created event 5 "Swimming" as DRAFT
+2026-07-01 04:00:28 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/events responded 201 in 145.1937 ms
+2026-07-01 04:00:28 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 04:00:28 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 12.3950 ms
+2026-07-01 04:00:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5178 ms
+2026-07-01 04:00:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3849 ms
+2026-07-01 04:00:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.5006 ms
+2026-07-01 04:01:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3557 ms
+2026-07-01 04:01:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0696 ms
+2026-07-01 04:01:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.7402 ms
+2026-07-01 04:01:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3256 ms
+2026-07-01 04:01:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3781 ms
+2026-07-01 04:01:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1271 ms
+2026-07-01 04:02:41 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5572 ms
+2026-07-01 04:02:41 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.6106 ms
+2026-07-01 04:02:41 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.2446 ms
+2026-07-01 04:03:42 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.9212 ms
+2026-07-01 04:03:42 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.8259 ms
+2026-07-01 04:03:42 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.5668 ms
+2026-07-01 04:04:43 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3096 ms
+2026-07-01 04:04:43 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1779 ms
+2026-07-01 04:04:43 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.7754 ms
+2026-07-01 04:05:44 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2623 ms
+2026-07-01 04:05:44 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0040 ms
+2026-07-01 04:05:44 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.6201 ms
+2026-07-01 04:06:45 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3104 ms
+2026-07-01 04:06:45 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1719 ms
+2026-07-01 04:06:45 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8858 ms
+2026-07-01 04:07:46 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2486 ms
+2026-07-01 04:07:46 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3318 ms
+2026-07-01 04:07:46 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9880 ms
+2026-07-01 04:08:47 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3979 ms
+2026-07-01 04:08:47 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0416 ms
+2026-07-01 04:08:47 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8460 ms
+2026-07-01 04:09:48 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2095 ms
+2026-07-01 04:09:48 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1365 ms
+2026-07-01 04:09:48 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8765 ms
+2026-07-01 04:10:49 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2429 ms
+2026-07-01 04:10:49 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0515 ms
+2026-07-01 04:10:49 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8769 ms
+2026-07-01 04:11:50 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3420 ms
+2026-07-01 04:11:50 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3386 ms
+2026-07-01 04:11:50 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9271 ms
+2026-07-01 04:12:51 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2480 ms
+2026-07-01 04:12:51 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1755 ms
+2026-07-01 04:12:51 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9703 ms
+2026-07-01 04:13:52 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3187 ms
+2026-07-01 04:13:52 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9524 ms
+2026-07-01 04:13:52 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0839 ms
+2026-07-01 04:14:53 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2044 ms
+2026-07-01 04:14:53 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1180 ms
+2026-07-01 04:14:53 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.7060 ms
+2026-07-01 04:15:54 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1414 ms
+2026-07-01 04:15:54 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9275 ms
+2026-07-01 04:15:54 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.6934 ms
+2026-07-01 04:16:55 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1504 ms
+2026-07-01 04:16:55 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.5358 ms
+2026-07-01 04:16:55 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9493 ms
+2026-07-01 04:17:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1827 ms
+2026-07-01 04:17:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1242 ms
+2026-07-01 04:17:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1308 ms
+2026-07-01 04:18:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 12.5203 ms
+2026-07-01 04:18:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1434 ms
+2026-07-01 04:18:09 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0973 ms
+2026-07-01 04:18:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2280 ms
+2026-07-01 04:18:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0676 ms
+2026-07-01 04:18:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8865 ms
+2026-07-01 04:19:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1995 ms
+2026-07-01 04:19:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.8363 ms
+2026-07-01 04:19:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9839 ms
+2026-07-01 04:19:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9576 ms
+2026-07-01 04:19:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1452 ms
+2026-07-01 04:19:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1750 ms
+2026-07-01 04:20:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1164 ms
+2026-07-01 04:20:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1167 ms
+2026-07-01 04:20:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.0233 ms
+2026-07-01 04:20:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1097 ms
+2026-07-01 04:20:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0272 ms
+2026-07-01 04:20:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.4102 ms
+2026-07-01 04:21:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2080 ms
+2026-07-01 04:21:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9396 ms
+2026-07-01 04:21:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8899 ms
+2026-07-01 04:22:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1397 ms
+2026-07-01 04:22:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9861 ms
+2026-07-01 04:22:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8293 ms
+2026-07-01 04:23:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3398 ms
+2026-07-01 04:23:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9827 ms
+2026-07-01 04:23:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.0728 ms
+2026-07-01 04:24:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3589 ms
+2026-07-01 04:24:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0452 ms
+2026-07-01 04:24:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9081 ms
+2026-07-01 04:55:39 [INF] : Starting SchoolEvents.Api
+2026-07-01 04:55:40 [INF] Microsoft.Hosting.Lifetime: Now listening on: http://localhost:5080
+2026-07-01 04:55:40 [INF] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-01 04:55:40 [INF] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2026-07-01 04:55:40 [INF] Microsoft.Hosting.Lifetime: Content root path: D:\Eray11v\OdysseyTeamAIBEST\backend\src\SchoolEvents.Api
+2026-07-01 04:56:01 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/users/me responded 200 in 428.4443 ms
+2026-07-01 04:56:01 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 68.6704 ms
+2026-07-01 04:56:01 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 3.4133 ms
+2026-07-01 04:56:01 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 7.4377 ms
+2026-07-01 04:56:01 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 9.7134 ms
+2026-07-01 04:56:02 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 04:56:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 168.4261 ms
+2026-07-01 04:56:04 [INF] SchoolEvents.Api.Controllers.AuthController: User 5 logged out
+2026-07-01 04:56:04 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/logout responded 204 in 4.3873 ms
+2026-07-01 04:56:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.6173 ms
+2026-07-01 04:56:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 9.9324 ms
+2026-07-01 04:56:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 401 in 18.4597 ms
+2026-07-01 04:56:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.7133 ms
+2026-07-01 04:56:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 2.5373 ms
+2026-07-01 04:56:18 [INF] SchoolEvents.Api.Controllers.AuthController: User 10 (admin@school.edu) logged in successfully (role="Student")
+2026-07-01 04:56:18 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/login responded 200 in 434.6992 ms
+2026-07-01 04:56:18 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.2790 ms
+2026-07-01 04:56:18 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.1353 ms
+2026-07-01 04:56:18 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=false, status=null, q=null, category=null, page=1/1, returned 3 of 3
+2026-07-01 04:56:18 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 37.6784 ms
+2026-07-01 04:56:18 [INF] SchoolEvents.Api.Controllers.RegistrationsController: GET /registrations/me called by user 10; returned 0 registration(s)
+2026-07-01 04:56:18 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/registrations/me responded 200 in 13.4110 ms
+2026-07-01 04:56:25 [INF] SchoolEvents.Api.Controllers.RegistrationsController: POST /events/4/registrations called by user 10
+2026-07-01 04:56:25 [INF] SchoolEvents.Api.Services.RegistrationService: User 10 attempting to register for event 4
+2026-07-01 04:56:25 [INF] SchoolEvents.Api.Services.RegistrationService: Enqueued notification job RegistrationConfirmed for user 10 (event 4)
+2026-07-01 04:56:25 [INF] SchoolEvents.Api.Services.RegistrationService: User 10 CONFIRMED for event 4 (2/50 seats)
+2026-07-01 04:56:25 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/events/4/registrations responded 201 in 248.8225 ms
+2026-07-01 04:56:25 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.3312 ms
+2026-07-01 04:56:25 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=false, status=null, q=null, category=null, page=1/1, returned 3 of 3
+2026-07-01 04:56:25 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 10.1787 ms
+2026-07-01 04:56:25 [INF] SchoolEvents.Api.Controllers.RegistrationsController: GET /registrations/me called by user 10; returned 1 registration(s)
+2026-07-01 04:56:25 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/registrations/me responded 200 in 5.9612 ms
+2026-07-01 04:56:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3979 ms
+2026-07-01 04:56:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3890 ms
+2026-07-01 04:56:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.4864 ms
+2026-07-01 04:56:53 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4243 ms
+2026-07-01 04:56:53 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.5794 ms
+2026-07-01 04:57:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3583 ms
+2026-07-01 04:57:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.2551 ms
+2026-07-01 04:57:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1648 ms
+2026-07-01 04:57:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2948 ms
+2026-07-01 04:57:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.5909 ms
+2026-07-01 04:57:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5125 ms
+2026-07-01 04:57:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.6930 ms
+2026-07-01 04:57:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.2624 ms
+2026-07-01 04:57:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3846 ms
+2026-07-01 04:57:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1392 ms
+2026-07-01 04:58:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3325 ms
+2026-07-01 04:58:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1950 ms
+2026-07-01 04:58:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.7077 ms
+2026-07-01 04:58:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5548 ms
+2026-07-01 04:58:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.2681 ms
+2026-07-01 04:58:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3529 ms
+2026-07-01 04:58:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.7703 ms
+2026-07-01 04:58:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.2157 ms
+2026-07-01 04:58:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2285 ms
+2026-07-01 04:58:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3511 ms
+2026-07-01 04:59:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5224 ms
+2026-07-01 04:59:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1113 ms
+2026-07-01 04:59:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1715 ms
+2026-07-01 04:59:15 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3979 ms
+2026-07-01 04:59:15 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.2958 ms
+2026-07-01 04:59:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1307 ms
+2026-07-01 04:59:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9549 ms
+2026-07-01 04:59:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.0350 ms
+2026-07-01 04:59:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2506 ms
+2026-07-01 04:59:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1416 ms
+2026-07-01 05:00:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1708 ms
+2026-07-01 05:00:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1203 ms
+2026-07-01 05:00:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9722 ms
+2026-07-01 05:00:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2627 ms
+2026-07-01 05:00:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1459 ms
+2026-07-01 05:00:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1791 ms
+2026-07-01 05:00:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9809 ms
+2026-07-01 05:00:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9717 ms
+2026-07-01 05:00:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1566 ms
+2026-07-01 05:00:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1223 ms
+2026-07-01 05:01:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2103 ms
+2026-07-01 05:01:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1103 ms
+2026-07-01 05:01:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8471 ms
+2026-07-01 05:01:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2852 ms
+2026-07-01 05:01:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1325 ms
+2026-07-01 05:01:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1015 ms
+2026-07-01 05:01:40 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3884 ms
+2026-07-01 05:01:51 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3718 ms
+2026-07-01 05:01:51 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.4764 ms
+2026-07-01 05:01:51 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.2525 ms
+2026-07-01 05:02:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1894 ms
+2026-07-01 05:02:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0015 ms
+2026-07-01 05:02:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9490 ms
+2026-07-01 05:02:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1988 ms
+2026-07-01 05:02:10 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0940 ms
+2026-07-01 05:02:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1102 ms
+2026-07-01 05:02:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9352 ms
+2026-07-01 05:02:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9902 ms
+2026-07-01 05:03:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3764 ms
+2026-07-01 05:03:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0717 ms
+2026-07-01 05:03:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.6548 ms
+2026-07-01 05:03:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.0854 ms
+2026-07-01 05:03:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9646 ms
+2026-07-01 05:03:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.7233 ms
+2026-07-01 05:04:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1975 ms
+2026-07-01 05:04:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.4060 ms
+2026-07-01 05:04:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1169 ms
+2026-07-01 05:05:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3010 ms
+2026-07-01 05:05:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.2688 ms
+2026-07-01 05:05:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.0295 ms
+2026-07-01 05:06:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1952 ms
+2026-07-01 05:06:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0509 ms
+2026-07-01 05:06:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9997 ms
+2026-07-01 05:07:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2044 ms
+2026-07-01 05:07:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9425 ms
+2026-07-01 05:07:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.7577 ms
+2026-07-01 05:08:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1563 ms
+2026-07-01 05:08:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.8942 ms
+2026-07-01 05:08:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.5999 ms
+2026-07-01 05:09:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2087 ms
+2026-07-01 05:09:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9108 ms
+2026-07-01 05:09:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1480 ms
+2026-07-01 05:10:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2508 ms
+2026-07-01 05:10:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9842 ms
+2026-07-01 05:10:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.7425 ms
+2026-07-01 05:11:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1704 ms
+2026-07-01 05:11:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9096 ms
+2026-07-01 05:11:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.9506 ms
+2026-07-01 05:12:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1919 ms
+2026-07-01 05:12:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1013 ms
+2026-07-01 05:12:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.0162 ms
+2026-07-01 05:13:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.1368 ms
+2026-07-01 05:13:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 0.8681 ms
+2026-07-01 05:13:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.5684 ms
+2026-07-01 05:15:22 [INF] : Starting SchoolEvents.Api
+2026-07-01 05:15:23 [INF] Microsoft.Hosting.Lifetime: Now listening on: http://localhost:5080
+2026-07-01 05:15:23 [INF] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-01 05:15:23 [INF] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2026-07-01 05:15:23 [INF] Microsoft.Hosting.Lifetime: Content root path: D:\Eray11v\OdysseyTeamAIBEST\backend\src\SchoolEvents.Api
+2026-07-01 05:15:35 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/users/me responded 200 in 400.5066 ms
+2026-07-01 05:15:35 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 75.6084 ms
+2026-07-01 05:15:35 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 3.5663 ms
+2026-07-01 05:15:35 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 7.6785 ms
+2026-07-01 05:15:35 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 10.9802 ms
+2026-07-01 05:15:35 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=false, status=null, q=null, category=null, page=1/1, returned 3 of 3
+2026-07-01 05:15:35 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 148.8139 ms
+2026-07-01 05:15:35 [INF] SchoolEvents.Api.Controllers.RegistrationsController: GET /registrations/me called by user 10; returned 1 registration(s)
+2026-07-01 05:15:35 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/registrations/me responded 200 in 18.5757 ms
+2026-07-01 05:15:37 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.1060 ms
+2026-07-01 05:15:38 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/notifications/read responded 204 in 22.2275 ms
+2026-07-01 05:15:43 [INF] SchoolEvents.Api.Controllers.AuthController: User 10 logged out
+2026-07-01 05:15:43 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/logout responded 204 in 3.4817 ms
+2026-07-01 05:15:45 [INF] SchoolEvents.Api.Controllers.AuthController: User 5 (frt@gmail.com) logged in successfully (role="Organizer")
+2026-07-01 05:15:45 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/login responded 200 in 470.7167 ms
+2026-07-01 05:15:45 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.8785 ms
+2026-07-01 05:15:45 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.1257 ms
+2026-07-01 05:15:45 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 05:15:45 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 25.9065 ms
+2026-07-01 05:16:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4136 ms
+2026-07-01 05:16:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.6540 ms
+2026-07-01 05:16:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 9.4331 ms
+2026-07-01 05:16:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5548 ms
+2026-07-01 05:16:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.6558 ms
+2026-07-01 05:16:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.4716 ms
+2026-07-01 05:17:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3685 ms
+2026-07-01 05:17:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.4976 ms
+2026-07-01 05:17:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.6398 ms
+2026-07-01 05:17:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4137 ms
+2026-07-01 05:17:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.4379 ms
+2026-07-01 05:17:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.7557 ms
+2026-07-01 05:18:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2474 ms
+2026-07-01 05:18:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.2471 ms
+2026-07-01 05:18:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.3574 ms
+2026-07-01 05:18:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4625 ms
+2026-07-01 05:18:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.5689 ms
+2026-07-01 05:18:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9858 ms
+2026-07-01 05:19:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3673 ms
+2026-07-01 05:19:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3030 ms
+2026-07-01 05:19:06 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.5758 ms
+2026-07-01 05:20:16 [INF] : Starting SchoolEvents.Api
+2026-07-01 05:20:17 [INF] Microsoft.Hosting.Lifetime: Now listening on: http://localhost:5080
+2026-07-01 05:20:17 [INF] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-01 05:20:17 [INF] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2026-07-01 05:20:17 [INF] Microsoft.Hosting.Lifetime: Content root path: D:\Eray11v\OdysseyTeamAIBEST\backend\src\SchoolEvents.Api
+2026-07-01 05:20:29 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/users/me responded 200 in 407.3217 ms
+2026-07-01 05:20:29 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 71.5482 ms
+2026-07-01 05:20:29 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 3.3112 ms
+2026-07-01 05:20:29 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 8.4209 ms
+2026-07-01 05:20:29 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 10.2396 ms
+2026-07-01 05:20:29 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 05:20:29 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 149.3570 ms
+2026-07-01 05:20:36 [INF] SchoolEvents.Api.Controllers.AuthController: User 5 logged out
+2026-07-01 05:20:36 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/logout responded 204 in 4.7192 ms
+2026-07-01 05:20:39 [INF] SchoolEvents.Api.Controllers.AuthController: User 5 (frt@gmail.com) logged in successfully (role="Organizer")
+2026-07-01 05:20:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/login responded 200 in 491.5206 ms
+2026-07-01 05:20:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.5203 ms
+2026-07-01 05:20:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.7599 ms
+2026-07-01 05:20:39 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 05:20:39 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 14.8279 ms
+2026-07-01 05:21:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.6669 ms
+2026-07-01 05:21:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.7064 ms
+2026-07-01 05:21:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 9.1796 ms
+2026-07-01 05:21:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4578 ms
+2026-07-01 05:21:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.5190 ms
+2026-07-01 05:21:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.0034 ms
+2026-07-01 05:22:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2730 ms
+2026-07-01 05:22:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3371 ms
+2026-07-01 05:22:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.0029 ms
+2026-07-01 05:22:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5746 ms
+2026-07-01 05:22:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 2.1030 ms
+2026-07-01 05:22:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.7807 ms
+2026-07-01 05:23:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4709 ms
+2026-07-01 05:23:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.6235 ms
+2026-07-01 05:23:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.3801 ms
+2026-07-01 05:23:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2727 ms
+2026-07-01 05:23:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3844 ms
+2026-07-01 05:23:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.9803 ms
+2026-07-01 05:24:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2518 ms
+2026-07-01 05:24:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.5902 ms
+2026-07-01 05:24:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.3922 ms
+2026-07-01 05:24:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4314 ms
+2026-07-01 05:24:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 21.0152 ms
+2026-07-01 05:24:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 21.4824 ms
+2026-07-01 05:25:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5003 ms
+2026-07-01 05:25:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.4075 ms
+2026-07-01 05:25:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.7809 ms
+2026-07-01 05:26:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.5722 ms
+2026-07-01 05:26:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.3637 ms
+2026-07-01 05:26:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1195 ms
+2026-07-01 05:26:47 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.6425 ms
+2026-07-01 05:26:47 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2464 ms
+2026-07-01 05:26:47 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.0909 ms
+2026-07-01 05:27:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.2996 ms
+2026-07-01 05:27:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.2979 ms
+2026-07-01 05:27:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.0315 ms
+2026-07-01 05:27:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4382 ms
+2026-07-01 05:27:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.5006 ms
+2026-07-01 05:27:30 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.5403 ms
+2026-07-01 05:28:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.4949 ms
+2026-07-01 05:28:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.1727 ms
+2026-07-01 05:28:07 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1808 ms
+2026-07-01 05:28:54 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health responded 200 in 0.3651 ms
+2026-07-01 05:28:54 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/health/ready responded 200 in 1.2529 ms
+2026-07-01 05:28:54 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1126 ms
+2026-07-01 06:31:16 [INF] : Starting SchoolEvents.Api
+2026-07-01 06:31:18 [INF] Microsoft.Hosting.Lifetime: Now listening on: http://localhost:5080
+2026-07-01 06:31:18 [INF] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-01 06:31:18 [INF] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2026-07-01 06:31:18 [INF] Microsoft.Hosting.Lifetime: Content root path: D:\Eray11v\OdysseyTeamAIBEST\backend\src\SchoolEvents.Api
+2026-07-01 06:31:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /index.html responded 200 in 1687.3395 ms
+2026-07-01 06:31:33 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/main.js responded 200 in 12.9225 ms
+2026-07-01 06:31:33 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/scroll.js responded 200 in 1.7636 ms
+2026-07-01 06:31:33 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/nav.js responded 200 in 3.7052 ms
+2026-07-01 06:31:33 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /css/output.css responded 200 in 65.1943 ms
+2026-07-01 06:31:33 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/i18n.js responded 200 in 4.2818 ms
+2026-07-01 06:31:33 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/ui.js responded 200 in 1.0272 ms
+2026-07-01 06:31:33 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /favicon.ico responded 404 in 4.7822 ms
+2026-07-01 06:31:34 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/users/me responded 200 in 780.5322 ms
+2026-07-01 06:31:34 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 113.8977 ms
+2026-07-01 06:31:34 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/views/organizer.js responded 200 in 1.4223 ms
+2026-07-01 06:31:34 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 20.6213 ms
+2026-07-01 06:31:34 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 06:31:34 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 242.8869 ms
+2026-07-01 06:31:46 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /index.html responded 200 in 1.0444 ms
+2026-07-01 06:31:49 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/users/me responded 200 in 10.9840 ms
+2026-07-01 06:31:49 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 5.7220 ms
+2026-07-01 06:31:49 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.8517 ms
+2026-07-01 06:31:49 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 06:31:49 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 24.2358 ms
+2026-07-01 06:32:04 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.9480 ms
+2026-07-01 12:46:43 [INF] : Starting SchoolEvents.Api
+2026-07-01 12:46:44 [INF] Microsoft.Hosting.Lifetime: Now listening on: http://localhost:5080
+2026-07-01 12:46:44 [INF] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-01 12:46:44 [INF] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2026-07-01 12:46:44 [INF] Microsoft.Hosting.Lifetime: Content root path: D:\Eray11v\OdysseyTeamAIBEST\backend\src\SchoolEvents.Api
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /index.html responded 304 in 34.8865 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /css/output.css responded 304 in 0.7042 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/main.js responded 304 in 0.2558 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/auth.js responded 200 in 7.0622 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/router.js responded 200 in 6.9005 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/nav.js responded 304 in 0.1617 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/scroll.js responded 304 in 0.2088 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/i18n.js responded 304 in 0.0987 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/features/tour.js responded 200 in 1.9474 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/theme.js responded 200 in 0.8639 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/store.js responded 200 in 0.5857 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/api.js responded 200 in 0.7436 ms
+2026-07-01 12:46:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/core/ui.js responded 304 in 0.2300 ms
+2026-07-01 12:46:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /favicon.ico responded 404 in 3.9923 ms
+2026-07-01 12:46:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/users/me responded 200 in 774.0395 ms
+2026-07-01 12:46:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 120.1783 ms
+2026-07-01 12:46:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/views/organizer.js responded 304 in 0.2431 ms
+2026-07-01 12:46:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 14.3844 ms
+2026-07-01 12:46:57 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 12:46:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 258.1833 ms
+2026-07-01 12:47:21 [INF] SchoolEvents.Api.Controllers.AuthController: User 5 logged out
+2026-07-01 12:47:21 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/logout responded 204 in 6.3817 ms
+2026-07-01 12:47:21 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /src/views/auth.js responded 200 in 1.8398 ms
+2026-07-01 12:47:52 [INF] SchoolEvents.Api.Controllers.AuthController: User 5 (frt@gmail.com) logged in successfully (role="Organizer")
+2026-07-01 12:47:52 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP POST /api/auth/login responded 200 in 531.8103 ms
+2026-07-01 12:47:52 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.1974 ms
+2026-07-01 12:47:52 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 8.6489 ms
+2026-07-01 12:47:52 [INF] SchoolEvents.Api.Services.EventService: Event list query: mine=true, status=null, q=null, category=null, page=1/1, returned 5 of 5
+2026-07-01 12:47:52 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/events responded 200 in 30.3478 ms
+2026-07-01 12:47:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.7755 ms
+2026-07-01 12:48:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.6347 ms
+2026-07-01 12:48:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.1273 ms
+2026-07-01 12:49:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.9231 ms
+2026-07-01 12:49:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.0780 ms
+2026-07-01 12:50:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.3181 ms
+2026-07-01 12:50:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 15.8718 ms
+2026-07-01 12:51:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 5.7037 ms
+2026-07-01 12:52:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.0767 ms
+2026-07-01 12:52:41 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 16.1099 ms
+2026-07-01 12:52:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.0930 ms
+2026-07-01 12:53:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.9794 ms
+2026-07-01 12:54:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.0890 ms
+2026-07-01 12:55:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.3496 ms
+2026-07-01 12:56:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 27.5627 ms
+2026-07-01 12:59:19 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 22.5045 ms
+2026-07-01 13:00:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.0136 ms
+2026-07-01 13:01:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.1752 ms
+2026-07-01 13:02:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.2976 ms
+2026-07-01 13:02:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.0771 ms
+2026-07-01 13:02:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.7128 ms
+2026-07-01 13:03:58 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.1266 ms
+2026-07-01 13:04:59 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.3858 ms
+2026-07-01 13:06:00 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.4201 ms
+2026-07-01 13:07:01 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.5463 ms
+2026-07-01 13:08:02 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.2283 ms
+2026-07-01 13:09:03 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 13.6724 ms
+2026-07-01 13:09:56 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 6.0966 ms
+2026-07-01 13:10:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.6620 ms
+2026-07-01 13:10:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.9640 ms
+2026-07-01 13:11:58 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.1974 ms
+2026-07-01 13:12:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.2896 ms
+2026-07-01 13:12:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.5745 ms
+2026-07-01 13:13:32 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 1.8649 ms
+2026-07-01 13:13:57 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.4975 ms
+2026-07-01 13:14:27 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.6265 ms
+2026-07-01 13:15:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.2467 ms
+2026-07-01 13:16:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.5706 ms
+2026-07-01 13:17:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.6706 ms
+2026-07-01 13:18:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.4541 ms
+2026-07-01 13:19:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.9730 ms
+2026-07-01 13:20:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.2802 ms
+2026-07-01 13:21:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 2.5167 ms
+2026-07-01 13:22:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.2286 ms
+2026-07-01 13:23:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.3795 ms
+2026-07-01 13:24:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.7857 ms
+2026-07-01 13:25:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.1031 ms
+2026-07-01 13:26:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.2233 ms
+2026-07-01 13:27:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.3463 ms
+2026-07-01 13:28:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.1138 ms
+2026-07-01 13:29:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.2056 ms
+2026-07-01 13:30:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.5098 ms
+2026-07-01 13:31:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.2758 ms
+2026-07-01 13:32:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 3.5256 ms
+2026-07-01 13:33:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.1405 ms
+2026-07-01 13:34:05 [INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/notifications responded 200 in 4.3982 ms

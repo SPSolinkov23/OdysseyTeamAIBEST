@@ -18,5 +18,4 @@ worker/appsettings.Production.json
 # Logs / OS
 *.log
 .DS_Store
-Thumbs.db
-logs/   
+Thumbs.db 
