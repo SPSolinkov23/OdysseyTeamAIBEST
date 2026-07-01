@@ -4,20 +4,22 @@ using SchoolEvents.Api.Dtos;
 using SchoolEvents.Api.Infrastructure;
 using SchoolEvents.Api.Services;
 using SchoolEvents.Data.Entities;
-
+ 
 namespace SchoolEvents.Api.Controllers;
-
+ 
 [ApiController]
 [Route("events")]
 public class EventsController : ControllerBase
 {
     private readonly EventService _events;
-
-    public EventsController(EventService events)
+    private readonly ILogger<EventsController> _logger;
+ 
+    public EventsController(EventService events, ILogger<EventsController> logger)
     {
         _events = events;
+        _logger = logger;
     }
-
+ 
     [HttpGet]
     [AllowAnonymous]
     public async Task<ActionResult<EventListResponse>> List(
@@ -30,7 +32,7 @@ public class EventsController : ControllerBase
     {
         return Ok(await _events.ListAsync(CallerId(), status, q, category, mine, page, pageSize));
     }
-
+ 
     [HttpGet("{id:long}")]
     [AllowAnonymous]
     public async Task<ActionResult<EventEnvelope>> Get(long id)
@@ -38,53 +40,65 @@ public class EventsController : ControllerBase
         var dto = await _events.GetAsync(id, CallerId(), User.IsOrganizer());
         return Ok(new EventEnvelope { Event = dto });
     }
-
+ 
     [HttpPost]
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventEnvelope>> Create(CreateEventRequest req)
     {
-        var dto = await _events.CreateAsync(User.GetUserId(), req);
+        var organizerId = User.GetUserId();
+        _logger.LogInformation("POST /events called by organizer {OrganizerId} (title=\"{Title}\")", organizerId, req.Title);
+ 
+        var dto = await _events.CreateAsync(organizerId, req);
         return StatusCode(StatusCodes.Status201Created, new EventEnvelope { Event = dto });
     }
-
+ 
     [HttpPatch("{id:long}")]
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventEnvelope>> Update(long id, UpdateEventRequest req)
     {
-        var dto = await _events.UpdateAsync(id, User.GetUserId(), req);
+        var organizerId = User.GetUserId();
+        _logger.LogInformation("PATCH /events/{EventId} called by organizer {OrganizerId}", id, organizerId);
+ 
+        var dto = await _events.UpdateAsync(id, organizerId, req);
         return Ok(new EventEnvelope { Event = dto });
     }
-
+ 
     [HttpPost("{id:long}/publish")]
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventEnvelope>> Publish(long id)
     {
-        var dto = await _events.PublishAsync(id, User.GetUserId());
+        var organizerId = User.GetUserId();
+        _logger.LogInformation("POST /events/{EventId}/publish called by organizer {OrganizerId}", id, organizerId);
+ 
+        var dto = await _events.PublishAsync(id, organizerId);
         return Ok(new EventEnvelope { Event = dto });
     }
-
+ 
     [HttpPost("{id:long}/cancel")]
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventEnvelope>> Cancel(long id)
     {
-        var dto = await _events.CancelAsync(id, User.GetUserId());
+        var organizerId = User.GetUserId();
+        _logger.LogInformation("POST /events/{EventId}/cancel called by organizer {OrganizerId}", id, organizerId);
+ 
+        var dto = await _events.CancelAsync(id, organizerId);
         return Ok(new EventEnvelope { Event = dto });
     }
-
+ 
     [HttpGet("{id:long}/registrations")]
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<EventRegistrationsResponse>> Attendees(long id)
     {
         return Ok(await _events.GetAttendeesAsync(id, User.GetUserId()));
     }
-
+ 
     [HttpGet("{id:long}/waitlist")]
     [Authorize(Roles = nameof(UserRole.Organizer))]
     public async Task<ActionResult<WaitlistResponse>> Waitlist(long id)
     {
         return Ok(await _events.GetWaitlistAsync(id, User.GetUserId()));
     }
-
+ 
     private long? CallerId() =>
         User.Identity?.IsAuthenticated == true ? User.GetUserId() : null;
 }
