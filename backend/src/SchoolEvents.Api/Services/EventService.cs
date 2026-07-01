@@ -12,6 +12,8 @@ public class EventService
 {
     private readonly SchoolEventsDbContext _db;
 
+   protected EventService() { _db = null!; }
+
     public EventService(SchoolEventsDbContext db)
     {
         _db = db;
@@ -38,7 +40,7 @@ public class EventService
         UpdatedAt = e.UpdatedAt,
     };
 
-    public async Task<EventListResponse> ListAsync(long? callerId, string? status, string? q, string? category, bool mine, int page, int pageSize)
+    public virtual async Task<EventListResponse> ListAsync(long? callerId, string? status, string? q, string? category, bool mine, int page, int pageSize)
     {
         page = Math.Max(1, page);
         pageSize = Math.Clamp(pageSize, 1, 50);
@@ -127,7 +129,7 @@ public class EventService
         };
     }
 
-    public async Task<EventDto> GetAsync(long id, long? callerId, bool callerIsOrganizer)
+    public virtual async Task<EventDto> GetAsync(long id, long? callerId, bool callerIsOrganizer)
     {
         var dto = await _db.Events.AsNoTracking()
             .Where(e => e.Id == id)
@@ -147,7 +149,7 @@ public class EventService
         return dto;
     }
 
-    public async Task<EventDto> CreateAsync(long organizerId, CreateEventRequest req)
+    public virtual async Task<EventDto> CreateAsync(long organizerId, CreateEventRequest req)
     {
         ValidateTimes(ToUtc(req.StartsAt), req.EndsAt is null ? null : ToUtc(req.EndsAt.Value));
 
@@ -171,7 +173,7 @@ public class EventService
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
 
-    public async Task<EventDto> UpdateAsync(long id, long organizerId, UpdateEventRequest req)
+    public virtual async Task<EventDto> UpdateAsync(long id, long organizerId, UpdateEventRequest req)
     {
         var ev = await LoadOwnedAsync(id, organizerId);
 
@@ -194,7 +196,7 @@ public class EventService
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
 
-    public async Task<EventDto> PublishAsync(long id, long organizerId)
+    public virtual async Task<EventDto> PublishAsync(long id, long organizerId)
     {
         var ev = await LoadOwnedAsync(id, organizerId);
         if (ev.Status == EventStatus.Cancelled)
@@ -205,7 +207,7 @@ public class EventService
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
     
-    public async Task<EventDto> CancelAsync(long id, long organizerId)
+    public virtual async Task<EventDto> CancelAsync(long id, long organizerId)
     {
         await using var tx = await _db.Database.BeginTransactionAsync();
 
@@ -251,7 +253,7 @@ public class EventService
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
 
-    public async Task<EventRegistrationsResponse> GetAttendeesAsync(long id, long organizerId)
+    public virtual async Task<EventRegistrationsResponse> GetAttendeesAsync(long id, long organizerId)
     {
         await LoadOwnedAsync(id, organizerId);
 
@@ -272,7 +274,7 @@ public class EventService
         return new EventRegistrationsResponse { Registrations = confirmed };
     }
 
-    public async Task<WaitlistResponse> GetWaitlistAsync(long id, long organizerId)
+    public virtual async Task<WaitlistResponse> GetWaitlistAsync(long id, long organizerId)
     {
         await LoadOwnedAsync(id, organizerId);
 

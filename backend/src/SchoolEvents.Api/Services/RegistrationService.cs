@@ -11,12 +11,14 @@ public class RegistrationService
 {
     private readonly SchoolEventsDbContext _db;
 
+    protected RegistrationService() {_db = null!;}
+
     public RegistrationService(SchoolEventsDbContext db)
     {
         _db = db;
     }
 
-    public async Task<RegistrationDto> RegisterAsync(long eventId, long userId)
+    public virtual async Task<RegistrationDto> RegisterAsync(long eventId, long userId)
     {
         await using var tx = await _db.Database.BeginTransactionAsync();
 
@@ -81,7 +83,7 @@ public class RegistrationService
         };
     }
 
-    public async Task<CancelResult> CancelAsync(long registrationId, long userId)
+    public virtual async Task<CancelResult> CancelAsync(long registrationId, long userId)
     {
         await using var tx = await _db.Database.BeginTransactionAsync();
 
