@@ -3,6 +3,8 @@ import { Auth } from "../core/auth.js";
 import { API } from "../core/api.js";
 import { Router } from "../core/router.js";
 import { I18n } from "../core/i18n.js";
+import { refreshAos } from "../core/anim.js";
+import { scrollToEl } from "../core/scroll.js";
 
 const CATS = ["Workshop", "Lecture", "Club", "Sports", "Seminar", "Hackathon", "Trip", "Event"];
 
@@ -12,13 +14,6 @@ function readOrganizerPage(defaultSize) {
         page: Math.max(1, parseInt(params.get("page") || "1", 10) || 1),
         pageSize: defaultSize,
     };
-}
-
-function setOrganizerPage(page) {
-    const params = new URLSearchParams();
-    if (page > 1) params.set("page", page);
-    history.pushState(null, "", "/organizer" + (params.toString() ? "?" + params.toString() : ""));
-    Router.handle();
 }
 
 function pagination(meta) {
@@ -34,12 +29,13 @@ function pagination(meta) {
     }
 
     return (
-        '<div id="org-pagination" class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
-        '<p class="text-sm text-slate-500 dark:text-slate-400">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
-        '<div class="flex flex-wrap items-center gap-2">' +
-        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> ' + I18n.t("pagination.previous") + '</button>' +
-        buttons.join("") +
-        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>' + I18n.t("pagination.next") + ' <i class="fa-solid fa-chevron-right"></i></button>' +
+        '<div id="org-pagination" class="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">' +
+        '<p class="order-2 text-sm text-slate-500 dark:text-slate-400 sm:order-1">' + I18n.t("pagination.summary", { page: meta.page, total: meta.totalPages, count: meta.totalCount }) + "</p>" +
+        '<div class="order-1 flex w-full items-center justify-center gap-2 sm:order-2 sm:w-auto">' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i><span class="hidden sm:inline"> ' + I18n.t("pagination.previous") + '</span></button>' +
+        '<div class="hidden items-center gap-2 sm:flex">' + buttons.join("") + '</div>' +
+        '<span class="min-w-[3.5rem] text-center text-sm font-semibold text-slate-600 dark:text-slate-300 sm:hidden">' + meta.page + " / " + meta.totalPages + '</span>' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '><span class="hidden sm:inline">' + I18n.t("pagination.next") + ' </span><i class="fa-solid fa-chevron-right"></i></button>' +
         "</div></div>"
     );
 }
@@ -62,10 +58,6 @@ export async function organizer() {
         { icon: "fa-users", label: I18n.t("org.statRegistrations"), value: page.stats.confirmedRegistrationCount + page.stats.waitlistCount, color: "emerald" },
     ];
 
-    const rows = list.length
-        ? list.map((e, idx) => eventRow(e, idx)).join("")
-        : UI.empty({ icon: "fa-calendar-plus", title: I18n.t("org.emptyTitle"), text: I18n.t("org.emptyText"), actionHtml: '<a href="/organizer/new" class="btn-primary"><i class="fa-solid fa-plus"></i> ' + I18n.t("org.newEvent") + '</a>' });
-
     const html =
         '<section class="bg-hero-grid bg-grid-dots border-b border-slate-200/70 bg-white dark:border-slate-700/70 dark:bg-slate-900"><div class="container-app py-10"><div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-aos="fade-right">' +
         '<div><span class="badge bg-brand-50 text-brand-700 ring-brand-200 dark:bg-brand-900/30 dark:text-brand-400 dark:ring-brand-800"><i class="fa-solid fa-user-tie"></i>' + I18n.t("org.badge") + '</span>' +
@@ -77,9 +69,17 @@ export async function organizer() {
             '<div class="card flex items-center gap-4 p-4" data-aos="zoom-in-up" data-aos-delay="' + i * 70 + '" data-aos-duration="500"><span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-' + s.color + "-100 text-" + s.color + '-600 text-lg"><i class="fa-solid ' + s.icon + '"></i></span><div><div class="font-display text-2xl font-bold text-slate-800 dark:text-slate-100">' + s.value + '</div><div class="text-xs text-slate-500 dark:text-slate-400">' + s.label + "</div></div></div>"
         ).join("") +
         "</div></div></section>" +
-        '<section class="container-app py-8"><h2 class="mb-5 font-display text-xl font-semibold text-slate-800 dark:text-slate-100">' + I18n.t("org.myEvents") + '</h2><div class="space-y-4">' + rows + "</div>" + pagination(page) + "</section>";
+        '<section class="container-app py-8"><h2 class="mb-5 font-display text-xl font-semibold text-slate-800 dark:text-slate-100">' + I18n.t("org.myEvents") + '</h2><div id="org-results">' + orgResultsHtml(page) + "</div></section>";
 
     return { html: html, onMount: bindDashboard };
+}
+
+function orgResultsHtml(page) {
+    const list = page.events;
+    const rows = list.length
+        ? list.map((e, idx) => eventRow(e, idx)).join("")
+        : UI.empty({ icon: "fa-calendar-plus", title: I18n.t("org.emptyTitle"), text: I18n.t("org.emptyText"), actionHtml: '<a href="/organizer/new" class="btn-primary"><i class="fa-solid fa-plus"></i> ' + I18n.t("org.newEvent") + '</a>' });
+    return '<div class="space-y-4">' + rows + "</div>" + pagination(page);
 }
 
 function eventRow(e, idx) {
@@ -106,30 +106,66 @@ function eventRow(e, idx) {
 }
 
 function bindDashboard(root) {
-    root.querySelectorAll("[data-publish]").forEach((b) => b.addEventListener("click", () => publish(b.getAttribute("data-publish"))));
-    root.querySelectorAll("[data-cancel-event]").forEach((b) => b.addEventListener("click", () => cancelEvent(b.getAttribute("data-cancel-event"))));
-    root.querySelectorAll("#org-pagination [data-page]").forEach((b) => b.addEventListener("click", () => setOrganizerPage(parseInt(b.getAttribute("data-page"), 10))));
+    const results = root.querySelector("#org-results");
+    const init = readOrganizerPage(8);
+    const state = { page: init.page, pageSize: 8 };
+    let reqId = 0;
+
+    async function load(scrollToResults) {
+        const token = ++reqId;
+        results.classList.add("results-loading");
+        let page;
+        try {
+            page = await API.listOrganizerEvents(state);
+        } catch (e) {
+            results.classList.remove("results-loading");
+            UI.toast(e.message, "error");
+            return;
+        }
+        if (token !== reqId) return;
+        results.innerHTML = orgResultsHtml(page);
+        results.classList.remove("results-loading");
+        bindResults();
+        refreshAos();
+        if (scrollToResults) scrollToEl(results);
+    }
+
+    function bindResults() {
+        results.querySelectorAll("[data-publish]").forEach((b) => b.addEventListener("click", () => publish(b.getAttribute("data-publish"), () => load(false))));
+        results.querySelectorAll("[data-cancel-event]").forEach((b) => b.addEventListener("click", () => cancelEvent(b.getAttribute("data-cancel-event"), () => load(false))));
+        results.querySelectorAll("#org-pagination [data-page]").forEach((b) => b.addEventListener("click", () => {
+            state.page = parseInt(b.getAttribute("data-page"), 10) || 1;
+            const params = new URLSearchParams();
+            if (state.page > 1) params.set("page", state.page);
+            history.pushState(null, "", "/organizer" + (params.toString() ? "?" + params.toString() : ""));
+            load(true);
+        }));
+    }
+
+    bindResults();
 }
 
-async function publish(id) {
+async function publish(id, onDone) {
     const ok = await UI.confirm({ title: I18n.t("org.publishConfirmTitle"), text: I18n.t("org.publishConfirmText"), confirmText: I18n.t("org.publish"), icon: "question" });
     if (!ok) return;
     try {
         await API.publishEvent(Auth.current().id, id);
         UI.toast(I18n.t("org.publishedToast"), "success");
-        Router.handle();
+        if (onDone) onDone();
+        else Router.handle();
     } catch (e) {
         UI.toast(e.message, "error");
     }
 }
 
-async function cancelEvent(id) {
+async function cancelEvent(id, onDone) {
     const ok = await UI.confirm({ title: I18n.t("org.cancelConfirmTitle"), text: I18n.t("org.cancelConfirmText"), confirmText: I18n.t("org.cancelEventBtn"), danger: true, icon: "warning" });
     if (!ok) return;
     try {
         await API.cancelEvent(Auth.current().id, id);
         UI.toast(I18n.t("org.cancelledToast"), "info");
-        Router.handle();
+        if (onDone) onDone();
+        else Router.handle();
     } catch (e) {
         UI.toast(e.message, "error");
     }
@@ -159,8 +195,8 @@ export async function organizerForm(id) {
         "</div>" +
         field(I18n.t("form.description"), '<textarea id="p-description" name="description" rows="4" class="input" placeholder="' + I18n.t("form.descPlaceholder") + '">' + UI.escape(d.description) + "</textarea>") +
         '<div class="grid gap-5 sm:grid-cols-2">' +
-        field(I18n.t("form.start"), '<input id="p-startsAt" name="startsAt" type="datetime-local" class="input" value="' + toLocalInput(d.startsAt) + '">') +
-        field(I18n.t("form.end"), '<input id="p-endsAt" name="endsAt" type="datetime-local" class="input" value="' + toLocalInput(d.endsAt) + '">') +
+        field(I18n.t("form.start"), '<input id="p-startsAt" name="startsAt" type="text" autocomplete="off" class="input" value="' + toLocalInput(d.startsAt) + '" placeholder="' + I18n.t("form.pickDateTime") + '">' + startPresets()) +
+        field(I18n.t("form.end"), '<input id="p-endsAt" name="endsAt" type="text" autocomplete="off" class="input" value="' + toLocalInput(d.endsAt) + '" placeholder="' + I18n.t("form.pickDateTime") + '">') +
         "</div>" +
         '<div class="grid gap-5 sm:grid-cols-2">' +
         field(I18n.t("form.location"), '<input id="p-location" name="location" class="input" value="' + UI.escape(d.location) + '" placeholder="' + I18n.t("form.locationPlaceholder") + '">') +
@@ -176,6 +212,33 @@ export async function organizerForm(id) {
 
 function field(label, control) {
     return '<div><label class="label">' + label + "</label>" + control + "</div>";
+}
+
+function startPresets() {
+    const chip = (key, label) =>
+        '<button type="button" data-preset="' + key + '" class="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 transition hover:bg-brand-100 hover:text-brand-700 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-brand-900/40 dark:hover:text-brand-300"><i class="fa-regular fa-clock mr-1"></i>' + label + "</button>";
+    return (
+        '<div id="start-presets" class="mt-2 flex flex-wrap gap-1.5">' +
+        chip("tonight", I18n.t("form.presetTonight")) +
+        chip("tomorrow", I18n.t("form.presetTomorrow")) +
+        chip("nextweek", I18n.t("form.presetNextWeek")) +
+        "</div>"
+    );
+}
+
+function presetDate(key) {
+    const d = new Date();
+    d.setSeconds(0, 0);
+    if (key === "tonight") {
+        d.setHours(18, 0);
+    } else if (key === "tomorrow") {
+        d.setDate(d.getDate() + 1);
+        d.setHours(9, 0);
+    } else if (key === "nextweek") {
+        d.setDate(d.getDate() + 7);
+        d.setHours(9, 0);
+    }
+    return d;
 }
 
 function previewCard(data) {
@@ -194,17 +257,85 @@ function previewCard(data) {
     );
 }
 
+let formGuard = null;
+
+function draftKey(ev) {
+    return "odyssey_event_draft_" + (ev ? ev.id : "new");
+}
+
 function bindForm(root, user, ev) {
     const form = root.querySelector("#event-form");
     const preview = root.querySelector("#live-preview");
+    const startInput = root.querySelector("#p-startsAt");
+    const endInput = root.querySelector("#p-endsAt");
+    const key = draftKey(ev);
+    let dirty = false;
+    let fpStart = null;
+    let fpEnd = null;
+
     const read = () => Object.fromEntries(new FormData(form).entries());
     const render = () => (preview.innerHTML = previewCard(read()));
+
+    function setField(input, value) {
+        input.value = value;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    if (!ev) {
+        try {
+            const saved = JSON.parse(localStorage.getItem(key) || "null");
+            if (saved && (saved.title || saved.description || saved.location || saved.url || saved.startsAt)) {
+                Object.keys(saved).forEach((k) => {
+                    const el = form.querySelector('[name="' + k + '"]');
+                    if (el) el.value = saved[k];
+                });
+                UI.toast(I18n.t("form.draftRestored"), "info");
+            }
+        } catch (e) { }
+    }
+
     render();
+
     import("choices.js").then(({ default: Choices }) => {
         new Choices(root.querySelector("#p-category"), { searchEnabled: false, shouldSort: false, itemSelectText: "", allowHTML: false });
     }).catch(() => { });
-    form.addEventListener("input", render);
-    form.addEventListener("change", render);
+
+    import("flatpickr").then(({ default: flatpickr }) => {
+        const opts = { enableTime: true, time_24hr: true, minuteIncrement: 5, dateFormat: "Y-m-d\\TH:i", altInput: true, altFormat: "D, d M Y · H:i", disableMobile: true, onChange: render };
+        fpStart = flatpickr(startInput, Object.assign({}, opts, { minDate: "today" }));
+        fpEnd = flatpickr(endInput, opts);
+    }).catch(() => { });
+
+    root.querySelectorAll("#start-presets [data-preset]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const start = presetDate(btn.getAttribute("data-preset"));
+            const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+            if (fpStart) fpStart.setDate(start, true);
+            else setField(startInput, toLocalInput(start));
+            if (!endInput.value) {
+                if (fpEnd) fpEnd.setDate(end, true);
+                else setField(endInput, toLocalInput(end));
+            }
+            dirty = true;
+        });
+    });
+
+    const autosave = () => {
+        dirty = true;
+        if (!ev) {
+            try { localStorage.setItem(key, JSON.stringify(read())); } catch (e) { }
+        }
+    };
+    form.addEventListener("input", () => { render(); autosave(); });
+    form.addEventListener("change", () => { render(); autosave(); });
+
+    if (formGuard) window.removeEventListener("beforeunload", formGuard);
+    formGuard = (e) => {
+        if (!document.body.contains(form) || !dirty) return;
+        e.preventDefault();
+        e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", formGuard);
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -219,6 +350,8 @@ function bindForm(root, user, ev) {
                 await API.createEvent(user.id, data);
                 UI.toast(I18n.t("form.draftCreated"), "success");
             }
+            dirty = false;
+            try { localStorage.removeItem(key); } catch (err) { }
             Router.navigate("/organizer");
         } catch (err) {
             UI.toast(err.message, "error");
