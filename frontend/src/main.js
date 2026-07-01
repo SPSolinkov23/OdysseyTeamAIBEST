@@ -5,13 +5,15 @@ import { renderNav, updateBell } from "./core/nav.js";
 import { refreshNotifications } from "./core/notifications.js";
 import { initAos } from "./core/anim.js";
 import { initScroll } from "./core/scroll.js";
-import { Tour } from "./features/tour.js";
+import { initStatus } from "./features/status.js";
 import { I18n } from "./core/i18n.js";
 import { Theme } from "./core/theme.js";
+import { UI } from "./core/ui.js";
 
 async function boot() {
     document.documentElement.lang = I18n.get();
     Theme.apply(Theme.get());
+    await UI.initDates();
     await Auth.restore();
     await initAos();
     initScroll();
@@ -20,13 +22,13 @@ async function boot() {
     Bus.on("auth", refreshNotifications);
     Bus.on("route", renderNav);
     Bus.on("notifications", updateBell);
-    Bus.on("lang", () => { renderNav(); Router.handle(); });
-    Bus.on("theme", renderNav);
-
-    Bus.on("route", (path) => {
-        const u = Auth.current();
-        if (u && (path === "/events" || path === "/organizer")) Tour.maybeStart(u);
+    Bus.on("lang", () => {
+        const run = () => { renderNav(); return Router.handle(); };
+        const reduce = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (typeof document.startViewTransition === "function" && !reduce) document.startViewTransition(run);
+        else run();
     });
+    Bus.on("theme", renderNav);
 
     window.addEventListener("popstate", () => Router.handle());
 
@@ -43,6 +45,8 @@ async function boot() {
 
     if (Auth.current()) refreshNotifications();
     setInterval(refreshNotifications, 30000);
+
+    initStatus();
 }
 
 if (document.readyState === "loading") {
