@@ -1,6 +1,8 @@
 using SchoolEvents.Data;
+using SchoolEvents.Data.Messaging;
 using SchoolEvents.Worker;
 using SchoolEvents.Worker.Email;
+using SchoolEvents.Worker.Messaging;
 using SchoolEvents.Worker.Options;
 using Serilog;
  

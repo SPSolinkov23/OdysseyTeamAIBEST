@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolEvents.Api.Dtos;
 using SchoolEvents.Api.Infrastructure;
+using SchoolEvents.Api.Messaging;
 using SchoolEvents.Data;
 using SchoolEvents.Data.Entities;
 using SchoolEvents.Data.Notifications;

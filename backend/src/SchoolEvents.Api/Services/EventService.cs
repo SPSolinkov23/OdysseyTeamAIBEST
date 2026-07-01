@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using SchoolEvents.Api.Dtos;
 using SchoolEvents.Api.Infrastructure;
+using SchoolEvents.Api.Messaging;
 using SchoolEvents.Data;
 using SchoolEvents.Data.Entities;
 using SchoolEvents.Data.Notifications;
@@ -236,6 +237,7 @@ public class EventService
         await using var tx = await _db.Database.BeginTransactionAsync();
  
         var ev = await LoadOwnedAsync(id, organizerId);
+        var notifiedAttendees = false;
         if (ev.Status != EventStatus.Cancelled)
         {
             var affected = await _db.Registrations
@@ -281,6 +283,10 @@ public class EventService
         }
  
         await tx.CommitAsync();
+
+        if (notifiedAttendees)
+            _jobQueue.NotifyJobReady();
+
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
  

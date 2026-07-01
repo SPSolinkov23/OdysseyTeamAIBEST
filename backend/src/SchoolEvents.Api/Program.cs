@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using SchoolEvents.Api;
 using SchoolEvents.Api.Auth;
 using SchoolEvents.Api.Infrastructure;
+using SchoolEvents.Api.Messaging;
 using SchoolEvents.Api.Services;
 using SchoolEvents.Data;
 using Serilog;

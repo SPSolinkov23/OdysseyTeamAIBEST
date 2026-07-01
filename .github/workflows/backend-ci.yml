@@ -1,0 +1,35 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ "**" ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository code
+      uses: actions/checkout@v4
+
+    - name: Set up .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x' 
+
+    - name: Restore dependencies
+      run: dotnet restore backend/SchoolEvents.sln
+
+    - name: Build the solution
+      run: dotnet build backend/SchoolEvents.sln --no-restore --configuration Release
+
+    - name: Run tests
+      run: dotnet test backend/SchoolEvents.sln --no-build --verbosity normal
