@@ -60,7 +60,7 @@ async function getSwal() {
 }
 
 function escape(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]));
 }
 
 function fmtDate(iso) {
@@ -114,12 +114,12 @@ function notifText(n) {
 
 function regBadge(status) {
     const m = REG_STATUS[status] || REG_STATUS.CANCELLED;
-    return '<span class="badge bg-' + m.color + '-100 text-' + m.color + '-700 ring-' + m.color + '-200"><i class="fa-solid ' + m.icon + '"></i>' + I18n.t(m.labelKey) + "</span>";
+    return "<span class=\"badge bg-" + m.color + "-100 text-" + m.color + "-700 ring-" + m.color + "-200\"><i class=\"fa-solid " + m.icon + "\"></i>" + I18n.t(m.labelKey) + "</span>";
 }
 
 function eventBadge(status) {
     const m = EVENT_STATUS[status] || EVENT_STATUS.DRAFT;
-    return '<span class="badge bg-' + m.color + '-100 text-' + m.color + '-700 ring-' + m.color + '-200"><i class="fa-solid ' + m.icon + '"></i>' + I18n.t(m.labelKey) + "</span>";
+    return "<span class=\"badge bg-" + m.color + "-100 text-" + m.color + "-700 ring-" + m.color + "-200\"><i class=\"fa-solid " + m.icon + "\"></i>" + I18n.t(m.labelKey) + "</span>";
 }
 
 function toast(message, type) {
@@ -127,7 +127,7 @@ function toast(message, type) {
     const t = type || "info";
     getToastify().then((Toastify) => {
         Toastify({
-            text: '<span class="ot-ico"><i class="fa-solid ' + (icons[t] || icons.info) + '"></i></span><span class="ot-msg">' + escape(message) + "</span>",
+            text: "<span class=\"ot-ico\"><i class=\"fa-solid " + (icons[t] || icons.info) + "\"></i></span><span class=\"ot-msg\">" + escape(message) + "</span>",
             escapeMarkup: false,
             className: "ot ot--" + t,
             duration: 4200,
@@ -175,22 +175,22 @@ async function alertDialog(opts) {
 
 function empty(o) {
     return (
-        '<div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white/60 px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-800/40" data-aos="zoom-in">' +
-        '<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-2xl text-brand-500 dark:bg-brand-900/30 dark:text-brand-400"><i class="fa-solid ' + (o.icon || "fa-inbox") + '"></i></div>' +
-        '<h3 class="font-display text-lg font-semibold text-slate-800 dark:text-slate-100">' + escape(o.title || I18n.t("ui.nothingHere")) + "</h3>" +
-        '<p class="mt-1 max-w-sm text-sm text-slate-500 dark:text-slate-400">' + escape(o.text || "") + "</p>" +
-        (o.actionHtml ? '<div class="mt-5">' + o.actionHtml + "</div>" : "") +
+        "<div class=\"flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white/60 px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-800/40\" data-aos=\"zoom-in\">" +
+        "<div class=\"mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-2xl text-brand-500 dark:bg-brand-900/30 dark:text-brand-400\"><i class=\"fa-solid " + (o.icon || "fa-inbox") + "\"></i></div>" +
+        "<h3 class=\"font-display text-lg font-semibold text-slate-800 dark:text-slate-100\">" + escape(o.title || I18n.t("ui.nothingHere")) + "</h3>" +
+        "<p class=\"mt-1 max-w-sm text-sm text-slate-500 dark:text-slate-400\">" + escape(o.text || "") + "</p>" +
+        (o.actionHtml ? "<div class=\"mt-5\">" + o.actionHtml + "</div>" : "") +
         "</div>"
     );
 }
 
 function guard(title, text) {
     return (
-        '<section class="container-app py-20"><div class="mx-auto max-w-lg rounded-2xl border border-rose-100 bg-white p-10 text-center shadow-soft dark:border-rose-900/30 dark:bg-slate-800" data-aos="flip-up">' +
-        '<div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50 text-2xl text-rose-500 dark:bg-rose-900/30"><i class="fa-solid fa-lock"></i></div>' +
-        '<h2 class="font-display text-2xl font-bold text-slate-800 dark:text-slate-100">' + escape(title) + "</h2>" +
-        '<p class="mt-2 text-slate-500 dark:text-slate-400">' + escape(text) + "</p>" +
-        '<a href="/" class="btn-primary mt-6"><i class="fa-solid fa-house"></i> ' + I18n.t("ui.goHome") + '</a></div></section>'
+        "<section class=\"container-app py-20\"><div class=\"mx-auto max-w-lg rounded-2xl border border-rose-100 bg-white p-10 text-center shadow-soft dark:border-rose-900/30 dark:bg-slate-800\" data-aos=\"flip-up\">" +
+        "<div class=\"mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50 text-2xl text-rose-500 dark:bg-rose-900/30\"><i class=\"fa-solid fa-lock\"></i></div>" +
+        "<h2 class=\"font-display text-2xl font-bold text-slate-800 dark:text-slate-100\">" + escape(title) + "</h2>" +
+        "<p class=\"mt-2 text-slate-500 dark:text-slate-400\">" + escape(text) + "</p>" +
+        "<a href=\"/\" class=\"btn-primary mt-6\"><i class=\"fa-solid fa-house\"></i> " + I18n.t("ui.goHome") + "</a></div></section>"
     );
 }
 
@@ -203,7 +203,7 @@ function progressBar(value, max, color) {
     const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
     const c = color || "brand";
     return (
-        '<div class="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700"><div class="h-full rounded-full bg-' + c + '-500 transition-all duration-700" style="width:' + pct + '%"></div></div>'
+        "<div class=\"h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700\"><div class=\"h-full rounded-full bg-" + c + "-500 transition-all duration-700\" style=\"width:" + pct + "%\"></div></div>"
     );
 }
 

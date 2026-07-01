@@ -6,19 +6,19 @@ const TOURS_KEY = "odyssey_school_events_tours";
 
 const STEPS = {
     student: [
-        { el: '#nav a[href="/"]', placement: "bottom-start", icon: "fa-hand-sparkles", key: "tour.student.1" },
-        { el: '#nav a[href="/events"]', placement: "bottom", icon: "fa-compass", key: "tour.student.2" },
+        { el: "#nav a[href=\"/\"]", placement: "bottom-start", icon: "fa-hand-sparkles", key: "tour.student.1" },
+        { el: "#nav a[href=\"/events\"]", placement: "bottom", icon: "fa-compass", key: "tour.student.2" },
         { el: "#ev-search", placement: "bottom", icon: "fa-magnifying-glass", key: "tour.student.3" },
         { el: "[data-register]", placement: "top", icon: "fa-bolt", key: "tour.student.4" },
-        { el: '#nav a[href="/my-registrations"]', placement: "bottom", icon: "fa-ticket", key: "tour.student.5" },
-        { el: '#nav a[href="/notifications"]', placement: "bottom-end", icon: "fa-bell", key: "tour.student.6" },
+        { el: "#nav a[href=\"/my-registrations\"]", placement: "bottom", icon: "fa-ticket", key: "tour.student.5" },
+        { el: "#nav a[href=\"/notifications\"]", placement: "bottom-end", icon: "fa-bell", key: "tour.student.6" },
     ],
     organizer: [
-        { el: '#nav a[href="/"]', placement: "bottom-start", icon: "fa-hand-sparkles", key: "tour.organizer.1" },
-        { el: '#nav a[href="/organizer/new"]', placement: "bottom", icon: "fa-plus", key: "tour.organizer.2" },
+        { el: "#nav a[href=\"/\"]", placement: "bottom-start", icon: "fa-hand-sparkles", key: "tour.organizer.1" },
+        { el: "#nav a[href=\"/organizer/new\"]", placement: "bottom", icon: "fa-plus", key: "tour.organizer.2" },
         { el: "[data-publish]", placement: "top", icon: "fa-paper-plane", key: "tour.organizer.3" },
-        { el: '[href^="/organizer/events/"]', placement: "top", icon: "fa-users", key: "tour.organizer.4" },
-        { el: '#nav a[href="/notifications"]', placement: "bottom-end", icon: "fa-bell", key: "tour.organizer.5" },
+        { el: "[href^=\"/organizer/events/\"]", placement: "top", icon: "fa-users", key: "tour.organizer.4" },
+        { el: "#nav a[href=\"/notifications\"]", placement: "bottom-end", icon: "fa-bell", key: "tour.organizer.5" },
     ],
 };
 
@@ -69,17 +69,17 @@ function buildContent(step) {
     const wrap = document.createElement("div");
     wrap.className = "w-72 p-1";
     wrap.innerHTML =
-        '<div class="flex items-center gap-2.5"><span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300"><i class="fa-solid ' + step.icon + '"></i></span>' +
-        '<h4 class="font-display text-sm font-bold text-slate-800 dark:text-slate-100">' + I18n.t(step.key + ".title") + "</h4></div>" +
-        '<p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">' + I18n.t(step.key + ".text") + "</p>" +
-        '<div class="mt-4 flex items-center justify-between">' +
-        '<button data-skip class="text-xs font-medium text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">' + I18n.t("tour.skip") + '</button>' +
-        '<div class="flex items-center gap-1.5">' +
-        steps.map((_, i) => '<span class="h-1.5 rounded-full transition-all ' + (i === idx ? "w-4 bg-brand-500" : "w-1.5 bg-slate-200 dark:bg-slate-600") + '"></span>').join("") +
+        "<div class=\"flex items-center gap-2.5\"><span class=\"flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300\"><i class=\"fa-solid " + step.icon + "\"></i></span>" +
+        "<h4 class=\"font-display text-sm font-bold text-slate-800 dark:text-slate-100\">" + I18n.t(step.key + ".title") + "</h4></div>" +
+        "<p class=\"mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300\">" + I18n.t(step.key + ".text") + "</p>" +
+        "<div class=\"mt-4 flex items-center justify-between\">" +
+        "<button data-skip class=\"text-xs font-medium text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300\">" + I18n.t("tour.skip") + "</button>" +
+        "<div class=\"flex items-center gap-1.5\">" +
+        steps.map((_, i) => "<span class=\"h-1.5 rounded-full transition-all " + (i === idx ? "w-4 bg-brand-500" : "w-1.5 bg-slate-200 dark:bg-slate-600") + "\"></span>").join("") +
         "</div>" +
-        '<div class="flex gap-1.5">' +
-        (idx > 0 ? '<button data-prev class="btn-secondary btn-sm">' + I18n.t("tour.back") + '</button>' : "") +
-        '<button data-next class="btn-primary btn-sm">' + (isLast ? I18n.t("tour.done") : I18n.t("tour.next")) + "</button>" +
+        "<div class=\"flex gap-1.5\">" +
+        (idx > 0 ? "<button data-prev class=\"btn-secondary btn-sm\">" + I18n.t("tour.back") + "</button>" : "") +
+        "<button data-next class=\"btn-primary btn-sm\">" + (isLast ? I18n.t("tour.done") : I18n.t("tour.next")) + "</button>" +
         "</div></div>";
 
     wrap.querySelector("[data-skip]").addEventListener("click", finish);

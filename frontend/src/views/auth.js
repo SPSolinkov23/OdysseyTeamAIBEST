@@ -13,15 +13,15 @@ const TAB_ON = "rounded-lg bg-white py-2.5 text-center text-sm font-semibold tex
 const TAB_OFF = "rounded-lg py-2.5 text-center text-sm font-semibold text-slate-500 transition hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200";
 
 function roleCard(value, icon, label, active) {
-    return '<button type="button" data-role="' + value + '" class="' + ROLE_BASE + " " + (active ? ROLE_ON : ROLE_OFF) + '"><i class="fa-solid ' + icon + '"></i>' + label + "</button>";
+    return "<button type=\"button\" data-role=\"" + value + "\" class=\"" + ROLE_BASE + " " + (active ? ROLE_ON : ROLE_OFF) + "\"><i class=\"fa-solid " + icon + "\"></i>" + label + "</button>";
 }
 
 function inputField(opts) {
     return (
-        '<div><label class="label" for="' + opts.id + '">' + opts.label + "</label>" +
-        '<div class="relative">' +
-        '<i class="fa-solid ' + opts.icon + ' pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>' +
-        '<input id="' + opts.id + '" name="' + opts.name + '"' + (opts.type ? ' type="' + opts.type + '"' : "") + ' class="input pl-11' + (opts.extraClass ? " " + opts.extraClass : "") + '" placeholder="' + opts.placeholder + '" autocomplete="' + opts.autocomplete + '">' +
+        "<div><label class=\"label\" for=\"" + opts.id + "\">" + opts.label + "</label>" +
+        "<div class=\"relative\">" +
+        "<i class=\"fa-solid " + opts.icon + " pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400\"></i>" +
+        "<input id=\"" + opts.id + "\" name=\"" + opts.name + "\"" + (opts.type ? " type=\"" + opts.type + "\"" : "") + " class=\"input pl-11" + (opts.extraClass ? " " + opts.extraClass : "") + "\" placeholder=\"" + opts.placeholder + "\" autocomplete=\"" + opts.autocomplete + "\">" +
         (opts.trailing || "") +
         "</div>" + (opts.below || "") + "</div>"
     );
@@ -30,34 +30,34 @@ function inputField(opts) {
 export function auth(mode) {
     const isLogin = mode !== "register";
     const passToggle =
-        '<button type="button" id="toggle-pass" class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 transition hover:text-brand-600"><i class="fa-solid fa-eye"></i></button>';
+        "<button type=\"button\" id=\"toggle-pass\" class=\"absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 transition hover:text-brand-600\"><i class=\"fa-solid fa-eye\"></i></button>";
     const passMeter = isLogin
         ? ""
-        : '<div id="pass-meter" class="mt-2 hidden"><div class="flex gap-1">' +
-          '<span class="pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700"></span><span class="pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700"></span><span class="pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700"></span><span class="pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700"></span>' +
-          '</div><p id="pass-label" class="mt-1 text-xs font-medium text-slate-400"></p></div>';
+        : "<div id=\"pass-meter\" class=\"mt-2 hidden\"><div class=\"flex gap-1\">" +
+          "<span class=\"pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700\"></span><span class=\"pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700\"></span><span class=\"pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700\"></span><span class=\"pass-seg h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700\"></span>" +
+          "</div><p id=\"pass-label\" class=\"mt-1 text-xs font-medium text-slate-400\"></p></div>";
 
     const html =
-        '<section class="relative isolate flex min-h-[calc(100vh-9rem)] items-center justify-center overflow-hidden px-4 py-10">' +
-        '<div class="absolute inset-0 -z-10 bg-gradient-to-br from-brand-50 via-white to-sky-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900"></div>' +
-        '<div class="absolute inset-0 -z-10 bg-hero-grid bg-grid-dots opacity-60 dark:bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.14)_1px,transparent_0)]"></div>' +
-        '<div class="auth-card card w-full max-w-md p-8" data-mode="' + (isLogin ? "login" : "register") + '">' +
-        '<div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-600 to-sky-500 text-white shadow-soft"><i class="fa-solid fa-graduation-cap text-xl"></i></div>' +
-        '<p class="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">' + (isLogin ? I18n.t("auth.signInSub") : I18n.t("auth.createSub")) + "</p>" +
-        '<div class="mt-5 grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1 dark:bg-slate-700/50">' +
-        '<a href="/login" class="' + (isLogin ? TAB_ON : TAB_OFF) + '">' + I18n.t("auth.signInBtn") + "</a>" +
-        '<a href="/register" class="' + (!isLogin ? TAB_ON : TAB_OFF) + '">' + I18n.t("auth.signUpBtn") + "</a>" +
+        "<section class=\"relative isolate flex min-h-[calc(100vh-9rem)] items-center justify-center overflow-hidden px-4 py-10\">" +
+        "<div class=\"absolute inset-0 -z-10 bg-gradient-to-br from-brand-50 via-white to-sky-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900\"></div>" +
+        "<div class=\"absolute inset-0 -z-10 bg-hero-grid bg-grid-dots opacity-60 dark:bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.14)_1px,transparent_0)]\"></div>" +
+        "<div class=\"auth-card card w-full max-w-md p-8\" data-mode=\"" + (isLogin ? "login" : "register") + "\">" +
+        "<div class=\"mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-600 to-sky-500 text-white shadow-soft\"><i class=\"fa-solid fa-graduation-cap text-xl\"></i></div>" +
+        "<p class=\"mt-4 text-center text-sm text-slate-500 dark:text-slate-400\">" + (isLogin ? I18n.t("auth.signInSub") : I18n.t("auth.createSub")) + "</p>" +
+        "<div class=\"mt-5 grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1 dark:bg-slate-700/50\">" +
+        "<a href=\"/login\" class=\"" + (isLogin ? TAB_ON : TAB_OFF) + "\">" + I18n.t("auth.signInBtn") + "</a>" +
+        "<a href=\"/register\" class=\"" + (!isLogin ? TAB_ON : TAB_OFF) + "\">" + I18n.t("auth.signUpBtn") + "</a>" +
         "</div>" +
-        '<form id="auth-form" class="mt-6 space-y-4" novalidate>' +
+        "<form id=\"auth-form\" class=\"mt-6 space-y-4\" novalidate>" +
         (isLogin ? "" : inputField({ id: "f-name", name: "name", icon: "fa-user", label: I18n.t("auth.fullName"), placeholder: I18n.t("auth.fullNamePlaceholder"), autocomplete: "name" })) +
         (isLogin
             ? ""
-            : '<div><label class="label">' + I18n.t("auth.registerAs") + '</label>' +
-              '<div class="grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1 dark:bg-slate-700/50">' +
+            : "<div><label class=\"label\">" + I18n.t("auth.registerAs") + "</label>" +
+              "<div class=\"grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1 dark:bg-slate-700/50\">" +
               roleCard("student", "fa-user-graduate", I18n.t("auth.student"), true) +
               roleCard("organizer", "fa-user-tie", I18n.t("auth.organizer"), false) +
-              '</div><input type="hidden" name="role" id="f-role" value="student">' +
-              '<p class="mt-1.5 text-xs text-slate-400">' + I18n.t("auth.organizerNote") + "</p></div>") +
+              "</div><input type=\"hidden\" name=\"role\" id=\"f-role\" value=\"student\">" +
+              "<p class=\"mt-1.5 text-xs text-slate-400\">" + I18n.t("auth.organizerNote") + "</p></div>") +
         inputField({ id: "f-email", name: "email", type: "email", icon: "fa-envelope", label: I18n.t("auth.email"), placeholder: I18n.t("auth.emailPlaceholder"), autocomplete: "email" }) +
         inputField({
             id: "f-pass",
@@ -71,7 +71,7 @@ export function auth(mode) {
             trailing: passToggle,
             below: passMeter,
         }) +
-        '<button type="submit" class="btn-primary mt-1 w-full bg-gradient-to-r from-brand-600 to-sky-500 hover:from-brand-700 hover:to-sky-600"><i class="fa-solid ' + (isLogin ? "fa-right-to-bracket" : "fa-arrow-right") + '"></i>' + (isLogin ? I18n.t("auth.signInBtn") : I18n.t("auth.signUpBtn")) + "</button>" +
+        "<button type=\"submit\" class=\"btn-primary mt-1 w-full bg-gradient-to-r from-brand-600 to-sky-500 hover:from-brand-700 hover:to-sky-600\"><i class=\"fa-solid " + (isLogin ? "fa-right-to-bracket" : "fa-arrow-right") + "\"></i>" + (isLogin ? I18n.t("auth.signInBtn") : I18n.t("auth.signUpBtn")) + "</button>" +
         "</form></div></section>";
 
     return { html: html, onMount: (root) => bind(root, isLogin) };
@@ -136,7 +136,7 @@ function bind(root, isLogin) {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const submit = form.querySelector('button[type="submit"]');
+        const submit = form.querySelector("button[type=\"submit\"]");
         submit.disabled = true;
         const data = Object.fromEntries(new FormData(form).entries());
         try {

@@ -11,8 +11,8 @@ import { Theme } from "./theme.js";
 
 function themeToggle() {
     const dark = Theme.get() === "dark";
-    return '<button type="button" id="theme-toggle" aria-label="Toggle theme" class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-brand-400">' +
-        '<i class="fa-solid ' + (dark ? "fa-sun" : "fa-moon") + ' text-lg"></i></button>';
+    return "<button type=\"button\" id=\"theme-toggle\" aria-label=\"Toggle theme\" class=\"flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-brand-400\">" +
+        "<i class=\"fa-solid " + (dark ? "fa-sun" : "fa-moon") + " text-lg\"></i></button>";
 }
 
 function prefersReducedMotion() {
@@ -48,9 +48,9 @@ async function setTheme(theme, origin) {
 function langToggle() {
     const cur = I18n.get();
     const btn = (code) =>
-        '<button type="button" data-lang="' + code + '" class="rounded-lg px-2.5 py-1.5 text-xs font-bold uppercase transition ' +
-        (cur === code ? "bg-white text-brand-700 shadow-sm dark:bg-slate-700 dark:text-brand-400" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200") + '">' + code + "</button>";
-    return '<div class="inline-flex items-center rounded-xl bg-slate-100 p-0.5 dark:bg-slate-700/50">' + btn("bg") + btn("en") + "</div>";
+        "<button type=\"button\" data-lang=\"" + code + "\" class=\"rounded-lg px-2.5 py-1.5 text-xs font-bold uppercase transition " +
+        (cur === code ? "bg-white text-brand-700 shadow-sm dark:bg-slate-700 dark:text-brand-400" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200") + "\">" + code + "</button>";
+    return "<div class=\"inline-flex items-center rounded-xl bg-slate-100 p-0.5 dark:bg-slate-700/50\">" + btn("bg") + btn("en") + "</div>";
 }
 
 async function setLang(lang) {
@@ -90,7 +90,7 @@ function isActive(href, cur) {
 function navLink(href, icon, label, cur) {
     const base = "relative inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-900/30 dark:hover:text-brand-400";
     const state = isActive(href, cur) ? "bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400" : "text-slate-600 dark:text-slate-300";
-    return '<a href="' + href + '" class="' + base + ' ' + state + '"><i class="fa-solid ' + icon + '"></i> ' + label + "</a>";
+    return "<a href=\"" + href + "\" class=\"" + base + " " + state + "\"><i class=\"fa-solid " + icon + "\"></i> " + label + "</a>";
 }
 
 function mobileLink(href, icon, label, cur) {
@@ -102,77 +102,77 @@ function mobileLink(href, icon, label, cur) {
         ? "bg-brand-600 text-white"
         : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400";
     return (
-        '<a href="' + href + '" data-mobile-link class="m-link group flex items-center gap-3 rounded-2xl px-3 py-3 text-[15px] font-semibold transition ' + wrap + '">' +
-        '<span class="flex h-10 w-10 flex-none items-center justify-center rounded-xl ' + badge + '"><i class="fa-solid ' + icon + '"></i></span>' +
-        '<span class="flex-1">' + label + '</span>' +
-        '<i class="fa-solid fa-chevron-right text-xs ' + (active ? "text-brand-400" : "text-slate-300 dark:text-slate-600") + '"></i></a>'
+        "<a href=\"" + href + "\" data-mobile-link class=\"m-link group flex items-center gap-3 rounded-2xl px-3 py-3 text-[15px] font-semibold transition " + wrap + "\">" +
+        "<span class=\"flex h-10 w-10 flex-none items-center justify-center rounded-xl " + badge + "\"><i class=\"fa-solid " + icon + "\"></i></span>" +
+        "<span class=\"flex-1\">" + label + "</span>" +
+        "<i class=\"fa-solid fa-chevron-right text-xs " + (active ? "text-brand-400" : "text-slate-300 dark:text-slate-600") + "\"></i></a>"
     );
 }
 
 function bellBadge(n) {
     if (n <= 0) return "";
-    return '<span data-bell-badge class="pointer-events-none absolute -right-0.5 -top-0.5 flex min-w-[18px] items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white ring-2 ring-white">' + (n > 9 ? "9+" : n) + "</span>";
+    return "<span data-bell-badge class=\"pointer-events-none absolute -right-0.5 -top-0.5 flex min-w-[18px] items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white ring-2 ring-white\">" + (n > 9 ? "9+" : n) + "</span>";
 }
 
 function bell() {
     const n = API.unreadCount();
     return (
-        '<div class="relative" id="notif-wrap">' +
-        '<button id="bell-btn" type="button" aria-label="Notifications" aria-haspopup="true" class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-brand-400">' +
-        '<i class="fa-solid fa-bell text-lg"></i>' + bellBadge(n) +
-        '</button>' +
-        '<div id="notif-panel" class="hidden fixed inset-x-2 top-[4.25rem] z-50 origin-top overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-96 dark:border-slate-700 dark:bg-slate-800">' +
-        '<div class="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-3 dark:border-slate-700">' +
-        '<div class="flex items-center gap-2">' +
-        '<span class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400"><i class="fa-solid fa-bell text-sm"></i></span>' +
-        '<h3 class="font-display text-sm font-bold text-slate-800 dark:text-slate-100">' + I18n.t("nav.notifications") + '</h3>' +
-        '</div>' +
-        '<button id="notif-mark-read" type="button" class="hidden inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-brand-600 transition hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-slate-700">' +
-        '<i class="fa-solid fa-check-double"></i> ' + I18n.t("nav.markAllRead") +
-        '</button>' +
-        '</div>' +
-        '<div id="notif-list" class="max-h-[70vh] overflow-y-auto sm:max-h-[28rem]"></div>' +
-        '</div>' +
-        '</div>'
+        "<div class=\"relative\" id=\"notif-wrap\">" +
+        "<button id=\"bell-btn\" type=\"button\" aria-label=\"Notifications\" aria-haspopup=\"true\" class=\"relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-brand-50 hover:text-brand-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-brand-400\">" +
+        "<i class=\"fa-solid fa-bell text-lg\"></i>" + bellBadge(n) +
+        "</button>" +
+        "<div id=\"notif-panel\" class=\"hidden fixed inset-x-2 top-[4.25rem] z-50 origin-top overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-96 dark:border-slate-700 dark:bg-slate-800\">" +
+        "<div class=\"flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-3 dark:border-slate-700\">" +
+        "<div class=\"flex items-center gap-2\">" +
+        "<span class=\"flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400\"><i class=\"fa-solid fa-bell text-sm\"></i></span>" +
+        "<h3 class=\"font-display text-sm font-bold text-slate-800 dark:text-slate-100\">" + I18n.t("nav.notifications") + "</h3>" +
+        "</div>" +
+        "<button id=\"notif-mark-read\" type=\"button\" class=\"hidden inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-brand-600 transition hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-slate-700\">" +
+        "<i class=\"fa-solid fa-check-double\"></i> " + I18n.t("nav.markAllRead") +
+        "</button>" +
+        "</div>" +
+        "<div id=\"notif-list\" class=\"max-h-[70vh] overflow-y-auto sm:max-h-[28rem]\"></div>" +
+        "</div>" +
+        "</div>"
     );
 }
 
 function notifItem(n) {
     const m = notifMeta(n.type);
     return (
-        '<div class="flex items-start gap-3 border-b border-slate-100 px-4 py-3 last:border-b-0 transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-700/50 ' + (n.read ? "" : "bg-brand-50/40 dark:bg-brand-900/20") + '">' +
-        '<span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-' + m.color + "-100 text-" + m.color + '-600"><i class="fa-solid ' + m.icon + '"></i></span>' +
-        '<div class="min-w-0 flex-1">' +
-        '<p class="text-sm leading-snug text-slate-700 dark:text-slate-200">' + UI.escape(UI.notifText(n)) + '</p>' +
-        '<p class="mt-0.5 text-xs text-slate-400 dark:text-slate-500"><i class="fa-regular fa-clock mr-1"></i>' + UI.escape(UI.fmtRelative(n.createdAt)) + '</p>' +
-        '</div>' +
-        (n.read ? "" : '<span class="mt-1.5 h-2 w-2 flex-none rounded-full bg-brand-500" aria-label="Unread"></span>') +
-        '</div>'
+        "<div class=\"flex items-start gap-3 border-b border-slate-100 px-4 py-3 last:border-b-0 transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-700/50 " + (n.read ? "" : "bg-brand-50/40 dark:bg-brand-900/20") + "\">" +
+        "<span class=\"flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-" + m.color + "-100 text-" + m.color + "-600\"><i class=\"fa-solid " + m.icon + "\"></i></span>" +
+        "<div class=\"min-w-0 flex-1\">" +
+        "<p class=\"text-sm leading-snug text-slate-700 dark:text-slate-200\">" + UI.escape(UI.notifText(n)) + "</p>" +
+        "<p class=\"mt-0.5 text-xs text-slate-400 dark:text-slate-500\"><i class=\"fa-regular fa-clock mr-1\"></i>" + UI.escape(UI.fmtRelative(n.createdAt)) + "</p>" +
+        "</div>" +
+        (n.read ? "" : "<span class=\"mt-1.5 h-2 w-2 flex-none rounded-full bg-brand-500\" aria-label=\"Unread\"></span>") +
+        "</div>"
     );
 }
 
 function emptyNotif() {
     return (
-        '<div class="px-6 py-12 text-center">' +
-        '<div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-xl text-brand-500 dark:bg-brand-900/30 dark:text-brand-400"><i class="fa-solid fa-bell-slash"></i></div>' +
-        '<h4 class="font-display text-sm font-semibold text-slate-800 dark:text-slate-100">' + I18n.t("nav.noNotifTitle") + '</h4>' +
-        '<p class="mt-1 text-xs text-slate-500 dark:text-slate-400">' + I18n.t("nav.noNotifText") + '</p>' +
-        '</div>'
+        "<div class=\"px-6 py-12 text-center\">" +
+        "<div class=\"mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-xl text-brand-500 dark:bg-brand-900/30 dark:text-brand-400\"><i class=\"fa-solid fa-bell-slash\"></i></div>" +
+        "<h4 class=\"font-display text-sm font-semibold text-slate-800 dark:text-slate-100\">" + I18n.t("nav.noNotifTitle") + "</h4>" +
+        "<p class=\"mt-1 text-xs text-slate-500 dark:text-slate-400\">" + I18n.t("nav.noNotifText") + "</p>" +
+        "</div>"
     );
 }
 
 function loadingNotif() {
     return (
-        '<div class="space-y-3 p-4">' +
+        "<div class=\"space-y-3 p-4\">" +
         Array.from({ length: 3 }).map(() =>
-            '<div class="flex items-start gap-3">' +
-            '<div class="h-9 w-9 flex-none animate-pulse rounded-xl bg-slate-100 dark:bg-slate-700"></div>' +
-            '<div class="flex-1 space-y-2">' +
-            '<div class="h-3 w-4/5 animate-pulse rounded bg-slate-100 dark:bg-slate-700"></div>' +
-            '<div class="h-3 w-2/5 animate-pulse rounded bg-slate-100 dark:bg-slate-700"></div>' +
-            '</div></div>'
+            "<div class=\"flex items-start gap-3\">" +
+            "<div class=\"h-9 w-9 flex-none animate-pulse rounded-xl bg-slate-100 dark:bg-slate-700\"></div>" +
+            "<div class=\"flex-1 space-y-2\">" +
+            "<div class=\"h-3 w-4/5 animate-pulse rounded bg-slate-100 dark:bg-slate-700\"></div>" +
+            "<div class=\"h-3 w-2/5 animate-pulse rounded bg-slate-100 dark:bg-slate-700\"></div>" +
+            "</div></div>",
         ).join("") +
-        '</div>'
+        "</div>"
     );
 }
 
@@ -188,14 +188,14 @@ function renderNotifList() {
 function avatar(user) {
     const initials = user.name.split(" ").map((p) => p[0]).slice(0, 2).join("");
     return (
-        '<div class="relative" id="user-menu"><button id="user-btn" class="flex items-center gap-2 rounded-xl py-1 pl-1 pr-2 transition hover:bg-slate-100 dark:hover:bg-slate-700">' +
-        '<span class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-sky-500 text-sm font-bold text-white">' + UI.escape(initials) + "</span>" +
-        '<span class="hidden text-left sm:block"><span class="block text-sm font-semibold leading-tight text-slate-800 dark:text-slate-100">' + UI.escape(user.name.split(" ")[0]) + '</span><span class="block text-[11px] leading-tight text-slate-400 dark:text-slate-500">' + (user.role === "organizer" ? I18n.t("nav.roleOrganizer") : I18n.t("nav.roleStudent")) + "</span></span>" +
-        '<i class="fa-solid fa-chevron-down hidden text-xs text-slate-400 sm:inline-block"></i></button>' +
-        '<div id="user-dropdown" class="absolute right-0 z-50 mt-2 hidden w-56 origin-top-right rounded-2xl border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-700 dark:bg-slate-800">' +
-        '<div class="border-b border-slate-100 px-3 py-2 dark:border-slate-700"><div class="text-sm font-semibold text-slate-800 dark:text-slate-100">' + UI.escape(user.name) + '</div><div class="truncate text-xs text-slate-500 dark:text-slate-400">' + UI.escape(user.email) + "</div></div>" +
-        '<button id="tour-btn" class="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"><i class="fa-solid fa-route w-4"></i> ' + I18n.t("nav.replayTour") + '</button>' +
-        '<button id="logout-btn" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20"><i class="fa-solid fa-right-from-bracket w-4"></i> ' + I18n.t("nav.signOut") + '</button>' +
+        "<div class=\"relative\" id=\"user-menu\"><button id=\"user-btn\" class=\"flex items-center gap-2 rounded-xl py-1 pl-1 pr-2 transition hover:bg-slate-100 dark:hover:bg-slate-700\">" +
+        "<span class=\"flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-sky-500 text-sm font-bold text-white\">" + UI.escape(initials) + "</span>" +
+        "<span class=\"hidden text-left sm:block\"><span class=\"block text-sm font-semibold leading-tight text-slate-800 dark:text-slate-100\">" + UI.escape(user.name.split(" ")[0]) + "</span><span class=\"block text-[11px] leading-tight text-slate-400 dark:text-slate-500\">" + (user.role === "organizer" ? I18n.t("nav.roleOrganizer") : I18n.t("nav.roleStudent")) + "</span></span>" +
+        "<i class=\"fa-solid fa-chevron-down hidden text-xs text-slate-400 sm:inline-block\"></i></button>" +
+        "<div id=\"user-dropdown\" class=\"absolute right-0 z-50 mt-2 hidden w-56 origin-top-right rounded-2xl border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-700 dark:bg-slate-800\">" +
+        "<div class=\"border-b border-slate-100 px-3 py-2 dark:border-slate-700\"><div class=\"text-sm font-semibold text-slate-800 dark:text-slate-100\">" + UI.escape(user.name) + "</div><div class=\"truncate text-xs text-slate-500 dark:text-slate-400\">" + UI.escape(user.email) + "</div></div>" +
+        "<button id=\"tour-btn\" class=\"mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700\"><i class=\"fa-solid fa-route w-4\"></i> " + I18n.t("nav.replayTour") + "</button>" +
+        "<button id=\"logout-btn\" class=\"flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20\"><i class=\"fa-solid fa-right-from-bracket w-4\"></i> " + I18n.t("nav.signOut") + "</button>" +
         "</div></div>"
     );
 }
@@ -215,17 +215,17 @@ export function renderNav() {
                 ? [["/organizer", "fa-gauge-high", I18n.t("nav.dashboard")], ["/organizer/new", "fa-plus", I18n.t("nav.newEvent")]]
                 : [["/events", "fa-compass", I18n.t("nav.events")], ["/my-registrations", "fa-ticket", I18n.t("nav.myRegistrations")]];
         if (user.isAdmin) links.push(["/admin", "fa-shield-halved", I18n.t("nav.admin")]);
-        center.innerHTML = '<nav class="hidden items-center gap-1 md:flex">' + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav>";
-        right.innerHTML = '<div class="flex items-center gap-1 sm:gap-1.5">' + themeToggle() + '<span class="hidden sm:inline-flex">' + langToggle() + '</span>' + bell() + avatar(user) + '<button id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu" class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700 md:hidden"><i class="fa-solid fa-bars text-lg"></i></button></div>';
+        center.innerHTML = "<nav class=\"hidden items-center gap-1 md:flex\">" + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav>";
+        right.innerHTML = "<div class=\"flex items-center gap-1 sm:gap-1.5\">" + themeToggle() + "<span class=\"hidden sm:inline-flex\">" + langToggle() + "</span>" + bell() + avatar(user) + "<button id=\"burger\" type=\"button\" aria-label=\"Menu\" aria-expanded=\"false\" aria-controls=\"mobile-menu\" class=\"flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700 md:hidden\"><i class=\"fa-solid fa-bars text-lg\"></i></button></div>";
         mobile.innerHTML =
-            '<div id="mobile-menu" class="md:hidden"><nav class="container-app flex flex-col gap-1 border-t border-slate-200/70 bg-white/95 pb-4 pt-3 backdrop-blur-xl dark:border-slate-700/70 dark:bg-slate-900/95">' +
+            "<div id=\"mobile-menu\" class=\"md:hidden\"><nav class=\"container-app flex flex-col gap-1 border-t border-slate-200/70 bg-white/95 pb-4 pt-3 backdrop-blur-xl dark:border-slate-700/70 dark:bg-slate-900/95\">" +
             links.map((l) => mobileLink(l[0], l[1], l[2], cur)).join("") +
-            '<div class="my-1.5 h-px bg-slate-100 dark:bg-slate-800"></div>' +
-            '<div class="flex items-center justify-between px-1.5 py-1"><span class="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">' + I18n.t("nav.language") + '</span>' + langToggle() + '</div>' +
+            "<div class=\"my-1.5 h-px bg-slate-100 dark:bg-slate-800\"></div>" +
+            "<div class=\"flex items-center justify-between px-1.5 py-1\"><span class=\"text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500\">" + I18n.t("nav.language") + "</span>" + langToggle() + "</div>" +
             "</nav></div>";
     } else {
         center.innerHTML = "";
-        right.innerHTML = '<div class="flex items-center gap-1.5 sm:gap-2">' + themeToggle() + '<span class="hidden sm:inline-flex">' + langToggle() + '</span><a href="/login" class="btn-ghost hidden whitespace-nowrap sm:inline-flex"><i class="fa-solid fa-right-to-bracket"></i> ' + I18n.t("nav.signIn") + '</a><a href="/register" class="btn-primary btn-sm whitespace-nowrap sm:px-4 sm:py-2.5 sm:text-sm sm:rounded-xl">' + I18n.t("nav.createAccount") + '</a></div>';
+        right.innerHTML = "<div class=\"flex items-center gap-1.5 sm:gap-2\">" + themeToggle() + "<span class=\"hidden sm:inline-flex\">" + langToggle() + "</span><a href=\"/login\" class=\"btn-ghost hidden whitespace-nowrap sm:inline-flex\"><i class=\"fa-solid fa-right-to-bracket\"></i> " + I18n.t("nav.signIn") + "</a><a href=\"/register\" class=\"btn-primary btn-sm whitespace-nowrap sm:px-4 sm:py-2.5 sm:text-sm sm:rounded-xl\">" + I18n.t("nav.createAccount") + "</a></div>";
         mobile.innerHTML = "";
     }
 
