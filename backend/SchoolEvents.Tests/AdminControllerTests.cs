@@ -45,9 +45,7 @@ public class AdminControllerTests
     {
         var db = GetInMemoryDbContext();
         
-        // Standard user setup
         db.Users.Add(new User { Id = 1, Email = "admin@school.edu", Role = UserRole.Student });
-        // The C# equivalent of your SQL script to grant admin access
         db.Add(new Admin { UserId = 1, CreatedAt = DateTime.UtcNow });
         
         db.Users.Add(new User { Id = 2, OrganizerStatus = OrganizerStatus.Pending, Email = "pending@test.com" });
