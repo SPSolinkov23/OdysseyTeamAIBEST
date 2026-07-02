@@ -5,6 +5,7 @@ import { Router } from "../core/router.js";
 import { I18n } from "../core/i18n.js";
 import { refreshAos } from "../core/anim.js";
 import { scrollToEl } from "../core/scroll.js";
+import { utcToSofiaInput } from "../core/tz.js";
 
 const CATS = ["Workshop", "Lecture", "Club", "Sports", "Seminar", "Hackathon", "Trip", "Event"];
 
@@ -194,8 +195,8 @@ export async function organizerForm(id) {
         "</div>" +
         field(I18n.t("form.description"), "<textarea id=\"p-description\" name=\"description\" rows=\"4\" class=\"input\" placeholder=\"" + I18n.t("form.descPlaceholder") + "\">" + UI.escape(d.description) + "</textarea>") +
         "<div class=\"grid gap-5 sm:grid-cols-2\">" +
-        field(I18n.t("form.start"), "<input id=\"p-startsAt\" name=\"startsAt\" type=\"text\" autocomplete=\"off\" class=\"input\" value=\"" + toLocalInput(d.startsAt) + "\" placeholder=\"" + I18n.t("form.pickDateTime") + "\">" + startPresets()) +
-        field(I18n.t("form.end"), "<input id=\"p-endsAt\" name=\"endsAt\" type=\"text\" autocomplete=\"off\" class=\"input\" value=\"" + toLocalInput(d.endsAt) + "\" placeholder=\"" + I18n.t("form.pickDateTime") + "\">") +
+        field(I18n.t("form.start"), "<input id=\"p-startsAt\" name=\"startsAt\" type=\"text\" autocomplete=\"off\" class=\"input\" value=\"" + utcToSofiaInput(d.startsAt) + "\" placeholder=\"" + I18n.t("form.pickDateTime") + "\">" + startPresets()) +
+        field(I18n.t("form.end"), "<input id=\"p-endsAt\" name=\"endsAt\" type=\"text\" autocomplete=\"off\" class=\"input\" value=\"" + utcToSofiaInput(d.endsAt) + "\" placeholder=\"" + I18n.t("form.pickDateTime") + "\">") +
         "</div>" +
         "<div class=\"grid gap-5 sm:grid-cols-2\">" +
         field(I18n.t("form.location"), "<input id=\"p-location\" name=\"location\" class=\"input\" value=\"" + UI.escape(d.location) + "\" placeholder=\"" + I18n.t("form.locationPlaceholder") + "\">") +

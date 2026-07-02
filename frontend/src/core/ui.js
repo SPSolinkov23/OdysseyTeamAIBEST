@@ -1,4 +1,5 @@
 import { I18n } from "./i18n.js";
+import { sofiaParts } from "./tz.js";
 
 const months = {
     en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -64,26 +65,32 @@ function escape(s) {
 }
 
 function fmtDate(iso) {
-    const d = new Date(iso);
-    return d.getDate() + " " + (monthsFull[I18n.get()] || monthsFull.en)[d.getMonth()] + " " + d.getFullYear();
+    const d = sofiaParts(iso);
+    if (!d) return "";
+    return d.day + " " + (monthsFull[I18n.get()] || monthsFull.en)[d.month] + " " + d.year;
 }
 
 function fmtTime(iso) {
-    const d = new Date(iso);
-    return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    const d = sofiaParts(iso);
+    if (!d) return "";
+    return String(d.hour).padStart(2, "0") + ":" + String(d.minute).padStart(2, "0");
+}
+
+function sofiaDayKey(iso) {
+    const d = sofiaParts(iso);
+    return d ? d.year * 10000 + d.month * 100 + d.day : NaN;
 }
 
 function fmtRange(startIso, endIso) {
-    const s = new Date(startIso);
-    const e = new Date(endIso || startIso);
-    const sameDay = s.toDateString() === e.toDateString();
+    const sameDay = sofiaDayKey(startIso) === sofiaDayKey(endIso || startIso);
     if (sameDay) return fmtDate(startIso) + " · " + fmtTime(startIso) + "–" + fmtTime(endIso || startIso);
     return fmtDate(startIso) + " " + fmtTime(startIso) + " → " + fmtDate(endIso) + " " + fmtTime(endIso);
 }
 
 function fmtShort(iso) {
-    const d = new Date(iso);
-    return d.getDate() + " " + (months[I18n.get()] || months.en)[d.getMonth()];
+    const d = sofiaParts(iso);
+    if (!d) return "";
+    return d.day + " " + (months[I18n.get()] || months.en)[d.month];
 }
 
 function fmtRelative(iso) {

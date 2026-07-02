@@ -14,7 +14,7 @@ public static class EmailTemplates
 
     private static (string Subject, string Body) BuildEn(string jobType, NotificationPayload p)
     {
-        var when = p.EventStartsAt.ToString("dddd, MMM d, yyyy 'at' h:mm tt 'UTC'", CultureInfo.InvariantCulture);
+        var when = SofiaTime.ToSofia(p.EventStartsAt).ToString("dddd, MMM d, yyyy 'at' h:mm tt '(Sofia time)'", CultureInfo.InvariantCulture);
         var where = string.IsNullOrWhiteSpace(p.EventLocation) ? "" : $"\nLocation: {p.EventLocation}";
 
         return jobType switch
@@ -71,7 +71,7 @@ public static class EmailTemplates
     private static (string Subject, string Body) BuildBg(string jobType, NotificationPayload p)
     {
         var culture = new CultureInfo("bg-BG");
-        var when = p.EventStartsAt.ToString("dddd, d MMMM yyyy 'г.,' HH:mm 'UTC'", culture);
+        var when = SofiaTime.ToSofia(p.EventStartsAt).ToString("dddd, d MMMM yyyy 'г.,' HH:mm '(софийско време)'", culture);
         var where = string.IsNullOrWhiteSpace(p.EventLocation) ? "" : $"\nМясто: {p.EventLocation}";
 
         return jobType switch

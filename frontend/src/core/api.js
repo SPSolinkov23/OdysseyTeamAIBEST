@@ -1,6 +1,7 @@
 import { Store } from "./store.js";
 import { Bus } from "./bus.js";
 import { I18n } from "./i18n.js";
+import { sofiaInputToUtc } from "./tz.js";
 
 async function request(method, path, body) {
     const headers = { Accept: "application/json" };
@@ -59,7 +60,7 @@ function up(s) {
 }
 
 function toIso(localValue) {
-    return localValue ? new Date(localValue).toISOString() : null;
+    return sofiaInputToUtc(localValue);
 }
 
 function mapUser(u) {
