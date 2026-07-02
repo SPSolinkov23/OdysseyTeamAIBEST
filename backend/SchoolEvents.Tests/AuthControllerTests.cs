@@ -6,6 +6,7 @@ using SchoolEvents.Api.Auth;
 using SchoolEvents.Api.Controllers;
 using SchoolEvents.Api.Dtos;
 using SchoolEvents.Api.Infrastructure;
+using SchoolEvents.Api.Messaging;
 using SchoolEvents.Data;
 using SchoolEvents.Data.Entities;
 using Xunit;
@@ -31,12 +32,14 @@ public class AuthControllerTests
         return mock;
     }
 
+    private static IJobQueue GetNullJobQueue() => new NullJobQueue();
+
     [Fact]
     public async Task Register_ShouldCreateStudentUser_WhenRoleIsStudentOrEmpty()
     {
         var db = GetInMemoryDbContext();
         var mockTokens = GetMockTokenService();
-        var controller = new AuthController(db, mockTokens.Object);
+        var controller = new AuthController(db, mockTokens.Object, GetNullJobQueue());
 
         var req = new RegisterRequest
         {
@@ -71,7 +74,7 @@ public class AuthControllerTests
     {
         var db = GetInMemoryDbContext();
         var mockTokens = GetMockTokenService();
-        var controller = new AuthController(db, mockTokens.Object);
+        var controller = new AuthController(db, mockTokens.Object, GetNullJobQueue());
 
         var req = new RegisterRequest
         {
@@ -100,7 +103,7 @@ public class AuthControllerTests
         await db.SaveChangesAsync();
 
         var mockTokens = GetMockTokenService();
-        var controller = new AuthController(db, mockTokens.Object);
+        var controller = new AuthController(db, mockTokens.Object, GetNullJobQueue());
 
         var req = new RegisterRequest
         {
@@ -117,7 +120,7 @@ public class AuthControllerTests
     {
         var db = GetInMemoryDbContext();
         var mockTokens = GetMockTokenService();
-        var controller = new AuthController(db, mockTokens.Object);
+        var controller = new AuthController(db, mockTokens.Object, GetNullJobQueue());
 
         var passwordHash = PasswordHasher.Hash("MySecretPassword");
         db.Users.Add(new User 
@@ -146,7 +149,7 @@ public class AuthControllerTests
     {
         var db = GetInMemoryDbContext();
         var mockTokens = GetMockTokenService();
-        var controller = new AuthController(db, mockTokens.Object);
+        var controller = new AuthController(db, mockTokens.Object, GetNullJobQueue());
 
         var passwordHash = PasswordHasher.Hash("MySecretPassword");
         db.Users.Add(new User 
@@ -171,7 +174,7 @@ public class AuthControllerTests
     {
         var db = GetInMemoryDbContext();
         var mockTokens = GetMockTokenService();
-        var controller = new AuthController(db, mockTokens.Object);
+        var controller = new AuthController(db, mockTokens.Object, GetNullJobQueue());
 
         var result = controller.Logout();
 
