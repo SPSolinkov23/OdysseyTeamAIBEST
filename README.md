@@ -53,7 +53,7 @@
 <hr>
 <h2 align="left">🧒Our team</h2>
 <ul>
-  <li><a href="https://github.com/bogdankehayov">Bogdan Kehayov</a> [Scrum trainer] <br></li>
+  <li><a href="https://github.com/bogdankehayov">Bogdan Kehayov</a> [Mentor] <br></li>
   <li><a href="https://github.com/SotirowwX">Konstantin Sotirov</a> [Front-end developer] <br></li>
   <li><a href="https://github.com/SPSolnikov23">Stilian Solinkov</a> [Front-end developer] <br></li>
   <li><a href="https://github.com/AYAAtanasov23">Aleksey Atanasov</a> [Front-end developer] <br></li>
