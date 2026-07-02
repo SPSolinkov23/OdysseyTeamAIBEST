@@ -10,13 +10,17 @@ namespace SchoolEvents.Api.Auth;
 public class TokenService
 {
     private readonly JwtOptions _options;
+    protected TokenService() 
+    { 
+        _options = null!;
+    }
 
     public TokenService(IOptions<JwtOptions> options)
     {
         _options = options.Value;
     }
 
-    public (string Token, DateTime ExpiresAt) Create(User user)
+    public virtual (string Token, DateTime ExpiresAt) Create(User user)
     {
         var now = DateTime.UtcNow;
         var expiresAt = now.AddMinutes(_options.ExpiresMinutes);
