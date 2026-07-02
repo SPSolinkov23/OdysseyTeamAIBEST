@@ -39,4 +39,5 @@ public static class JobTypes
     public const string OrganizerPending = "OrganizerPending";
     public const string OrganizerApproved = "OrganizerApproved";
     public const string OrganizerRejected = "OrganizerRejected";
+    public const string OrganizerRequestSubmitted = "OrganizerRequestSubmitted";
 }

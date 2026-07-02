@@ -8,16 +8,16 @@ import { I18n } from "./i18n.js";
 function home() {
     const u = Auth.current();
     if (!u) return "/login";
-    return u.role === "organizer" ? "/organizer" : "/events";
+    return "/events";
 }
 
 const routes = [
     { re: /^\/$/, role: "home" },
     { re: /^\/login$/, role: "guest", view: () => import("../views/auth.js").then((m) => m.auth("login")) },
     { re: /^\/register$/, role: "guest", view: () => import("../views/auth.js").then((m) => m.auth("register")) },
-    { re: /^\/events$/, role: "student", view: () => import("../views/student.js").then((m) => m.events()) },
-    { re: /^\/events\/([\w-]+)$/, role: "student", view: (m) => import("../views/student.js").then((mod) => mod.eventDetail(m[1])) },
-    { re: /^\/my-registrations$/, role: "student", view: () => import("../views/student.js").then((m) => m.myRegistrations()) },
+    { re: /^\/events$/, role: "any", view: () => import("../views/student.js").then((m) => m.events()) },
+    { re: /^\/events\/([\w-]+)$/, role: "any", view: (m) => import("../views/student.js").then((mod) => mod.eventDetail(m[1])) },
+    { re: /^\/my-registrations$/, role: "any", view: () => import("../views/student.js").then((m) => m.myRegistrations()) },
     { re: /^\/organizer$/, role: "organizer", view: () => import("../views/organizer.js").then((m) => m.organizer()) },
     { re: /^\/organizer\/new$/, role: "organizer", view: () => import("../views/organizer.js").then((m) => m.organizerForm()) },
     { re: /^\/organizer\/events\/([\w-]+)\/edit$/, role: "organizer", view: (m) => import("../views/organizer.js").then((mod) => mod.organizerForm(m[1])) },
