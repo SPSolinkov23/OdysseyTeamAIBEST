@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolEvents.Api.Dtos;
 using SchoolEvents.Api.Infrastructure;
+using SchoolEvents.Api.Messaging;
 using SchoolEvents.Data;
 using SchoolEvents.Data.Entities;
 using SchoolEvents.Data.Notifications;
@@ -10,12 +11,14 @@ namespace SchoolEvents.Api.Services;
 public class RegistrationService
 {
     private readonly SchoolEventsDbContext _db;
+    private readonly IJobQueue _jobQueue;
 
-    protected RegistrationService() {_db = null!;}
+    protected RegistrationService() { _db = null!; _jobQueue = null!; }
 
-    public RegistrationService(SchoolEventsDbContext db)
+    public RegistrationService(SchoolEventsDbContext db, IJobQueue jobQueue)
     {
         _db = db;
+        _jobQueue = jobQueue;
     }
 
     public virtual async Task<RegistrationDto> RegisterAsync(long eventId, long userId)
@@ -72,6 +75,8 @@ public class RegistrationService
 
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
+
+        _jobQueue.NotifyJobReady();
 
         return new RegistrationDto
         {
@@ -133,6 +138,9 @@ public class RegistrationService
 
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
+
+        if (promoted is not null)
+            _jobQueue.NotifyJobReady();
 
         return new CancelResult { PromotedRegistration = promoted };
     }

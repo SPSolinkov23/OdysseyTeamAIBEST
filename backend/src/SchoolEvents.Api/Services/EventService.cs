@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using SchoolEvents.Api.Dtos;
 using SchoolEvents.Api.Infrastructure;
+using SchoolEvents.Api.Messaging;
 using SchoolEvents.Data;
 using SchoolEvents.Data.Entities;
 using SchoolEvents.Data.Notifications;
@@ -11,12 +12,14 @@ namespace SchoolEvents.Api.Services;
 public class EventService
 {
     private readonly SchoolEventsDbContext _db;
+    private readonly IJobQueue _jobQueue;
 
-   protected EventService() { _db = null!; }
+    protected EventService() { _db = null!; _jobQueue = null!; }
 
-    public EventService(SchoolEventsDbContext db)
+    public EventService(SchoolEventsDbContext db, IJobQueue jobQueue)
     {
         _db = db;
+        _jobQueue = jobQueue;
     }
 
     private static readonly Expression<Func<Event, EventDto>> ToDto = e => new EventDto
@@ -212,12 +215,14 @@ public class EventService
         await using var tx = await _db.Database.BeginTransactionAsync();
 
         var ev = await LoadOwnedAsync(id, organizerId);
+        var notifiedAttendees = false;
         if (ev.Status != EventStatus.Cancelled)
         {
             var affected = await _db.Registrations
                 .Include(r => r.User)
                 .Where(r => r.EventId == id && r.Status != RegistrationStatus.Cancelled)
                 .ToListAsync();
+            notifiedAttendees = affected.Count > 0;
 
             foreach (var r in affected)
             {
@@ -250,6 +255,10 @@ public class EventService
         }
 
         await tx.CommitAsync();
+
+        if (notifiedAttendees)
+            _jobQueue.NotifyJobReady();
+
         return await GetAsync(ev.Id, organizerId, callerIsOrganizer: true);
     }
 

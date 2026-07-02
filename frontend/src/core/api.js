@@ -18,7 +18,7 @@ async function request(method, path, body) {
             body: body !== undefined ? JSON.stringify(body) : undefined,
         });
     } catch (e) {
-        throw new Error(I18n.t("api.cantReach"));
+        throw new Error(I18n.t("api.cantReach"), { cause: e });
     }
 
     const text = await res.text();
@@ -81,7 +81,7 @@ function mapUser(u) {
 function mapEvent(e) {
     const confirmed = e.confirmed_count || 0;
     const seats = e.seats_available != null ? e.seats_available : Math.max(0, (e.capacity || 0) - confirmed);
-    
+
     return {
         id: e.id,
         organizerId: e.organizer_id,

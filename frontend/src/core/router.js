@@ -32,8 +32,8 @@ function notFound() {
 
 function loader() {
     return (
-        '<section class="container-app flex items-center justify-center py-32">' +
-        '<span class="inline-flex h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-brand-500 dark:border-slate-700 dark:border-t-brand-400"></span>' +
+        "<section class=\"container-app flex items-center justify-center py-32\">" +
+        "<span class=\"inline-flex h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-brand-500 dark:border-slate-700 dark:border-t-brand-400\"></span>" +
         "</section>"
     );
 }
