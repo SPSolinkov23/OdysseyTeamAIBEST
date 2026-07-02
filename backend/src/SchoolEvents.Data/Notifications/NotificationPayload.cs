@@ -15,6 +15,9 @@ public class NotificationPayload
     public string? EventLocation { get; set; }
 
     public int? WaitlistPosition { get; set; }
+
+    public string? ActorName { get; set; }
+    public string? ActorEmail { get; set; }
 }
 
 public static class NotificationJson

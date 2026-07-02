@@ -72,7 +72,36 @@ public class AuthController : ControllerBase
         _db.Notifications.Add(AppNotifications.Welcome(user.Id, user.DisplayName));
 
         if (appliedAsOrganizer)
+        {
             _db.Notifications.Add(AppNotifications.OrganizerPending(user.Id));
+
+            var admins = await _db.Admins
+                .Where(a => a.User != null)
+                .Select(a => a.User!)
+                .ToListAsync();
+
+            foreach (var admin in admins)
+            {
+                _db.Notifications.Add(AppNotifications.OrganizerRequestSubmitted(admin.Id, user.DisplayName));
+
+                _db.NotificationJobs.Add(new NotificationJob
+                {
+                    Type = JobTypes.OrganizerRequestSubmitted,
+                    Payload = NotificationJson.Serialize(new NotificationPayload
+                    {
+                        UserId = admin.Id,
+                        Email = admin.Email,
+                        Name = admin.DisplayName,
+                        Language = admin.Language,
+                        ActorName = user.DisplayName,
+                        ActorEmail = user.Email,
+                    }),
+                    Status = JobStatus.Pending,
+                    MaxAttempts = 5,
+                    AvailableAt = DateTime.UtcNow,
+                });
+            }
+        }
 
         await _db.SaveChangesAsync();
 

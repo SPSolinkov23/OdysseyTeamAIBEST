@@ -295,6 +295,7 @@ const DICT = {
         "notif.OrganizerPending": "You've applied to become an organizer. Your request is pending approval from an administrator.",
         "notif.OrganizerApproved": "Your organizer request was approved! You now have organizer access.",
         "notif.OrganizerRejected": "Your organizer request was declined. Your account stays as a student account.",
+        "notif.OrganizerRequestSubmitted": "New organizer request from {name} is awaiting your review.",
     },
 
     bg: {
@@ -587,6 +588,7 @@ const DICT = {
         "notif.OrganizerPending": "Кандидатства за организатор. Заявката ти очаква одобрение от администратор.",
         "notif.OrganizerApproved": "Заявката ти за организатор е одобрена! Вече имаш достъп на организатор.",
         "notif.OrganizerRejected": "Заявката ти за организатор е отхвърлена. Акаунтът ти остава ученически.",
+        "notif.OrganizerRequestSubmitted": "Нова заявка за организатор от {name} очаква преглед.",
     },
 };
 

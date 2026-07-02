@@ -75,6 +75,7 @@ const NOTIF_META = {
     OrganizerPending: { icon: "fa-user-clock", color: "amber" },
     OrganizerApproved: { icon: "fa-user-check", color: "emerald" },
     OrganizerRejected: { icon: "fa-user-xmark", color: "rose" },
+    OrganizerRequestSubmitted: { icon: "fa-user-plus", color: "brand" },
 };
 
 function notifMeta(type) {
@@ -212,7 +213,7 @@ export function renderNav() {
     if (user) {
         const links =
             user.role === "organizer"
-                ? [["/organizer", "fa-gauge-high", I18n.t("nav.dashboard")], ["/organizer/new", "fa-plus", I18n.t("nav.newEvent")]]
+                ? [["/organizer/new", "fa-plus", I18n.t("nav.newEvent")], ["/events", "fa-compass", I18n.t("nav.events")], ["/my-registrations", "fa-ticket", I18n.t("nav.myRegistrations")], ["/organizer", "fa-gauge-high", I18n.t("nav.dashboard")]]
                 : [["/events", "fa-compass", I18n.t("nav.events")], ["/my-registrations", "fa-ticket", I18n.t("nav.myRegistrations")]];
         if (user.isAdmin) links.push(["/admin", "fa-shield-halved", I18n.t("nav.admin")]);
         center.innerHTML = "<nav class=\"hidden items-center gap-1 md:flex\">" + links.map((l) => navLink(l[0], l[1], l[2], cur)).join("") + "</nav>";

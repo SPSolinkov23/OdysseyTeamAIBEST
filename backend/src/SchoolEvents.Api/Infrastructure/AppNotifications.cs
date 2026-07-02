@@ -75,4 +75,14 @@ public static class AppNotifications
         Message = "Your organizer request was declined. Your account stays as a student account.",
         IsRead = false,
     };
+
+    public static Notification OrganizerRequestSubmitted(long adminUserId, string applicantName) => new()
+    {
+        UserId = adminUserId,
+        Type = JobTypes.OrganizerRequestSubmitted,
+        EventId = null,
+        Message = $"New organizer request from {applicantName} is awaiting review.",
+        Data = Json(new { name = applicantName }),
+        IsRead = false,
+    };
 }

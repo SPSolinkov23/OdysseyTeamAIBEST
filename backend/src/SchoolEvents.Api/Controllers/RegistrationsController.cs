@@ -23,7 +23,6 @@ public class RegistrationsController : ControllerBase
     }
 
     [HttpPost("events/{eventId:long}/registrations")]
-    [Authorize(Roles = nameof(UserRole.Student))]
     public async Task<ActionResult<RegistrationDto>> Register(long eventId)
     {
         var dto = await _registrations.RegisterAsync(eventId, User.GetUserId());

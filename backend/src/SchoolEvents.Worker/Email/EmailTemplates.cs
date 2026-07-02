@@ -29,6 +29,11 @@ public static class EmailTemplates
                 $"Hi {p.Name},\n\nYour request to become an organizer has been declined. "
                 + "Your account stays as a student account and you can keep registering for events.\n\n— School Events"),
 
+            JobTypes.OrganizerRequestSubmitted => (
+                "New organizer request awaiting review",
+                $"Hi {p.Name},\n\n{p.ActorName} ({p.ActorEmail}) has requested organizer access. "
+                + "Sign in to the admin panel to approve or decline the request.\n\n— School Events"),
+
             JobTypes.AccountWelcome => (
                 "Welcome to School Events",
                 $"Hi {p.Name},\n\nYour School Events account has been created successfully. "
@@ -80,6 +85,11 @@ public static class EmailTemplates
                 "Заявката ти за организатор е отхвърлена",
                 $"Здравей {p.Name},\n\nЗаявката ти да станеш организатор е отхвърлена. "
                 + "Акаунтът ти остава ученически и можеш да продължиш да се записваш за събития.\n\n— School Events"),
+
+            JobTypes.OrganizerRequestSubmitted => (
+                "Нова заявка за организатор за преглед",
+                $"Здравей {p.Name},\n\n{p.ActorName} ({p.ActorEmail}) поиска достъп на организатор. "
+                + "Влез в администраторския панел, за да одобриш или отхвърлиш заявката.\n\n— School Events"),
 
             JobTypes.AccountWelcome => (
                 "Добре дошъл в School Events",
