@@ -35,7 +35,6 @@
 <h3> Code editors and collaborative services used:</h3>
 <p align="left">
   <a href="https://visualstudio.microsoft.com/vs/"><img src="https://visualstudio.microsoft.com/wp-content/uploads/2021/10/Product-Icon.svg" alt="Visual Studio" width="50"/></a>
-  <a href="https://code.visualstudio.com/"><img src="https://en.wikipedia.org/wiki/File:Visual_Studio_Code_1.35_icon.svg" alt="VS code logo" width="48px" /></a>
   <a href="https://www.microsoft.com/en/microsoft-teams/group-chat-software"><img src="https://img.icons8.com/color/344/microsoft-teams.png" alt="MS Teams logo" width="50px" /></a>
   <a href="https://github.com/"><img src="https://joshuapenalba.files.wordpress.com/2014/12/github-icon.png" alt="GitHub logo" width="55"/></a>
   <a href="https://git-scm.com/"><img src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" alt="Git logo" width="48px"></a>
@@ -44,8 +43,6 @@
 <p align="left">
   <a href="https://www.csharp.com/"><img src="https://softuni.bg/Content/images/university/professions/csharp.svg" alt="C# logo" width="50px"/></a>
 </p>
-<h3>Softwares used for visual elements:</h3>
-  <a href="https://www.adobe.com/products/illustrator.html"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Adobe_Illustrator_CC_icon.svg/1200px-Adobe_Illustrator_CC_icon.svg.png" alt="Adobe Illustrator logo" width="50px" /></a>
 <h3>Used programs for creating documentation and presentation:</h3>
 <p align="left">
   <a href="https://codingburgas-my.sharepoint.com/:w:/g/personal/gvlitsanowski23_codingburgas_bg/ETr3WMmguZ9MgCV1uMpVjZ0BYS9h5B76-XUSCWXF7UnaFw?e=DwVd0Q"><img src="https://img.icons8.com/color/344/ms-word.png" alt="MS Word logo" width="48px" /></a>
