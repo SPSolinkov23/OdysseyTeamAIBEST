@@ -73,19 +73,38 @@ function readPageState(defaultSize) {
     };
 }
 
+<<<<<<< HEAD
+=======
+function setPageState(page, q, category) {
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", page);
+    if (q) params.set("q", q);
+    if (category) params.set("category", category);
+    history.pushState(null, "", "/events" + (params.toString() ? "?" + params.toString() : ""));
+    Router.handle();
+}
+
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 function pagination(meta) {
     if (meta.totalPages <= 1) return "";
 
     const buttons = [];
     for (let p = 1; p <= meta.totalPages; p++) {
         if (p === 1 || p === meta.totalPages || Math.abs(p - meta.page) <= 1) {
+<<<<<<< HEAD
             buttons.push("<button class=\"chip " + (p === meta.page ? "is-active" : "") + "\" data-page=\"" + p + "\">" + p + "</button>");
         } else if (buttons[buttons.length - 1] !== "<span class=\"px-1 text-slate-400 dark:text-slate-500\">...</span>") {
             buttons.push("<span class=\"px-1 text-slate-400 dark:text-slate-500\">...</span>");
+=======
+            buttons.push('<button class="chip ' + (p === meta.page ? "is-active" : "") + '" data-page="' + p + '">' + p + "</button>");
+        } else if (buttons[buttons.length - 1] !== '<span class="px-1 text-slate-400 dark:text-slate-500">...</span>') {
+            buttons.push('<span class="px-1 text-slate-400 dark:text-slate-500">...</span>');
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
         }
     }
 
     return (
+<<<<<<< HEAD
         "<div id=\"ev-pagination\" class=\"mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-between\">" +
         "<p class=\"order-2 text-sm text-slate-500 dark:text-slate-400 sm:order-1\">" + I18n.t("pagination.summary", { page: meta.page, total: meta.totalPages, count: meta.totalCount }) + "</p>" +
         "<div class=\"order-1 flex w-full items-center justify-center gap-2 sm:order-2 sm:w-auto\">" +
@@ -93,10 +112,19 @@ function pagination(meta) {
         "<div class=\"hidden items-center gap-2 sm:flex\">" + buttons.join("") + "</div>" +
         "<span class=\"min-w-[3.5rem] text-center text-sm font-semibold text-slate-600 dark:text-slate-300 sm:hidden\">" + meta.page + " / " + meta.totalPages + "</span>" +
         "<button class=\"btn-secondary btn-sm\" data-page=\"" + (meta.page + 1) + "\"" + (!meta.hasNextPage ? " disabled" : "") + "><span class=\"hidden sm:inline\">" + I18n.t("pagination.next") + " </span><i class=\"fa-solid fa-chevron-right\"></i></button>" +
+=======
+        '<div id="ev-pagination" class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
+        '<p class="text-sm text-slate-500 dark:text-slate-400">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
+        '<div class="flex flex-wrap items-center gap-2">' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> ' + I18n.t("pagination.previous") + '</button>' +
+        buttons.join("") +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>' + I18n.t("pagination.next") + ' <i class="fa-solid fa-chevron-right"></i></button>' +
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
         "</div></div>"
     );
 }
 
+<<<<<<< HEAD
 async function fetchAllPublished() {
     let page = 1;
     let all = [];
@@ -175,6 +203,20 @@ export async function events() {
         { icon: "fa-calendar-star", label: I18n.t("events.statActive"), value: data.stats.totalEvents, color: "brand" },
         { icon: "fa-circle-check", label: I18n.t("events.statFree"), value: data.stats.seatsAvailable, color: "emerald" },
         { icon: "fa-hourglass-half", label: I18n.t("events.statWaitlist"), value: data.stats.waitlistCount, color: "amber" },
+=======
+export async function events() {
+    const user = Auth.current();
+    const state = readPageState(9);
+    const page = await API.listPublishedEvents(state);
+    const list = page.events;
+    const mine = await myMap();
+    const cats = page.categories;
+
+    const stats = [
+        { icon: "fa-calendar-star", label: I18n.t("events.statActive"), value: page.stats.totalEvents, color: "brand" },
+        { icon: "fa-circle-check", label: I18n.t("events.statFree"), value: page.stats.seatsAvailable, color: "emerald" },
+        { icon: "fa-hourglass-half", label: I18n.t("events.statWaitlist"), value: page.stats.waitlistCount, color: "amber" },
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
     ];
 
     const html =
@@ -189,12 +231,25 @@ export async function events() {
             "<div><div class=\"font-display text-2xl font-bold text-slate-800 dark:text-slate-100\">" + s.value + "</div><div class=\"text-xs text-slate-500 dark:text-slate-400\">" + s.label + "</div></div></div>",
         ).join("") +
         "</div></div></section>" +
+<<<<<<< HEAD
         "<section class=\"container-app py-8\"><div class=\"mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between\">" +
         "<div class=\"relative w-full sm:max-w-xs\"><i class=\"fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400\"></i><input id=\"ev-search\" type=\"search\" autocomplete=\"off\" class=\"input pl-10\" value=\"" + UI.escape(init.q) + "\" placeholder=\"" + I18n.t("events.searchPlaceholder") + "\"></div>" +
         "<div id=\"ev-cats\" class=\"-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0\"><button class=\"chip flex-none " + (!init.category ? "is-active" : "") + "\" data-cat=\"\">" + I18n.t("events.all") + "</button>" +
         cats.map((c) => "<button class=\"chip flex-none " + (c === init.category ? "is-active" : "") + "\" data-cat=\"" + UI.escape(c) + "\">" + UI.escape(UI.catLabel(c)) + "</button>").join("") +
         "</div></div>" +
         "<div id=\"ev-results\">" + first.html + "</div>" +
+=======
+        '<section class="container-app py-8"><div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
+        '<div class="relative w-full sm:max-w-xs"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i><input id="ev-search" class="input pl-10" value="' + UI.escape(state.q) + '" placeholder="' + I18n.t("events.searchPlaceholder") + '"></div>' +
+        '<div id="ev-cats" class="flex flex-wrap gap-2"><button class="chip ' + (!state.category ? "is-active" : "") + '" data-cat="">' + I18n.t("events.all") + '</button>' +
+        cats.map((c) => '<button class="chip ' + (c === state.category ? "is-active" : "") + '" data-cat="' + UI.escape(c) + '">' + UI.escape(UI.catLabel(c)) + "</button>").join("") +
+        "</div></div>" +
+        '<div id="ev-grid" class="' + (list.length ? "grid" : "hidden") + ' gap-5 sm:grid-cols-2 lg:grid-cols-3">' +
+        list.map((e, i) => eventCard(e, mine, i)).join("") +
+        "</div>" +
+        '<div id="ev-empty" class="' + (list.length ? "hidden" : "") + '">' + UI.empty({ icon: "fa-calendar-xmark", title: I18n.t("events.noFoundTitle"), text: I18n.t("events.noFoundText") }) + "</div>" +
+        pagination(page) +
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
         "</section>";
 
     return { html: html, onMount: (root) => bindEvents(root, ctx, init) };
@@ -202,6 +257,7 @@ export async function events() {
 
 function bindEvents(root, ctx, init) {
     const search = root.querySelector("#ev-search");
+<<<<<<< HEAD
     const results = root.querySelector("#ev-results");
     const catsWrap = root.querySelector("#ev-cats");
     const state = { page: init.page, q: init.q, category: init.category };
@@ -262,6 +318,29 @@ function bindEvents(root, ctx, init) {
     });
 
     bindResults();
+=======
+    let searchTimer = null;
+    const currentCategory = new URLSearchParams(location.search).get("category") || "";
+
+    search.addEventListener("input", () => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => setPageState(1, (search.value || "").trim(), currentCategory), 300);
+    });
+    root.querySelectorAll("#ev-cats .chip").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            setPageState(1, (search.value || "").trim(), btn.getAttribute("data-cat") || "");
+        });
+    });
+
+    root.querySelectorAll("#ev-pagination [data-page]").forEach((btn) => {
+        btn.addEventListener("click", () => setPageState(parseInt(btn.getAttribute("data-page"), 10), (search.value || "").trim(), currentCategory));
+    });
+
+    const grid = root.querySelector("#ev-grid");
+    grid.querySelectorAll("[data-register]").forEach((btn) => {
+        btn.addEventListener("click", () => quickRegister(btn.getAttribute("data-register"), btn));
+    });
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 }
 
 async function onRegistered(ctx, render) {

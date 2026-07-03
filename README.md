@@ -12,7 +12,8 @@
 <h2>📷Screenshots</h2>
 <p align="center">
       <img src="resources/scr1.png" alt="screenshot 1" width="600px">
-  <img src="resources/scr2.png" alt="screenshot 2" width="600px">
+      <img src="resources/scr2.png" alt="screenshot 2" width="600px">
+      <img src="resources/scr3.png" alt="screenshot 3" width="600px">
 </p>
 <hr>
 <h2>📥Installation</h2>
@@ -23,18 +24,18 @@
 <h2>📃Documents</h2>
 <h3>Documentation</h3>
 <ul>
-  <li><a href="" download>Documentation</a></li>
+  <li><a href="https://1drv.ms/w/c/6274d81ff4909dba/IQCe_q62mffOTLOZnQ8J3dkFAYdbAHNHlRYIjhxoE-8SiGY?e=yZ0Xlh" download>Documentation</a></li>
 </ul>
 <h3>Presentation</h3>
 <ul>
-  <li><a href="" download>Presentation</a></li>
+  <li><a href="https://1drv.ms/p/c/6274d81ff4909dba/IQBfe2mGjzb_SbNlE5GrrlUOAez_CNUkpcSxi702gCH64lI?e=7YLzI7" download>Presentation</a></li>
 </ul>
 <hr>
 <h2>🖥️Technologies</h2>
 <h3> Code editors and collaborative services used:</h3>
 <p align="left">
   <a href="https://visualstudio.microsoft.com/vs/"><img src="https://visualstudio.microsoft.com/wp-content/uploads/2021/10/Product-Icon.svg" alt="Visual Studio" width="50"/></a>
-  <a href="https://code.visualstudio.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/2048px-Visual_Studio_Code_1.35_icon.svg.png" alt="VS code logo" width="48px" /></a>
+  <a href="https://code.visualstudio.com/"><img src="https://en.wikipedia.org/wiki/File:Visual_Studio_Code_1.35_icon.svg" alt="VS code logo" width="48px" /></a>
   <a href="https://www.microsoft.com/en/microsoft-teams/group-chat-software"><img src="https://img.icons8.com/color/344/microsoft-teams.png" alt="MS Teams logo" width="50px" /></a>
   <a href="https://github.com/"><img src="https://joshuapenalba.files.wordpress.com/2014/12/github-icon.png" alt="GitHub logo" width="55"/></a>
   <a href="https://git-scm.com/"><img src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" alt="Git logo" width="48px"></a>
@@ -53,7 +54,7 @@
 <hr>
 <h2 align="left">🧒Our team</h2>
 <ul>
-  <li><a href="https://github.com/bogdankehayov">Bogdan Kehayov</a> [Scrum trainer] <br></li>
+  <li><a href="https://github.com/bogdankehayov">Bogdan Kehayov</a> [Mentor] <br></li>
   <li><a href="https://github.com/SotirowwX">Konstantin Sotirov</a> [Front-end developer] <br></li>
   <li><a href="https://github.com/SPSolnikov23">Stilian Solinkov</a> [Front-end developer] <br></li>
   <li><a href="https://github.com/AYAAtanasov23">Aleksey Atanasov</a> [Front-end developer] <br></li>

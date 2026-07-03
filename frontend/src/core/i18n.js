@@ -81,7 +81,10 @@ const DICT = {
 
         "pagination.previous": "Previous",
         "pagination.next": "Next",
+<<<<<<< HEAD
         "pagination.summary": "Page {page} of {total} · {count} events",
+=======
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 
         "detail.unavailableTitle": "Event unavailable",
         "detail.unavailableText": "It may be a draft, cancelled or removed.",
@@ -374,7 +377,10 @@ const DICT = {
 
         "pagination.previous": "Предишна",
         "pagination.next": "Следваща",
+<<<<<<< HEAD
         "pagination.summary": "Страница {page} от {total} · {count} събития",
+=======
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 
         "detail.unavailableTitle": "Събитието не е налично",
         "detail.unavailableText": "Може да е чернова, отменено или премахнато.",
