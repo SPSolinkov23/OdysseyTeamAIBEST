@@ -17,19 +17,36 @@ function readOrganizerPage(defaultSize) {
     };
 }
 
+<<<<<<< HEAD
+=======
+function setOrganizerPage(page) {
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", page);
+    history.pushState(null, "", "/organizer" + (params.toString() ? "?" + params.toString() : ""));
+    Router.handle();
+}
+
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 function pagination(meta) {
     if (meta.totalPages <= 1) return "";
 
     const buttons = [];
     for (let p = 1; p <= meta.totalPages; p++) {
         if (p === 1 || p === meta.totalPages || Math.abs(p - meta.page) <= 1) {
+<<<<<<< HEAD
             buttons.push("<button class=\"chip " + (p === meta.page ? "is-active" : "") + "\" data-page=\"" + p + "\">" + p + "</button>");
         } else if (buttons[buttons.length - 1] !== "<span class=\"px-1 text-slate-400 dark:text-slate-500\">...</span>") {
             buttons.push("<span class=\"px-1 text-slate-400 dark:text-slate-500\">...</span>");
+=======
+            buttons.push('<button class="chip ' + (p === meta.page ? "is-active" : "") + '" data-page="' + p + '">' + p + "</button>");
+        } else if (buttons[buttons.length - 1] !== '<span class="px-1 text-slate-400 dark:text-slate-500">...</span>') {
+            buttons.push('<span class="px-1 text-slate-400 dark:text-slate-500">...</span>');
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
         }
     }
 
     return (
+<<<<<<< HEAD
         "<div id=\"org-pagination\" class=\"mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-between\">" +
         "<p class=\"order-2 text-sm text-slate-500 dark:text-slate-400 sm:order-1\">" + I18n.t("pagination.summary", { page: meta.page, total: meta.totalPages, count: meta.totalCount }) + "</p>" +
         "<div class=\"order-1 flex w-full items-center justify-center gap-2 sm:order-2 sm:w-auto\">" +
@@ -37,6 +54,14 @@ function pagination(meta) {
         "<div class=\"hidden items-center gap-2 sm:flex\">" + buttons.join("") + "</div>" +
         "<span class=\"min-w-[3.5rem] text-center text-sm font-semibold text-slate-600 dark:text-slate-300 sm:hidden\">" + meta.page + " / " + meta.totalPages + "</span>" +
         "<button class=\"btn-secondary btn-sm\" data-page=\"" + (meta.page + 1) + "\"" + (!meta.hasNextPage ? " disabled" : "") + "><span class=\"hidden sm:inline\">" + I18n.t("pagination.next") + " </span><i class=\"fa-solid fa-chevron-right\"></i></button>" +
+=======
+        '<div id="org-pagination" class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">' +
+        '<p class="text-sm text-slate-500 dark:text-slate-400">Page ' + meta.page + " of " + meta.totalPages + " · " + meta.totalCount + " events</p>" +
+        '<div class="flex flex-wrap items-center gap-2">' +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page - 1) + '"' + (!meta.hasPreviousPage ? " disabled" : "") + '><i class="fa-solid fa-chevron-left"></i> ' + I18n.t("pagination.previous") + '</button>' +
+        buttons.join("") +
+        '<button class="btn-secondary btn-sm" data-page="' + (meta.page + 1) + '"' + (!meta.hasNextPage ? " disabled" : "") + '>' + I18n.t("pagination.next") + ' <i class="fa-solid fa-chevron-right"></i></button>' +
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
         "</div></div>"
     );
 }
@@ -50,6 +75,10 @@ function toLocalInput(iso) {
 
 export async function organizer() {
     const page = await API.listOrganizerEvents(readOrganizerPage(8));
+<<<<<<< HEAD
+=======
+    const list = page.events;
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 
     const stats = [
         { icon: "fa-layer-group", label: I18n.t("org.statTotal"), value: page.stats.totalEvents, color: "brand" },
@@ -69,7 +98,11 @@ export async function organizer() {
             "<div class=\"card flex items-center gap-4 p-4\" data-aos=\"zoom-in-up\" data-aos-delay=\"" + i * 70 + "\" data-aos-duration=\"500\"><span class=\"flex h-12 w-12 items-center justify-center rounded-2xl bg-" + s.color + "-100 text-" + s.color + "-600 text-lg\"><i class=\"fa-solid " + s.icon + "\"></i></span><div><div class=\"font-display text-2xl font-bold text-slate-800 dark:text-slate-100\">" + s.value + "</div><div class=\"text-xs text-slate-500 dark:text-slate-400\">" + s.label + "</div></div></div>",
         ).join("") +
         "</div></div></section>" +
+<<<<<<< HEAD
         "<section class=\"container-app py-8\"><h2 class=\"mb-5 font-display text-xl font-semibold text-slate-800 dark:text-slate-100\">" + I18n.t("org.myEvents") + "</h2><div id=\"org-results\">" + orgResultsHtml(page) + "</div></section>";
+=======
+        '<section class="container-app py-8"><h2 class="mb-5 font-display text-xl font-semibold text-slate-800 dark:text-slate-100">' + I18n.t("org.myEvents") + '</h2><div class="space-y-4">' + rows + "</div>" + pagination(page) + "</section>";
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 
     return { html: html, onMount: bindDashboard };
 }
@@ -106,6 +139,7 @@ function eventRow(e, idx) {
 }
 
 function bindDashboard(root) {
+<<<<<<< HEAD
     const results = root.querySelector("#org-results");
     const init = readOrganizerPage(8);
     const state = { page: init.page, pageSize: 8 };
@@ -143,6 +177,11 @@ function bindDashboard(root) {
     }
 
     bindResults();
+=======
+    root.querySelectorAll("[data-publish]").forEach((b) => b.addEventListener("click", () => publish(b.getAttribute("data-publish"))));
+    root.querySelectorAll("[data-cancel-event]").forEach((b) => b.addEventListener("click", () => cancelEvent(b.getAttribute("data-cancel-event"))));
+    root.querySelectorAll("#org-pagination [data-page]").forEach((b) => b.addEventListener("click", () => setOrganizerPage(parseInt(b.getAttribute("data-page"), 10))));
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 }
 
 async function publish(id, onDone) {

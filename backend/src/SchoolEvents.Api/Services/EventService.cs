@@ -43,7 +43,11 @@ public class EventService
         UpdatedAt = e.UpdatedAt,
     };
 
+<<<<<<< HEAD
     public virtual async Task<EventListResponse> ListAsync(long? callerId, string? status, string? q, string? category, bool mine, int page, int pageSize)
+=======
+    public async Task<EventListResponse> ListAsync(long? callerId, string? status, string? q, string? category, bool mine, int page, int pageSize)
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
     {
         page = Math.Max(1, page);
         pageSize = Math.Clamp(pageSize, 1, 50);
@@ -82,7 +86,11 @@ public class EventService
             query = query.Where(e => e.Category == selectedCategory);
         }
 
+<<<<<<< HEAD
         var stats = (await query
+=======
+        var stats = await query
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
             .Select(e => new
             {
                 e.Status,
@@ -100,7 +108,12 @@ public class EventService
                 ConfirmedRegistrationCount = g.Sum(e => e.ConfirmedCount),
                 WaitlistCount = g.Sum(e => e.WaitlistCount),
                 SeatsAvailable = g.Sum(e => e.Capacity - e.ConfirmedCount),
+<<<<<<< HEAD
             }).ToListAsync()).FirstOrDefault() ?? new EventListStatsDto();
+=======
+            })
+            .FirstOrDefaultAsync() ?? new EventListStatsDto();
+>>>>>>> 9618377549e18494be6870721d80e497ba67eaf3
 
         var totalCount = await query.CountAsync();
         var totalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pageSize);
